@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:organics_salary/pages/home/salary/salary_screen.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -8,24 +9,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle =
+  int _selectedIndex = 1;
+  static TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
-  static const List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _widgetOptions = <Widget>[
     Text(
-      'Home',
+      'หน้าแรก',
+      style: optionStyle,
+    ),
+    SalaryScreen(),
+    Text(
+      'แจ้งลา',
       style: optionStyle,
     ),
     Text(
-      'Likes',
-      style: optionStyle,
-    ),
-    Text(
-      'Search',
-      style: optionStyle,
-    ),
-    Text(
-      'Profile',
+      'โปรไฟล์',
       style: optionStyle,
     ),
   ];
@@ -33,11 +31,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        // elevation: 20,
-        // title: const Text('GoogleNavBar'),
-      ),
+      // backgroundColor: Colors.white,
+      // appBar: AppBar(
+      // elevation: 20,
+      // title: const Text('GoogleNavBar'),
+      // ),
+      appBar: null,
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
@@ -67,19 +66,19 @@ class _HomePageState extends State<HomePage> {
               tabs: [
                 GButton(
                   icon: LineIcons.home,
-                  text: 'Home',
+                  text: 'หน้าแรก',
                 ),
                 GButton(
-                  icon: LineIcons.heart,
-                  text: 'Likes',
+                  icon: LineIcons.moneyCheck,
+                  text: 'สลิปเงินเดือน',
                 ),
                 GButton(
-                  icon: LineIcons.search,
-                  text: 'Search',
+                  icon: LineIcons.businessTime,
+                  text: 'แจ้งลา',
                 ),
                 GButton(
                   icon: LineIcons.user,
-                  text: 'Profile',
+                  text: 'โปรไฟล์',
                 ),
               ],
               selectedIndex: _selectedIndex,
