@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:organics_salary/pages/home/profile/profile_screen.dart';
 import 'package:organics_salary/pages/home/salary/salary_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,10 +23,7 @@ class _HomePageState extends State<HomePage> {
       'แจ้งลา',
       style: optionStyle,
     ),
-    Text(
-      'โปรไฟล์',
-      style: optionStyle,
-    ),
+    ProfileScreen(),
   ];
 
   @override
@@ -38,7 +36,11 @@ class _HomePageState extends State<HomePage> {
       // ),
       appBar: null,
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: ListView(
+          children: [
+            _widgetOptions.elementAt(_selectedIndex),
+          ],
+        ),
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(

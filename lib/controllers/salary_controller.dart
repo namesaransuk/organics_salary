@@ -1,39 +1,92 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:organics_salary/models/sheet_data.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:organics_salary/controllers/loading_controller.dart';
 
 class SalaryController extends GetxController {
-  var connect = Get.find<GetConnect>();
+  final LoadingController loadingController = Get.put(LoadingController());
+  var dataList = <Map<String, dynamic>>[].obs;
 
-  Future<List<Map<String, dynamic>>> fetchUsers() async {
-    try {
-      var response = await connect.post(
-          "https://script.google.com/macros/s/AKfycbzR_inTrrtEKk6AlfZ856ysAzMoo_NVFis7xKERTS4jpFiyT1MT7RfmD__HvndQpKyU/exec",null);
-      // var response = await http.post(Uri.parse(
-      //     "http://script.google.com/macros/s/AKfycbzR_inTrrtEKk6AlfZ856ysAzMoo_NVFis7xKERTS4jpFiyT1MT7RfmD__HvndQpKyU/exec"));
-          // "https://script.googleusercontent.com/macros/echo?user_content_key=QaMFApUoCbQTcXj5nJwfgnlPPbCx-TS5jXzeffQVwFE1UbyGeLKHzrUG2w7Z57BmG_zxVRAx_ogA7I2yyeSralJzTMel3u-Im5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnC_OgmT6cp65fzD7CSHDlxOrMZFRiKoBbqrDHoo5qhGQRMTfMSDyFj5p09lakTqxCRhh4wFfRqSiTV8jCDhYCn7n6oMV7BTxmtz9Jw9Md8uu&lib=MCqtzRpUbzPAv5UZSauo9rnoLM9bSnHJz"));
-      // return jsonDecode(result.body);
+  void loadData() {
+    loadingController.dialogLoading();
 
-      print(response.body);
+    Future.delayed(const Duration(seconds: 3), () {
+      Get.back();
 
-      if (response.body != null) {
-        if (response.body.isNotEmpty) {
-          return List<Map<String, dynamic>>.from(jsonDecode(response.body));
-        } else {
-          // Handle the case where the response body is an empty string or an empty array
-          print("Response body is empty: $response.body");
-          return [];
-        }
-      } else {
-        // Handle the case where the response body is null
-        print("Response body is null");
-        return [];
-      }
-    } catch (error) {
-      // Handle any errors that occurred during the request
-      print("Error fetching users: $error");
-      return [];
-    }
+      dataList.clear();
+      dataList.addAll([
+        {
+          'name': 'John Doe',
+          'customer': 'IT1234',
+          'role': "IT Programer",
+          'salaryMonth': "มกราคม",
+          'yearValue': "2567",
+          'salary': 50000,
+          'da': 5000,
+          'ot': 2000,
+          'fc': 1000,
+          'bonus': 3000,
+          'interest': 100,
+          'pm': 4000,
+          'oi': 1500,
+          'ti': 65500,
+          'ss': 2000,
+          'tax': 8000,
+          'agl': 500,
+          'loan': 3000,
+          'df': 1000,
+          'od': 200,
+          'td': 15700,
+          'total': 49800,
+        },
+        {
+          'name': 'John Doe',
+          'customer': 'IT1234',
+          'role': "IT Programer",
+          'salaryMonth': "กุมภาพันธ์",
+          'yearValue': "2567",
+          'salary': 50000,
+          'da': 5000,
+          'ot': 2000,
+          'fc': 1000,
+          'bonus': 3000,
+          'interest': 100,
+          'pm': 4000,
+          'oi': 1500,
+          'ti': 65500,
+          'ss': 2000,
+          'tax': 8000,
+          'agl': 500,
+          'loan': 3000,
+          'df': 1000,
+          'od': 200,
+          'td': 15700,
+          'total': 49800,
+        },
+        {
+          'name': 'John Doe',
+          'customer': 'IT1234',
+          'role': "IT Programer",
+          'salaryMonth': "มีนาคม",
+          'yearValue': "2567",
+          'salary': 50000,
+          'da': 5000,
+          'ot': 2000,
+          'fc': 1000,
+          'bonus': 3000,
+          'interest': 100,
+          'pm': 4000,
+          'oi': 1500,
+          'ti': 65500,
+          'ss': 2000,
+          'tax': 8000,
+          'agl': 500,
+          'loan': 3000,
+          'df': 1000,
+          'od': 200,
+          'td': 15700,
+          'total': 49800,
+        },
+      ]);
+    });
   }
 }
