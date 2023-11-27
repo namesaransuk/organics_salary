@@ -6,10 +6,10 @@ class SalaryController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
   var dataList = <Map<String, dynamic>>[].obs;
 
-  void loadData() {
+  Future<void> loadData() async {
     loadingController.dialogLoading();
 
-    Future.delayed(const Duration(seconds: 3), () {
+    await Future.delayed(const Duration(seconds: 1), () {
       Get.back();
 
       dataList.clear();

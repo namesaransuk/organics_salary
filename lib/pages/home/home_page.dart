@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:organics_salary/pages/home/leave/leave_screen.dart';
 import 'package:organics_salary/pages/home/profile/profile_screen.dart';
 import 'package:organics_salary/pages/home/salary/salary_screen.dart';
 
@@ -10,7 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
   static TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static List<Widget> _widgetOptions = <Widget>[
@@ -19,10 +20,7 @@ class _HomePageState extends State<HomePage> {
       style: optionStyle,
     ),
     SalaryScreen(),
-    Text(
-      'แจ้งลา',
-      style: optionStyle,
-    ),
+    LeaveScreen(),
     ProfileScreen(),
   ];
 

@@ -6,6 +6,7 @@ import 'package:organics_salary/pages/home/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   Get.lazyPut(() => GetConnect());
   runApp(const MyApp());
 }

@@ -3,12 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:organics_salary/controllers/salary_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
-final List<String> slipList = [
-  'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-  'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-];
+import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
 
 class SalaryScreen extends StatefulWidget {
   @override
@@ -21,179 +16,237 @@ class _SalaryScreenState extends State<SalaryScreen> {
   String reason = '';
   final CarouselController _controller = CarouselController();
   final SalaryController salaryController = Get.put(SalaryController());
+  int selectedIndex = 2;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 20),
+    return DefaultTabController(
+      length: 2,
       child: Column(
-        children: <Widget>[
-          CarouselSlider(
-            items: _buildImageSliders(),
-            options: CarouselOptions(
-              height: MediaQuery.of(context).size.height * 0.83,
-              initialPage: 2,
-              enlargeCenterPage: true,
-              onPageChanged: onPageChange,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            child: SegmentedTabControl(
+              radius: const Radius.circular(25),
+              backgroundColor: Colors.grey.shade300,
+              indicatorColor: Color.fromARGB(255, 19, 110, 104),
+              tabTextColor: Colors.black45,
+              selectedTabTextColor: Colors.white,
+              // squeezeIntensity: 2,
+              // height: 45,
+              tabPadding: const EdgeInsets.symmetric(horizontal: 8),
+              textStyle: Theme.of(context).textTheme.bodyLarge,
+              tabs: [
+                SegmentTab(label: 'เงินเดือน'),
+                SegmentTab(label: 'ขอสลิป'),
+              ],
             ),
-            carouselController: _controller,
           ),
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Flexible(
-                child: ElevatedButton(
-                  onPressed: () => _controller.previousPage(),
-                  child: Text('←'),
-                ),
-              ),
-              ...Iterable<int>.generate(slipList.length).map(
-                (int pageIndex) => Flexible(
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        // backgroundColor: pageIndex,
-                        ),
-                    onPressed: () {
-                      _controller.animateToPage(pageIndex);
-                      // salaryController.loadData();
-                    },
-                    child: Text("$pageIndex"),
-                  ),
-                ),
-              ),
-              Flexible(
-                child: ElevatedButton(
-                  onPressed: () {
-                    _controller.nextPage();
-                  },
-                  child: Text('→'),
-                ),
-              ),
-            ],
+          // Sample pages
+          Container(
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: TabBarView(
+              physics: const BouncingScrollPhysics(),
+              children: [
+                viewSlip(),
+                Center(
+                  child: Text('Test'),
+                )
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  List<Widget> _buildImageSliders() {
-    salaryController.loadData();
+  Widget viewSlip() {
+    return FutureBuilder(
+      future: salaryController.loadData(),
+      builder: (context, snapshot) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 20, bottom: 20),
+          child: Column(
+            children: <Widget>[
+              CarouselSlider(
+                items: _buildSlipSliders(),
+                options: CarouselOptions(
+                  height: MediaQuery.of(context).size.height,
+                  initialPage: 2,
+                  enlargeCenterPage: true,
+                  onPageChanged: onPageChange,
+                ),
+                carouselController: _controller,
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  // Flexible(
+                  //   child: ElevatedButton(
+                  //     onPressed: () => _controller.previousPage(),
+                  //     child: Text('←'),
+                  //   ),
+                  // ),
+                  ...Iterable<int>.generate(salaryController.dataList.length)
+                      .map(
+                        (int pageIndex) => Flexible(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              // padding: MaterialStateProperty.resolveWith<
+                              //     EdgeInsetsGeometry?>(
+                              //   (Set<MaterialState> states) {
+                              //     return states.contains(MaterialState.pressed)
+                              //         ? EdgeInsets.all(16.0)
+                              //         : EdgeInsets.all(16.0);
+                              //   },
+                              // ),
+                              backgroundColor: pageIndex == selectedIndex
+                                  ? MaterialStateProperty.all<Color>(
+                                      Color.fromARGB(255, 19, 110, 104))
+                                  : null,
+                            ),
+                            onPressed: () {
+                              _controller.animateToPage(pageIndex);
+                            },
+                            child: Text(
+                              "${salaryController.dataList[pageIndex]['salaryMonth']}",
+                              style: TextStyle(
+                                  color: pageIndex == selectedIndex
+                                      ? Colors.white
+                                      : null),
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  // Flexible(
+                  //   child: ElevatedButton(
+                  //     onPressed: () {
+                  //       _controller.nextPage();
+                  //     },
+                  //     child: Text('→'),
+                  //   ),
+                  // ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
+  List<Widget> _buildSlipSliders() {
     return salaryController.dataList
         .map(
           (item) => Card(
             surfaceTintColor: Colors.white,
-            child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      Row(
+                      Image.network(
+                        "https://organicscosme.com/image/bg_head/organics.png",
+                        width: 40,
+                        height: 40,
+                      ),
+                      SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.network(
-                            "https://organicscosme.com/image/bg_head/organics.png",
-                            width: MediaQuery.of(context).size.width * 0.1,
-                            height: MediaQuery.of(context).size.width * 0.1,
-                          ),
-                          SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Organics Cosme CO.,LTD.",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.green,
-                                ),
-                              ),
-                              Text(
-                                "บริษัท ออกานิกส์ คอสเม่ จำกัด",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                  color: Colors.green,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        item['name'],
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                        ),
-                      ),
-                      Text("รหัสพนักงาน : ${item['customer']}"),
-                      Text("ตำแหน่ง : ${item['role']}"),
-                      SizedBox(height: 20),
-                      Center(
-                        child: Column(
-                          children: [
-                            Text(
-                                "เงินเดือนประจำเดือน ${item['salaryMonth']} ${item['yearValue']}",
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    fontSize: 14)),
-                            Text("รายการเงินเดือน (Earnings)",
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    fontSize: 14)),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      // รายการเงินเดือน
-                      _buildEarningItem("เงินเดือนค่าจ้าง", item['salary']),
-                      _buildEarningItem("เบี้ยขยัน", item['da']),
-                      _buildEarningItem("ค่าล่วงเวลา", item['ot']),
-                      _buildEarningItem("ค่าน้ำมัน", item['fc']),
-                      _buildEarningItem("โบนัส", item['bonus']),
-                      _buildEarningItem("ดอกเบี้ย", item['interest']),
-                      _buildEarningItem("เงินประจำตำแหน่ง", item['pm']),
-                      _buildEarningItem("ค่าคอมมิชชั่น", item['oi']),
-                      _buildEarningItem("รวมเงินได้", item['ti'], bold: true),
-                      SizedBox(height: 10),
-                      Divider(),
-                      SizedBox(height: 10),
-                      Center(
-                        child: Text("รายการเงินหัก (Deductions)",
+                          Text(
+                            "Organics Cosme CO.,LTD.",
                             style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                fontSize: 14)),
-                      ),
-                      SizedBox(height: 10),
-                      // รายการหัก
-                      _buildDeductionItem("ประกันสังคม", item['ss']),
-                      _buildDeductionItem("ภาษี", item['tax']),
-                      _buildDeductionItem("ขาด/ลา/มาสาย", item['agl']),
-                      _buildDeductionItem("เงินกู้ยืม", item['loan']),
-                      _buildDeductionItem("กองทุนเงินฝาก", item['df']),
-                      _buildDeductionItem("รายการหักอื่นๆ", item['od']),
-                      _buildDeductionItem("รวมรายการหัก", item['td'],
-                          bold: true),
-                      SizedBox(height: 10),
-                      Divider(),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("รวมเป็นเงิน",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          Text(numberToStringCurrency(item['total']),
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.green,
+                            ),
+                          ),
+                          Text(
+                            "บริษัท ออกานิกส์ คอสเม่ จำกัด",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              color: Colors.green,
+                            ),
+                          ),
                         ],
                       ),
                     ],
                   ),
-                ),
-              ],
+                  SizedBox(height: 20),
+                  Text(
+                    item['name'],
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                  Text("รหัสพนักงาน : ${item['customer']}"),
+                  Text("ตำแหน่ง : ${item['role']}"),
+                  SizedBox(height: 20),
+                  Center(
+                    child: Column(
+                      children: [
+                        Text(
+                            "เงินเดือนประจำเดือน ${item['salaryMonth']} ${item['yearValue']}",
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontSize: 14)),
+                        Text("รายการเงินเดือน (Earnings)",
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontSize: 14)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // รายการเงินเดือน
+                  _buildEarningItem("เงินเดือนค่าจ้าง", item['salary']),
+                  _buildEarningItem("เบี้ยขยัน", item['da']),
+                  _buildEarningItem("ค่าล่วงเวลา", item['ot']),
+                  _buildEarningItem("ค่าน้ำมัน", item['fc']),
+                  _buildEarningItem("โบนัส", item['bonus']),
+                  _buildEarningItem("ดอกเบี้ย", item['interest']),
+                  _buildEarningItem("เงินประจำตำแหน่ง", item['pm']),
+                  _buildEarningItem("ค่าคอมมิชชั่น", item['oi']),
+                  _buildEarningItem("รวมเงินได้", item['ti'], bold: true),
+                  SizedBox(height: 10),
+                  Divider(),
+                  SizedBox(height: 10),
+                  Center(
+                    child: Text("รายการเงินหัก (Deductions)",
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontSize: 14)),
+                  ),
+                  SizedBox(height: 10),
+                  // รายการหัก
+                  _buildDeductionItem("ประกันสังคม", item['ss']),
+                  _buildDeductionItem("ภาษี", item['tax']),
+                  _buildDeductionItem("ขาด/ลา/มาสาย", item['agl']),
+                  _buildDeductionItem("เงินกู้ยืม", item['loan']),
+                  _buildDeductionItem("กองทุนเงินฝาก", item['df']),
+                  _buildDeductionItem("รายการหักอื่นๆ", item['od']),
+                  _buildDeductionItem("รวมรายการหัก", item['td'], bold: true),
+                  SizedBox(height: 10),
+                  Divider(),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("รวมเป็นเงิน",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(numberToStringCurrency(item['total']),
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         )
@@ -203,6 +256,7 @@ class _SalaryScreenState extends State<SalaryScreen> {
   void onPageChange(int index, CarouselPageChangedReason changeReason) {
     setState(() {
       reason = changeReason.toString();
+      selectedIndex = index;
     });
   }
 
