@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:organics_salary/theme.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -10,7 +11,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 20),
+      padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
       child: Column(
         children: [
           buildProfile(),
@@ -18,7 +19,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           buildName(),
           const SizedBox(height: 24),
           buildNumbers(),
-          const SizedBox(height: 48),
+          const SizedBox(height: 24),
           buildAbout(),
         ],
       ),
@@ -29,137 +30,263 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final color = Theme.of(context).colorScheme.primary;
 
     return Center(
-      child: Stack(
-        children: [
-          buildImage(),
-          Positioned(
-            bottom: 0,
-            right: 4,
-            child: buildEditIcon(color),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildImage() {
-    final image =
-        NetworkImage('https://synergysoft.co.th/images/2022/06/30/user.png');
-
-    return ClipOval(
-      child: Material(
-        color: Colors.transparent,
-        child: Ink.image(
-          image: image,
-          fit: BoxFit.cover,
-          width: 128,
-          height: 128,
-          child: InkWell(onTap: () {}),
-        ),
-      ),
-    );
-  }
-
-  Widget buildEditIcon(Color color) => buildCircle(
-        color: Colors.white,
-        all: 3,
-        child: buildCircle(
-          color: color,
-          all: 8,
-          child: Icon(
-            Icons.edit,
-            color: Colors.white,
-            size: 20,
-          ),
-        ),
-      );
-  Widget buildCircle({
-    required Widget child,
-    required double all,
-    required Color color,
-  }) =>
-      ClipOval(
-        child: Container(
-          padding: EdgeInsets.all(all),
-          color: color,
-          child: child,
-        ),
-      );
-
-  Widget buildName() => Column(
-        children: [
-          Text(
-            'user.name',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'user.email',
-            style: TextStyle(color: Colors.grey),
-          )
-        ],
-      );
-
-  Widget buildNumbers() => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          buildButton(context, 'รหัสพนักงาน', 'IT 1234'),
-          buildDivider(),
-          buildButton(context, 'ตำแหน่ง', 'IT Officer'),
-          // buildDivider(),
-          // buildButton(context, '50', 'Followers'),
-        ],
-      );
-  Widget buildDivider() => Container(
-        height: 24,
-        child: VerticalDivider(),
-      );
-  Widget buildButton(BuildContext context, String value, String text) =>
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: MaterialButton(
-          padding: EdgeInsets.symmetric(vertical: 4),
-          onPressed: () {},
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                value,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  // fontSize: 16,
-                ),
-              ),
-              SizedBox(height: 2),
-              Text(
-                text,
-                style: TextStyle(
-                  fontSize: 20,
-                  // fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-
-  Widget buildAbout() => Container(
-        padding: EdgeInsets.symmetric(horizontal: 48),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'About',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      child: ClipOval(
+        child: Material(
+          color: Colors.transparent,
+          shadowColor: Colors.grey,
+          elevation: 2,
+          child: Transform.translate(
+            offset: Offset(0, -1),
+            child: Ink.image(
+              image: NetworkImage(
+                  'https://synergysoft.co.th/images/2022/06/30/user.png'),
+              fit: BoxFit.cover,
+              width: 128,
+              height: 128,
             ),
-            const SizedBox(height: 16),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildName() {
+    return Column(
+      children: [
+        Text(
+          'Dr.Jel Organics',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'บริษัท ออกานิกส์ คอสเม่ จำกัด',
+          style: TextStyle(color: Colors.grey),
+        )
+      ],
+    );
+  }
+
+  Widget buildNumbers() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        buildSubDetail(context, 'รหัสพนักงาน', 'IT 1234'),
+        buildDivider(),
+        buildSubDetail(context, 'ตำแหน่ง', 'IT Officer'),
+        buildDivider(),
+        buildSubDetail(context, 'OGN Coin', '0'),
+      ],
+    );
+  }
+
+  Widget buildDivider() {
+    return Container(
+      height: 40,
+      child: VerticalDivider(),
+    );
+  }
+
+  Widget buildSubDetail(BuildContext context, String value, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: MaterialButton(
+        padding: EdgeInsets.symmetric(vertical: 4),
+        onPressed: () {},
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
             Text(
-              'user.about',
-              style: TextStyle(fontSize: 16, height: 1.4),
+              value,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                // fontSize: 16,
+              ),
+            ),
+            SizedBox(height: 2),
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 18,
+                // fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
-      );
+      ),
+    );
+  }
+
+  Widget buildAbout() {
+    return Card(
+      color: AppTheme.ognGreen,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'สถิติการมาทำงาน',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                'ลาป่วย / วัน',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '10',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                'ลากิจ / วัน',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '20',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                'ลาพักร้อน / วัน',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '1',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                'มาสาย / ครั้ง',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '30',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                'ลาอื่นๆ / วัน',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '40',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                'การมาทำงาน / ครั้ง',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '50%',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

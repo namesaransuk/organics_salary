@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:organics_salary/pages/auth/extention.dart';
+import 'package:organics_salary/theme.dart';
 
 class LoginPage extends StatefulWidget {
   final Function(String? email, String? password)? onSubmitted;
@@ -11,24 +12,24 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late String email, password;
-  String? emailError, passwordError;
-  Function(String? email, String? password)? get onSubmitted =>
+  late String empId, password;
+  String? empIdError, passwordError;
+  Function(String? empId, String? password)? get onSubmitted =>
       widget.onSubmitted;
 
   @override
   void initState() {
     super.initState();
-    email = '';
+    empId = '';
     password = '';
 
-    emailError = null;
+    empIdError = null;
     passwordError = null;
   }
 
   void resetErrorText() {
     setState(() {
-      emailError = null;
+      empIdError = null;
       passwordError = null;
     });
   }
@@ -36,20 +37,20 @@ class _LoginPageState extends State<LoginPage> {
   bool validate() {
     resetErrorText();
 
-    RegExp emailExp = RegExp(
+    RegExp empIdExp = RegExp(
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
     bool isValid = true;
-    if (email.isEmpty || !emailExp.hasMatch(email)) {
+    if (empId.isEmpty || !empIdExp.hasMatch(empId)) {
       setState(() {
-        emailError = 'Email is invalid';
+        empIdError = 'รหัสพนักงานไม่ถูกต้อง';
       });
       isValid = false;
     }
 
     if (password.isEmpty) {
       setState(() {
-        passwordError = 'Please enter a password';
+        passwordError = 'กรุณาใส่รหัสผ่าน';
       });
       isValid = false;
     }
@@ -60,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
   void submit() {
     if (validate()) {
       if (onSubmitted != null) {
-        onSubmitted!(email, password);
+        onSubmitted!(empId, password);
       }
     }
   }
@@ -71,42 +72,49 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: ListView(
           children: [
-            SizedBox(height: screenHeight * .12),
-            const Text(
-              'เข้าสู่ระบบ',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
+            SizedBox(height: screenHeight * .2),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'ลงชื่อเข้าใช้',
+                      style: TextStyle(
+                        color: AppTheme.ognGreen,
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'ระบบ Organics HR',
+                      style: TextStyle(
+                        fontSize: 20,
+                        // color: Colors.black.withOpacity(.6),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Image.asset(
+                  'img/organics_legendary.png',
+                  width: 170,
+                ),
+              ],
             ),
-            SizedBox(height: screenHeight * .01),
-            Text(
-              'Organics Legendary Group',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.black.withOpacity(.6),
-              ),
-            ),
-            Text(
-              'Public Company Limited',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.black.withOpacity(.6),
-              ),
-            ),
-            SizedBox(height: screenHeight * .12),
+            SizedBox(height: screenHeight * .05),
             InputField(
               onChanged: (value) {
                 setState(() {
-                  email = value;
+                  empId = value;
                 });
               },
-              labelText: 'อีเมล์',
-              errorText: emailError,
-              keyboardType: TextInputType.emailAddress,
+              labelText: 'รหัสพนักงาน',
+              errorText: empIdError,
               textInputAction: TextInputAction.next,
               autoFocus: true,
             ),
@@ -136,41 +144,54 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(
-              height: screenHeight * .075,
+              height: screenHeight * .05,
             ),
-            FormButton(
-              text: 'เข้าสู่ระบบ',
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.ognGreen,
+              ),
               onPressed: submit,
-            ),
-            SizedBox(
-              height: screenHeight * .15,
-            ),
-            TextButton(
-              onPressed: () {
-                Get.toNamed('/register');
-              },
-              // onPressed: () => Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (_) => const RegisterPage(),
-              //   ),
-              // ),
-              child: RichText(
-                text: const TextSpan(
-                  text: "ไม่มีบัญชีพนักงาน, ",
-                  style: TextStyle(color: Colors.black),
-                  children: [
-                    TextSpan(
-                      text: 'ลงทะเบียน',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                      ),
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Text(
+                    'เข้าสู่ระบบ',
+                    style: TextStyle(
+                      color: Colors.white,
                     ),
-                  ],
+                  ),
                 ),
               ),
             )
+            // SizedBox(
+            //   height: screenHeight * .15,
+            // ),
+            // TextButton(
+            //   onPressed: () {
+            //     Get.toNamed('/register');
+            //   },
+            //   // onPressed: () => Navigator.push(
+            //   //   context,
+            //   //   MaterialPageRoute(
+            //   //     builder: (_) => const RegisterPage(),
+            //   //   ),
+            //   // ),
+            //   child: RichText(
+            //     text: const TextSpan(
+            //       text: "ไม่มีบัญชีพนักงาน, ",
+            //       style: TextStyle(color: Colors.black),
+            //       children: [
+            //         TextSpan(
+            //           text: 'ลงทะเบียน',
+            //           style: TextStyle(
+            //             color: Colors.blue,
+            //             fontWeight: FontWeight.bold,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),

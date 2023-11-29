@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: Color.fromRGBO(19, 110, 104, 1),
           useMaterial3: true,
-          textTheme: GoogleFonts.kanitTextTheme(),
+          textTheme: GoogleFonts.promptTextTheme(),
         ),
         // home: HomePage(),
         initialRoute: '/',

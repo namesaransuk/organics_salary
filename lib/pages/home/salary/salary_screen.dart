@@ -4,6 +4,7 @@ import 'package:organics_salary/controllers/salary_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
+import 'package:mirai_dropdown_menu/mirai_dropdown_menu.dart';
 
 class SalaryScreen extends StatefulWidget {
   @override
@@ -25,15 +26,15 @@ class _SalaryScreenState extends State<SalaryScreen> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: SegmentedTabControl(
-              radius: const Radius.circular(25),
-              backgroundColor: Colors.grey.shade300,
+              radius: const Radius.circular(0),
+              backgroundColor: Colors.grey.shade500,
               indicatorColor: Color.fromARGB(255, 19, 110, 104),
-              tabTextColor: Colors.black45,
+              tabTextColor: Colors.white,
               selectedTabTextColor: Colors.white,
-              // squeezeIntensity: 2,
-              // height: 45,
+              squeezeIntensity: 2,
+              height: 55,
               tabPadding: const EdgeInsets.symmetric(horizontal: 8),
               textStyle: Theme.of(context).textTheme.bodyLarge,
               tabs: [
@@ -44,11 +45,11 @@ class _SalaryScreenState extends State<SalaryScreen> {
           ),
           // Sample pages
           Container(
-            height: MediaQuery.of(context).size.height * 0.8,
+            height: MediaQuery.of(context).size.height * 0.85,
             child: TabBarView(
               physics: const BouncingScrollPhysics(),
               children: [
-                viewSlip(),
+                viewSlip(context),
                 Center(
                   child: Text('Test'),
                 )
@@ -60,7 +61,7 @@ class _SalaryScreenState extends State<SalaryScreen> {
     );
   }
 
-  Widget viewSlip() {
+  Widget viewSlip(context) {
     return FutureBuilder(
       future: salaryController.loadData(),
       builder: (context, snapshot) {
@@ -68,17 +69,6 @@ class _SalaryScreenState extends State<SalaryScreen> {
           padding: const EdgeInsets.only(top: 20, bottom: 20),
           child: Column(
             children: <Widget>[
-              CarouselSlider(
-                items: _buildSlipSliders(),
-                options: CarouselOptions(
-                  height: MediaQuery.of(context).size.height,
-                  initialPage: 2,
-                  enlargeCenterPage: true,
-                  onPageChanged: onPageChange,
-                ),
-                carouselController: _controller,
-              ),
-              SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -130,6 +120,17 @@ class _SalaryScreenState extends State<SalaryScreen> {
                   // ),
                 ],
               ),
+              SizedBox(height: 20),
+              CarouselSlider(
+                items: _buildSlipSliders(context),
+                options: CarouselOptions(
+                  height: MediaQuery.of(context).size.height * 0.75,
+                  initialPage: 2,
+                  enlargeCenterPage: true,
+                  onPageChanged: onPageChange,
+                ),
+                carouselController: _controller,
+              ),
             ],
           ),
         );
@@ -137,15 +138,21 @@ class _SalaryScreenState extends State<SalaryScreen> {
     );
   }
 
-  List<Widget> _buildSlipSliders() {
+  List<Widget> _buildSlipSliders(context) {
     return salaryController.dataList
         .map(
           (item) => Card(
-            surfaceTintColor: Colors.white,
+            // decoration: BoxDecoration(
+            //   borderRadius: BorderRadius.circular(30),
+            //   border: Border.all(
+            //     color: Colors.grey,
+            //   ),
+            // ),
+            // surfaceTintColor: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
+                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [

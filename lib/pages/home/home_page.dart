@@ -4,6 +4,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:organics_salary/pages/home/leave/leave_screen.dart';
 import 'package:organics_salary/pages/home/profile/profile_screen.dart';
 import 'package:organics_salary/pages/home/salary/salary_screen.dart';
+import 'package:organics_salary/theme.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,18 +12,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
   static TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static List<Widget> _widgetOptions = <Widget>[
+    ProfileScreen(),
+    SalaryScreen(),
+    LeaveScreen(),
+    // CoinScreen(),
     Text(
       'หน้าแรก',
       style: optionStyle,
     ),
-    SalaryScreen(),
-    LeaveScreen(),
-    ProfileScreen(),
   ];
+
+  bool get shouldShowAppBar =>
+      _selectedIndex == 0 || _selectedIndex == _widgetOptions.length - 1;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +37,26 @@ class _HomePageState extends State<HomePage> {
       // elevation: 20,
       // title: const Text('GoogleNavBar'),
       // ),
-      appBar: null,
+      appBar: shouldShowAppBar
+          ? AppBar(
+              title: _selectedIndex == 0
+                  ? Text(
+                      'ข้อมูลส่วนตัว',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  : Text(
+                      'Organics Coin',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+              centerTitle: true,
+              backgroundColor: AppTheme.ognGreen,
+              foregroundColor: Colors.white,
+            )
+          : null,
       body: Center(
         child: ListView(
           children: [
@@ -57,16 +81,16 @@ class _HomePageState extends State<HomePage> {
               rippleColor: Colors.grey[300]!,
               hoverColor: Colors.grey[100]!,
               gap: 8,
-              activeColor: Colors.black,
+              activeColor: Colors.white,
               iconSize: 24,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               duration: Duration(milliseconds: 400),
-              tabBackgroundColor: Colors.grey[100]!,
+              tabBackgroundColor: AppTheme.ognGreen!,
               color: Colors.black,
               tabs: [
                 GButton(
-                  icon: LineIcons.home,
-                  text: 'หน้าแรก',
+                  icon: LineIcons.user,
+                  text: 'โปรไฟล์',
                 ),
                 GButton(
                   icon: LineIcons.moneyCheck,
@@ -77,8 +101,8 @@ class _HomePageState extends State<HomePage> {
                   text: 'แจ้งลา',
                 ),
                 GButton(
-                  icon: LineIcons.user,
-                  text: 'โปรไฟล์',
+                  icon: LineIcons.coins,
+                  text: 'คอยน์',
                 ),
               ],
               selectedIndex: _selectedIndex,
