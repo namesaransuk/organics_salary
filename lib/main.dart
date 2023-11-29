@@ -36,7 +36,6 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme: GoogleFonts.promptTextTheme(),
         ),
-        // home: HomePage(),
         initialRoute: '/',
         defaultTransition: Transition.cupertino,
         getPages: [
