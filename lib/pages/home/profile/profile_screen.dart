@@ -7,7 +7,34 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen>
+    with TickerProviderStateMixin {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ListView(
+          // shrinkWrap: true,
+          children: const [
+            GetMainUI(),
+          ],
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).padding.bottom,
+        ),
+      ],
+    );
+  }
+}
+
+class GetMainUI extends StatefulWidget {
+  const GetMainUI({super.key});
+
+  @override
+  State<GetMainUI> createState() => _GetMainUIState();
+}
+
+class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -144,46 +171,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                'ลาป่วย / วัน',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '10',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                'ลากิจ / วัน',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '20',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        buildCard('ลาป่วย / วัน', '10'),
+                        buildCard('ลากิจ / วัน', '20'),
                       ],
                     ),
                   ),
@@ -191,46 +180,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                'ลาพักร้อน / วัน',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '1',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                'มาสาย / ครั้ง',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '30',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        buildCard('ลาพักร้อน / วัน', '1'),
+                        buildCard('มาสาย / ครั้ง', '30'),
                       ],
                     ),
                   ),
@@ -238,51 +189,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                'ลาอื่นๆ / วัน',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '40',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                'การมาทำงาน / ครั้ง',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '50%',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        buildCard('ลาอื่นๆ / วัน', '40'),
+                        buildCard('การมาทำงาน / %', '50%'),
                       ],
                     ),
                   ),
                 ],
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildCard(String header, String quantity) {
+    return Expanded(
+      child: Column(
+        children: [
+          Text(
+            header,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            quantity,
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],

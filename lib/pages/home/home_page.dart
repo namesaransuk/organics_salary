@@ -57,13 +57,7 @@ class _HomePageState extends State<HomePage> {
               foregroundColor: Colors.white,
             )
           : null,
-      body: Center(
-        child: ListView(
-          children: [
-            _widgetOptions.elementAt(_selectedIndex),
-          ],
-        ),
-      ),
+      body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -76,14 +70,14 @@ class _HomePageState extends State<HomePage> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
             child: GNav(
               rippleColor: Colors.grey[300]!,
               hoverColor: Colors.grey[100]!,
               gap: 8,
               activeColor: Colors.white,
-              iconSize: 24,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              iconSize: 26,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               duration: Duration(milliseconds: 400),
               tabBackgroundColor: AppTheme.ognGreen!,
               color: Colors.black,
