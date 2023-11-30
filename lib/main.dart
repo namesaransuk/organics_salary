@@ -4,6 +4,7 @@ import 'package:organics_salary/pages/auth/login_page.dart';
 import 'package:organics_salary/pages/auth/register_page.dart';
 import 'package:organics_salary/pages/home/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
         title: 'Organics Salary',
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('th'),
+          const Locale('en'),
+          const Locale('us'),
+        ],
+        locale: Locale('th'),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: Color.fromRGBO(19, 110, 104, 1),
