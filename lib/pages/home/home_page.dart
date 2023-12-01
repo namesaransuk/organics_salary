@@ -4,6 +4,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:organics_salary/pages/home/leave/leave_screen.dart';
 import 'package:organics_salary/pages/home/profile/profile_screen.dart';
 import 'package:organics_salary/pages/home/salary/salary_screen.dart';
+import 'package:organics_salary/pages/home/coin/index.dart';
 import 'package:organics_salary/theme.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,10 +21,7 @@ class _HomePageState extends State<HomePage> {
     SalaryScreen(),
     LeaveScreen(),
     // CoinScreen(),
-    Text(
-      'หน้าแรก',
-      style: optionStyle,
-    ),
+    HomeMenu(),
   ];
 
   bool get shouldShowAppBar =>
