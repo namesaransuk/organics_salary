@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
 import 'package:organics_salary/theme.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:dotted_border/dotted_border.dart';
+import 'dart:io';
+
+List<Map<String, dynamic>> listLeave = [
+  {'lId': 1, 'lName': 'ลาป่วย'},
+  {'lId': 2, 'lName': 'มาสาย'},
+  {'lId': 3, 'lName': 'ลากิจ'},
+  {'lId': 4, 'lName': 'ลาพักร้อนประจำปี'},
+  {'lId': 5, 'lName': 'ลาคลอด'},
+  {'lId': 6, 'lName': 'ลาอื่นๆ'},
+];
 
 class LeaveScreen extends StatefulWidget {
   const LeaveScreen({super.key});
@@ -62,23 +74,273 @@ class LeaveReport extends StatefulWidget {
 }
 
 class _LeaveReportState extends State<LeaveReport> {
+  late TextEditingController _nameController;
+  late TextEditingController _empIdController;
+  late TextEditingController _departmentController;
+
+  XFile? image;
+
+  final ImagePicker picker = ImagePicker();
+
+  Future getImage(ImageSource media) async {
+    var img = await picker.pickImage(source: media);
+
+    setState(() {
+      image = img;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: 'Dr.Jel Organics');
+    _empIdController = TextEditingController(text: 'IT 1234');
+    _departmentController = TextEditingController(text: 'CEO');
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(30.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Text('data'),
+              Column(
+                children: [
+                  TextField(
+                    controller: _nameController,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 7, horizontal: 16),
+                      labelText: 'ชื่อ-นามสกุล',
+                      alignLabelWithHint: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                        borderSide: BorderSide(color: AppTheme.ognGreen),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _empIdController,
+                          decoration: InputDecoration(
+                            labelText: 'รหัสพนักงาน',
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 7, horizontal: 16),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: BorderSide(color: AppTheme.ognGreen),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: TextField(
+                          controller: _departmentController,
+                          decoration: InputDecoration(
+                            labelText: 'แผนก / ฝ่าย',
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 7, horizontal: 16),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: BorderSide(color: AppTheme.ognGreen),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(height: 40, color: Colors.black45),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('ประเภทการลา'),
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          // color: Colors.white,
+                          border:
+                              Border.all(color: AppTheme.ognGreen, width: 1),
+                          borderRadius: BorderRadius.circular(50),
+                          // boxShadow: <BoxShadow>[
+                          //   BoxShadow(
+                          //       color: Color.fromRGBO(0, 0, 0, 0.57), blurRadius: 5)
+                          // ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 30, right: 30),
+                          child: DropdownButton(
+                            borderRadius: BorderRadius.circular(20),
+                            // value: salaryController.monthName != null
+                            //     ? '${salaryController.monthName}'
+                            //     : null,
+                            items: [
+                              for (final leave in listLeave)
+                                DropdownMenuItem<String>(
+                                  value: '${leave['lId']} ${leave['lName']}',
+                                  child: Text(
+                                    '${leave['lName']}',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                            ],
+                            onChanged: (String? value) {
+                              if (value != null) {
+                                // dynamic selectedValues = value.split(' ');
+                                // int selectedMonth = int.parse(selectedValues[0]);
+                                // String selectedMonthName = selectedValues[1];
+
+                                // salaryController.loadData(selectedMonth);
+                                // salaryController.getMonthName(selectedMonthName);
+                                // print(selectedMonth);
+                              }
+                            },
+                            icon: const Padding(
+                                padding: EdgeInsets.only(left: 20),
+                                child: Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.black,
+                                )),
+                            iconEnabledColor: Colors.white,
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 15),
+                            dropdownColor: Colors.white,
+                            underline: Container(),
+                            isExpanded: true,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 16.0),
+                    child: DottedBorder(
+                      dashPattern: [8, 4],
+                      borderType: BorderType.RRect,
+                      radius: Radius.circular(12),
+                      padding: EdgeInsets.all(6),
+                      child: image != null
+                          ? Column(
+                              children: [
+                                ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12)),
+                                  child: Image.file(
+                                    File(image!.path),
+                                    fit: BoxFit.cover,
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 300,
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    myAlert();
+                                  },
+                                  child: Text('เลือกรูปภาพใหม่'),
+                                ),
+                              ],
+                            )
+                          : Container(
+                              width: double.infinity,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "ไม่ได้เลือกรูปภาพ",
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      myAlert();
+                                    },
+                                    child: Text('อัพโหลดรูป'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                    ),
+                  ),
+                ],
               )
             ],
           ),
         )
       ],
     );
+  }
+
+  void myAlert() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            title: Text('กรุณาเลือกรูป'),
+            content: Container(
+              height: MediaQuery.of(context).size.height / 6,
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    //if user click this button, user can upload image from gallery
+                    onPressed: () {
+                      Navigator.pop(context);
+                      getImage(ImageSource.gallery);
+                    },
+                    child: Row(
+                      children: [
+                        Icon(Icons.image),
+                        SizedBox(width: 7),
+                        Text('จากแกลลอรี่'),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    //if user click this button. user can upload image from camera
+                    onPressed: () {
+                      Navigator.pop(context);
+                      getImage(ImageSource.camera);
+                    },
+                    child: Row(
+                      children: [
+                        Icon(Icons.camera_alt),
+                        SizedBox(width: 7),
+                        Text('จากกล้อง'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
 
@@ -97,7 +359,7 @@ class _LeaveHistoryState extends State<LeaveHistory> {
     return ListView(
       children: [
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(30.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

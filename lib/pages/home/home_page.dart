@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:organics_salary/pages/home/coin/coin_screen.dart';
 import 'package:organics_salary/pages/home/leave/leave_screen.dart';
 import 'package:organics_salary/pages/home/profile/profile_screen.dart';
 import 'package:organics_salary/pages/home/salary/salary_screen.dart';
-import 'package:organics_salary/pages/home/coin/index.dart';
+// import 'package:organics_salary/pages/home/coin/index.dart';
 import 'package:organics_salary/theme.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,8 +21,8 @@ class _HomePageState extends State<HomePage> {
     ProfileScreen(),
     SalaryScreen(),
     LeaveScreen(),
-    // CoinScreen(),
-    HomeMenu(),
+    CoinScreen(),
+    // HomeMenu(),
   ];
 
   bool get shouldShowAppBar =>
