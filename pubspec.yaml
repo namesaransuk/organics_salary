@@ -49,6 +49,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^23.2.6
   image_picker: ^1.0.4
   dotted_border: ^2.1.0
+  date_format: ^2.0.7
 
 dev_dependencies:
   flutter_test:

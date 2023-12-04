@@ -9,8 +9,8 @@ var category = [
 ];
 var images = [
   // const AssetImage("assets/img/coin/14.png"),
-  const AssetImage("assets/img/coin/15.jpg"),
-  const AssetImage("assets/img/coin/15.jpg"),
+  const AssetImage("img/coin/15.jpg"),
+  const AssetImage("img/coin/15.jpg"),
 ];
 var ratting = [
   40,

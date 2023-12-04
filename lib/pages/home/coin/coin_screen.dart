@@ -5,25 +5,50 @@ import 'package:organics_salary/pages/home/coin/details.dart';
 import 'package:organics_salary/pages/home/coin/resorces_list.dart';
 
 class CoinScreen extends StatelessWidget {
-  const CoinScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ListView(
+          // shrinkWrap: true,
+          children: const [
+            GetMainUI(),
+          ],
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).padding.bottom,
+        ),
+      ],
+    );
+  }
+}
 
+class GetMainUI extends StatefulWidget {
+  const GetMainUI({super.key});
+
+  @override
+  State<GetMainUI> createState() => _GetMainUIState();
+}
+
+class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
+      padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
       child: Column(
-        // crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
                 image: AssetImage('img/coin/ogn_coin.png'),
-                width: 80,
-                height: 80,
+                width: 60,
+                height: 60,
               ),
               Text(
-                "0",
+                "1000",
                 style: TextStyle(
                     color: Colors.teal,
                     fontWeight: FontWeight.bold,
@@ -34,40 +59,34 @@ class CoinScreen extends StatelessWidget {
           const SizedBox(
             height: 5,
           ),
-          Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
               2,
               (index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Details(index),
-                      ),
-                    );
-                  },
-                  child: Card(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    margin: const EdgeInsets.only(right: 10, top: 10),
-                    child: Container(
-                      padding: const EdgeInsets.all(0),
-                      width: 210,
-                      child: Column(
-                        children: [
-                          Container(
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10)),
-                              color: AppTheme.ognGreen,
-                            ),
-                            height: 30,
-                            child: Center(
-                              child: Padding(
+                return Card(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  margin: const EdgeInsets.only(right: 10, top: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10)),
+                          color: AppTheme.ognGreen,
+                        ),
+                        height: 45,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Text(
                                   names[index],
@@ -77,68 +96,39 @@ class CoinScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                          Column(
-                            // crossAxisAlignment:
-                            //     CrossAxisAlignment.center,
-                            // mainAxisAlignment:
-                            //     MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                child: Stack(
-                                  // crossAxisAlignment:
-                                  //     CrossAxisAlignment.center,
-                                  // mainAxisAlignment:
-                                  //     MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      child: Image(
-                                        image: images[index],
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: MediaQuery.of(context).padding.top +
-                                          150,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 50),
-                                        child: ElevatedButton(
-                                          onPressed: () {},
-                                          child: Row(
-                                            // mainAxisAlignment:
-                                            //     MainAxisAlignment.start,
-                                            children: [
-                                              const Image(
-                                                image: AssetImage(
-                                                    'img/coin/ogn_coin2.png'),
-                                                width: 17,
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                prices[index],
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                              VerticalDivider(
+                                width: 30,
+                                indent:
+                                    MediaQuery.of(context).size.width * 0.04,
+                                endIndent:
+                                    MediaQuery.of(context).size.width * 0.04,
+                              ),
+                              const Image(
+                                image: AssetImage('img/coin/ogn_coin2.png'),
+                                width: 17,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                prices[index],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
                                 ),
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                      InkWell(
+                        onTap: () {},
+                        child: Image(
+                          image: images[index],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ],
                   ),
                 );
               },

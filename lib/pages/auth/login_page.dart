@@ -150,7 +150,10 @@ class _LoginPageState extends State<LoginPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.ognGreen,
               ),
-              onPressed: submit,
+              // onPressed: submit,
+              onPressed: () {
+                Get.toNamed('home');
+              },
               child: Container(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),

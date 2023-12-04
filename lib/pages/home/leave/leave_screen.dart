@@ -4,6 +4,8 @@ import 'package:organics_salary/theme.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'dart:io';
+import 'package:date_format/date_format.dart';
+import 'package:intl/intl.dart';
 
 List<Map<String, dynamic>> listLeave = [
   {'lId': 1, 'lName': 'ลาป่วย'},
@@ -78,6 +80,8 @@ class _LeaveReportState extends State<LeaveReport> {
   late TextEditingController _empIdController;
   late TextEditingController _departmentController;
 
+  String? selectedLeave;
+
   XFile? image;
 
   final ImagePicker picker = ImagePicker();
@@ -90,12 +94,64 @@ class _LeaveReportState extends State<LeaveReport> {
     });
   }
 
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+  String startDate = 'เลือกวันที่';
+  String startTime = 'เลือกเวลา';
+  String endDate = 'เลือกวันที่';
+  String endTime = 'เลือกเวลา';
+
+  Future<void> _selectDate(BuildContext context, int mode) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    final String formattedDate =
+        DateFormat('dd MMMM yyyy', 'th').format(picked!.toLocal());
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        if (mode == 1) {
+          startDate = formattedDate;
+        } else {
+          endDate = formattedDate;
+        }
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context, int mode) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+
+    if (picked != null && picked != selectedTime) {
+      final DateTime now = DateTime.now();
+      final DateTime newTime =
+          DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
+
+      final String formattedTime = DateFormat.Hm().format(newTime);
+
+      setState(() {
+        if (mode == 1) {
+          startTime = formattedTime;
+        } else {
+          endTime = formattedTime;
+        }
+      });
+    }
+  }
+
   @override
   void initState() {
-    super.initState();
     _nameController = TextEditingController(text: 'Dr.Jel Organics');
     _empIdController = TextEditingController(text: 'IT 1234');
     _departmentController = TextEditingController(text: 'CEO');
+
+    super.initState();
   }
 
   @override
@@ -185,7 +241,6 @@ class _LeaveReportState extends State<LeaveReport> {
                       Text('ประเภทการลา'),
                       DecoratedBox(
                         decoration: BoxDecoration(
-                          // color: Colors.white,
                           border:
                               Border.all(color: AppTheme.ognGreen, width: 1),
                           borderRadius: BorderRadius.circular(50),
@@ -194,99 +249,263 @@ class _LeaveReportState extends State<LeaveReport> {
                           //       color: Color.fromRGBO(0, 0, 0, 0.57), blurRadius: 5)
                           // ],
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 30, right: 30),
-                          child: DropdownButton(
-                            borderRadius: BorderRadius.circular(20),
-                            // value: salaryController.monthName != null
-                            //     ? '${salaryController.monthName}'
-                            //     : null,
-                            items: [
-                              for (final leave in listLeave)
-                                DropdownMenuItem<String>(
-                                  value: '${leave['lId']} ${leave['lName']}',
-                                  child: Text(
-                                    '${leave['lName']}',
-                                    style: const TextStyle(color: Colors.black),
-                                  ),
+                        child: DropdownButton(
+                          padding: EdgeInsets.only(left: 30, right: 30),
+                          borderRadius: BorderRadius.circular(20),
+                          items: [
+                            for (final leave in listLeave)
+                              DropdownMenuItem<String>(
+                                value: '${leave['lId']} ${leave['lName']}',
+                                child: Text(
+                                  '${leave['lName']}',
+                                  style: const TextStyle(color: Colors.black),
                                 ),
-                            ],
-                            onChanged: (String? value) {
-                              if (value != null) {
-                                // dynamic selectedValues = value.split(' ');
-                                // int selectedMonth = int.parse(selectedValues[0]);
-                                // String selectedMonthName = selectedValues[1];
+                              ),
+                          ],
+                          onChanged: (String? value) {
+                            if (value != null) {
+                              setState(() {
+                                selectedLeave = value;
+                              });
+                              // dynamic selectedValues = value.split(' ');
+                              // int selectedMonth = int.parse(selectedValues[0]);
+                              // String selectedMonthName = selectedValues[1];
 
-                                // salaryController.loadData(selectedMonth);
-                                // salaryController.getMonthName(selectedMonthName);
-                                // print(selectedMonth);
-                              }
-                            },
-                            icon: const Padding(
-                                padding: EdgeInsets.only(left: 20),
-                                child: Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.black,
-                                )),
-                            iconEnabledColor: Colors.white,
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 15),
-                            dropdownColor: Colors.white,
-                            underline: Container(),
-                            isExpanded: true,
+                              // salaryController.loadData(selectedMonth);
+                              // salaryController.getMonthName(selectedMonthName);
+                              // print(selectedMonth);
+                            }
+                          },
+                          value: selectedLeave,
+                          icon: const Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.black,
+                              )),
+                          iconEnabledColor: Colors.white,
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 15),
+                          dropdownColor: Colors.white,
+                          underline: Container(),
+                          isExpanded: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                  selectedLeave != null && selectedLeave!.startsWith('1')
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 16.0),
+                          child: DottedBorder(
+                            dashPattern: [8, 4],
+                            borderType: BorderType.RRect,
+                            radius: Radius.circular(12),
+                            padding: EdgeInsets.all(6),
+                            child: image != null
+                                ? Column(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(12)),
+                                        child: Image.file(
+                                          File(image!.path),
+                                          fit: BoxFit.cover,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 300,
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          myAlert();
+                                        },
+                                        child: Text('เลือกรูปภาพใหม่'),
+                                      ),
+                                    ],
+                                  )
+                                : Container(
+                                    width: double.infinity,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "ไม่ได้เลือกรูปภาพ",
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            myAlert();
+                                          },
+                                          child: Text('อัพโหลดรูป'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                          ),
+                        )
+                      : Container(),
+                  SizedBox(height: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('เหตุผลการลา'),
+                      TextField(
+                        minLines: 3,
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration(
+                          alignLabelWithHint: true,
+                          hintText: 'เช่น นำไปทำธุรกรรม',
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                            borderSide: BorderSide(color: AppTheme.ognGreen),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                            borderSide: BorderSide(color: Colors.grey),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 16.0),
-                    child: DottedBorder(
-                      dashPattern: [8, 4],
-                      borderType: BorderType.RRect,
-                      radius: Radius.circular(12),
-                      padding: EdgeInsets.all(6),
-                      child: image != null
-                          ? Column(
-                              children: [
-                                ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12)),
-                                  child: Image.file(
-                                    File(image!.path),
-                                    fit: BoxFit.cover,
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 300,
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    myAlert();
-                                  },
-                                  child: Text('เลือกรูปภาพใหม่'),
-                                ),
-                              ],
-                            )
-                          : Container(
-                              width: double.infinity,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "ไม่ได้เลือกรูปภาพ",
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      myAlert();
-                                    },
-                                    child: Text('อัพโหลดรูป'),
-                                  ),
-                                ],
-                              ),
+                  SizedBox(height: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('ตั่งแต่'),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('วันที่ : ${startDate}'),
+                            ElevatedButton(
+                              onPressed: () => _selectDate(context, 1),
+                              child: Text('เลือกวันที่'),
                             ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('เวลา : $startTime'),
+                            ElevatedButton(
+                              onPressed: () => _selectTime(context, 1),
+                              child: Text('เลือกเวลา'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('จนถึง'),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                                'วันที่ : $endDate'),
+                            ElevatedButton(
+                              onPressed: () => _selectDate(context, 2),
+                              child: Text('เลือกวันที่'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('เวลา : $endTime'),
+                            ElevatedButton(
+                              onPressed: () => _selectTime(context, 2),
+                              child: Text('เลือกเวลา'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Card(
+                    color: AppTheme.ognGreen,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'กฏระเบียบการลา',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'ลาพักร้อน ลาป่วย ลากิจ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  'Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae, molestias pariatur. Accusamus facilis beatae quas impedit consequuntur laudantium temporibus aut autem porro pariatur praesentium doloremque optio deleniti, odio, dicta eaque.',
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.ognGreen,
+                        ),
+                        onPressed: () {},
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            'บันทึกใบลา',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               )
             ],
@@ -321,6 +540,9 @@ class _LeaveReportState extends State<LeaveReport> {
                         Text('จากแกลลอรี่'),
                       ],
                     ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
                   ),
                   ElevatedButton(
                     //if user click this button. user can upload image from camera

@@ -4,10 +4,12 @@ import 'package:organics_salary/controllers/loading_controller.dart';
 
 class SalaryController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
+  RxInt monthId = 0.obs;
   RxString monthName = ''.obs;
   RxList<Map<String, dynamic>> dataList = RxList<Map<String, dynamic>>();
 
-  void getMonthName(String mName) async {
+  void getMonthName(int mId, String mName) {
+    monthId.value = mId;
     monthName.value = mName;
   }
 
@@ -21,9 +23,9 @@ class SalaryController extends GetxController {
       if (month == 1) {
         dataList.addAll([
           {
-            'name': 'John Doe',
+            'name': 'Dr.Jel Organics',
             'customer': 'IT1234',
-            'role': "IT Programer",
+            'role': "CEO",
             'salaryMonth': "มกราคม",
             'yearValue': "2567",
             'salary': 50000,
@@ -48,9 +50,9 @@ class SalaryController extends GetxController {
       } else if (month == 2) {
         dataList.addAll([
           {
-            'name': 'John Doe',
+            'name': 'Dr.Jel Organics',
             'customer': 'IT1234',
-            'role': "IT Programer",
+            'role': "CEO",
             'salaryMonth': "กุมภาพันธ์",
             'yearValue': "2567",
             'salary': 50000,
@@ -75,9 +77,9 @@ class SalaryController extends GetxController {
       } else if (month == 3) {
         dataList.addAll([
           {
-            'name': 'John Doe',
+            'name': 'Dr.Jel Organics',
             'customer': 'IT1234',
-            'role': "IT Programer",
+            'role': "CEO",
             'salaryMonth': "มีนาคม",
             'yearValue': "2567",
             'salary': 50000,
