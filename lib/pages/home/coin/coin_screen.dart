@@ -59,80 +59,88 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
           const SizedBox(
             height: 5,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              2,
-              (index) {
-                return Card(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  margin: const EdgeInsets.only(right: 10, top: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10)),
-                          color: AppTheme.ognGreen,
+          GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              // crossAxisSpacing: 100.0,
+              // mainAxisSpacing: 100.0,
+            ),
+            itemCount: 3,
+            itemBuilder: (context, index) {
+              return Card(
+                color: AppTheme.ognGreen,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        names[index],
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
                         ),
-                        height: 45,
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Text(
-                                  names[index],
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        color: Colors.white,
+                        child: Stack(
+                          children: [
+                            InkWell(
+                              onTap: () {},
+                              child: Image(
+                                width: double.infinity,
+                                image: images[index],
+                                // fit: BoxFit.cover,
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 10,
+                              left: MediaQuery.of(context).padding.left + 30,
+                              right: MediaQuery.of(context).padding.right + 30,
+                              child: SizedBox(
+                                height: 30,
+                                child: ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 1,
+                                    backgroundColor: Color.fromARGB(171, 255, 255, 255),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Image(
+                                        image: AssetImage(
+                                            'img/coin/ogn_coin2.png'),
+                                        width: 14,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        prices[index],
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                              VerticalDivider(
-                                width: 30,
-                                indent:
-                                    MediaQuery.of(context).size.width * 0.04,
-                                endIndent:
-                                    MediaQuery.of(context).size.width * 0.04,
-                              ),
-                              const Image(
-                                image: AssetImage('img/coin/ogn_coin2.png'),
-                                width: 17,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                prices[index],
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                      InkWell(
-                        onTap: () {},
-                        child: Image(
-                          image: images[index],
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                    ),
+                  ],
+                ),
+              );
+            },
           )
         ],
       ),

@@ -5,12 +5,12 @@ import 'package:organics_salary/controllers/loading_controller.dart';
 class SalaryController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
   RxInt monthId = 0.obs;
-  RxString monthName = ''.obs;
+  RxString monthName = 'กรุณาเลือกเดือน'.obs;
   RxList<Map<String, dynamic>> dataList = RxList<Map<String, dynamic>>();
 
-  void getMonthName(int mId, String mName) {
-    monthId.value = mId;
+  void getMonthName(String mName) {
     monthName.value = mName;
+    // print(monthName);
   }
 
   void loadData(int month) async {

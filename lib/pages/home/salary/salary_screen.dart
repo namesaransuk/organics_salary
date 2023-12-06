@@ -10,21 +10,20 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 final SalaryController salaryController = Get.put(SalaryController());
 String reason = '';
 int selectedIndex = 2;
-int month = 1;
 
-List<Map<String, dynamic>> listMonth = [
-  {'mId': 1, 'mName': 'มกราคม'},
-  {'mId': 2, 'mName': 'กุมภาพันธ์'},
-  {'mId': 3, 'mName': 'มีนาคม'},
-  {'mId': 4, 'mName': 'เมษายน'},
-  {'mId': 5, 'mName': 'พฤษภาคม'},
-  {'mId': 6, 'mName': 'มิถุนายน'},
-  {'mId': 7, 'mName': 'กรกฎาคม'},
-  {'mId': 8, 'mName': 'สิงหาคม'},
-  {'mId': 9, 'mName': 'กันยายน'},
-  {'mId': 10, 'mName': 'ตุลาคม'},
-  {'mId': 11, 'mName': 'พฤศจิกายน'},
-  {'mId': 12, 'mName': 'ธันวาคม'},
+List<String> listMonth = <String>[
+  'มกราคม',
+  'กุมภาพันธ์',
+  'มีนาคม',
+  'เมษายน',
+  'พฤษภาคม',
+  'มิถุนายน',
+  'กรกฎาคม',
+  'สิงหาคม',
+  'กันยายน',
+  'ตุลาคม',
+  'พฤศจิกายน',
+  'ธันวาคม',
 ];
 // List<String> listYear = <String>['2566', '2567', '2568', '2569'];
 
@@ -96,63 +95,66 @@ class SlipView extends StatelessWidget {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: <Widget>[
-              // Obx(() {
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: AppTheme.ognGreen, width: 1),
-                  borderRadius: BorderRadius.circular(50),
-                  // boxShadow: <BoxShadow>[
-                  //   BoxShadow(
-                  //       color: Color.fromRGBO(0, 0, 0, 0.57), blurRadius: 5)
-                  // ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30, right: 30),
-                  child: DropdownButton<String>(
-                    value: salaryController.monthName.value != ''
-                        ? salaryController.monthName.value
-                        : listMonth.isNotEmpty
-                            ? listMonth[0][
-                                'mName'] // หรือค่าเริ่มต้นที่คุณต้องการให้เลือก
-                            : null,
-                    items: listMonth.map((Map<String, dynamic> month) {
-                      return DropdownMenuItem<String>(
-                        value: month['mName'],
-                        child: Text(
-                          '${month['mName']}',
-                          style: const TextStyle(color: Colors.black),
+              Obx(
+                () => DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: AppTheme.ognGreen, width: 1),
+                    borderRadius: BorderRadius.circular(50),
+                    // boxShadow: <BoxShadow>[
+                    //   BoxShadow(
+                    //       color: Color.fromRGBO(0, 0, 0, 0.57), blurRadius: 5)
+                    // ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 30, right: 30),
+                    child: DropdownButton<String>(
+                      value: salaryController.monthName.value,
+                      items: [
+                        DropdownMenuItem<String>(
+                          enabled: false,
+                          value: 'กรุณาเลือกเดือน',
+                          child: Text(
+                            'กรุณาเลือกเดือน',
+                            style: const TextStyle(color: Colors.black54),
+                          ),
                         ),
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      if (value != null) {
-                        final selectedValues = value.split(' ');
-                        final selectedMonthId = selectedValues[0];
-                        final selectedMonthName = selectedValues[1];
+                        for (final month in listMonth)
+                          DropdownMenuItem<String>(
+                            value: month,
+                            child: Text(
+                              month,
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          ),
+                      ],
+                      onChanged: (String? value) {
+                        if (value != null) {
+                          // final selectedValues = value.split(' ');
+                          // final selectedMonthId = selectedValues[0];
+                          // final selectedMonthName = selectedValues[1];
 
-                        salaryController.loadData(int.parse(selectedMonthId));
-                        salaryController.getMonthName(
-                            int.parse(selectedMonthId), selectedMonthName);
-                        print(selectedMonthName);
-                      }
-                    },
-                    icon: const Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.black,
+                          int selectedIndex = listMonth.indexOf(value) + 1;
+                          salaryController.loadData(selectedIndex);
+                          salaryController.getMonthName(value);
+                        }
+                      },
+                      icon: const Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.black,
+                        ),
                       ),
+                      iconEnabledColor: Colors.white,
+                      style: const TextStyle(color: Colors.black, fontSize: 15),
+                      dropdownColor: Colors.white,
+                      underline: Container(),
+                      isExpanded: true,
                     ),
-                    iconEnabledColor: Colors.white,
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
-                    dropdownColor: Colors.white,
-                    underline: Container(),
-                    isExpanded: true,
                   ),
                 ),
               ),
-              // }),
               SizedBox(height: 20),
               _buildSlip(context)
             ],
@@ -378,10 +380,10 @@ class _SlipRequestState extends State<SlipRequest> {
 
     String _selectedDate = '';
     void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-      setState(() {
-        _selectedDate = args.value.toString();
-        print(_selectedDate);
-      });
+      // setState(() {
+      //   _selectedDate = args.value.toString();
+      //   print(_selectedDate);
+      // });
     }
 
     return ListView(
@@ -447,7 +449,7 @@ class _SlipRequestState extends State<SlipRequest> {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            listMonth[index]['mName'],
+                                            listMonth[index],
                                             textAlign: TextAlign.left,
                                           ),
                                         ),
@@ -489,8 +491,20 @@ class _SlipRequestState extends State<SlipRequest> {
                       keyboardType: TextInputType.multiline,
                       decoration: InputDecoration(
                         alignLabelWithHint: true,
-                        border: OutlineInputBorder(),
                         hintText: 'เช่น นำไปทำธุรกรรม',
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(color: AppTheme.ognGreen),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
                       ),
                     ),
                   ],
@@ -522,12 +536,16 @@ class _SlipRequestState extends State<SlipRequest> {
                           textAlign: TextAlign.center,
                         ),
                         showNavigationArrow: true,
-                        onSelectionChanged: _onSelectionChanged,
+                        onSelectionChanged:
+                            (DateRangePickerSelectionChangedArgs args) {
+                          _onSelectionChanged(args);
+                        },
                         view: DateRangePickerView.month,
                         selectionMode: DateRangePickerSelectionMode.single,
                         controller: _datePickerController,
+                        selectionColor: AppTheme.ognGreen,
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),

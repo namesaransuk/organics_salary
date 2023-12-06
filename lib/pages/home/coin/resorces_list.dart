@@ -8,7 +8,7 @@ var category = [
   false,
 ];
 var images = [
-  // const AssetImage("assets/img/coin/14.png"),
+  const AssetImage("img/coin/14.png"),
   const AssetImage("img/coin/15.jpg"),
   const AssetImage("img/coin/15.jpg"),
 ];
@@ -19,6 +19,7 @@ var ratting = [
 ];
 var names = [
   "Iphone 14",
+  "Iphone 15",
   "Iphone 15",
 ];
 var with_ = [
@@ -37,6 +38,7 @@ var with_ = [
 ];
 var prices = [
   "2000",
+  "4000",
   "4000",
 ];
 var mediumRating = [

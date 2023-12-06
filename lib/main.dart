@@ -46,6 +46,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
+           dividerTheme: DividerThemeData(
+          color: Colors.black,
+          // thickness: 2,
+        ),
+          dividerColor: Colors.black,
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: MaterialColor(0xFF136E68, {
               50: Color(0xFF136E68),

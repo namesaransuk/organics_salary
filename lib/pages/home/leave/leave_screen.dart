@@ -145,6 +145,8 @@ class _LeaveReportState extends State<LeaveReport> {
     }
   }
 
+  int? selectedOption;
+
   @override
   void initState() {
     _nameController = TextEditingController(text: 'Dr.Jel Organics');
@@ -174,14 +176,14 @@ class _LeaveReportState extends State<LeaveReport> {
                       labelText: 'ชื่อ-นามสกุล',
                       alignLabelWithHint: true,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                        borderRadius: BorderRadius.circular(20.0),
                         borderSide: BorderSide(color: AppTheme.ognGreen),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                        borderRadius: BorderRadius.circular(20.0),
                         borderSide: BorderSide(color: Colors.grey),
                       ),
                     ),
@@ -197,14 +199,14 @@ class _LeaveReportState extends State<LeaveReport> {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 7, horizontal: 16),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                              borderRadius: BorderRadius.circular(20.0),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                              borderRadius: BorderRadius.circular(20.0),
                               borderSide: BorderSide(color: AppTheme.ognGreen),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                              borderRadius: BorderRadius.circular(20.0),
                               borderSide: BorderSide(color: Colors.grey),
                             ),
                           ),
@@ -219,14 +221,14 @@ class _LeaveReportState extends State<LeaveReport> {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 7, horizontal: 16),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                              borderRadius: BorderRadius.circular(20.0),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                              borderRadius: BorderRadius.circular(20.0),
                               borderSide: BorderSide(color: AppTheme.ognGreen),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                              borderRadius: BorderRadius.circular(20.0),
                               borderSide: BorderSide(color: Colors.grey),
                             ),
                           ),
@@ -252,7 +254,16 @@ class _LeaveReportState extends State<LeaveReport> {
                         child: DropdownButton(
                           padding: EdgeInsets.only(left: 30, right: 30),
                           borderRadius: BorderRadius.circular(20),
+                          hint: Text('เลือกประเภทการลา'),
                           items: [
+                            DropdownMenuItem<String>(
+                              value: 'เลือกประเภทการลา',
+                              enabled: false,
+                              child: Text(
+                                'เลือกประเภทการลา',
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                            ),
                             for (final leave in listLeave)
                               DropdownMenuItem<String>(
                                 value: '${leave['lId']} ${leave['lName']}',
@@ -297,50 +308,96 @@ class _LeaveReportState extends State<LeaveReport> {
                       ? Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 16.0),
-                          child: DottedBorder(
-                            dashPattern: [8, 4],
-                            borderType: BorderType.RRect,
-                            radius: Radius.circular(12),
-                            padding: EdgeInsets.all(6),
-                            child: image != null
-                                ? Column(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(12)),
-                                        child: Image.file(
-                                          File(image!.path),
-                                          fit: BoxFit.cover,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 300,
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          myAlert();
-                                        },
-                                        child: Text('เลือกรูปภาพใหม่'),
-                                      ),
-                                    ],
-                                  )
-                                : Container(
-                                    width: double.infinity,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "ไม่ได้เลือกรูปภาพ",
-                                          style: TextStyle(fontSize: 18),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            myAlert();
-                                          },
-                                          child: Text('อัพโหลดรูป'),
-                                        ),
-                                      ],
-                                    ),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Radio(
+                                    value: 1,
+                                    groupValue: selectedOption,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedOption = value;
+                                        print("Button value: $value");
+                                      });
+                                    },
                                   ),
+                                  Text('ไม่มีใบรับรองแพทย์')
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Radio(
+                                    value: 2,
+                                    groupValue: selectedOption,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedOption = value;
+                                        print("Button value: $value");
+                                      });
+                                    },
+                                  ),
+                                  Text('มีใบรับรองแพทย์')
+                                ],
+                              ),
+                              selectedOption == 2
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      child: DottedBorder(
+                                        dashPattern: [8, 4],
+                                        borderType: BorderType.RRect,
+                                        radius: Radius.circular(12),
+                                        padding: EdgeInsets.all(20),
+                                        child: image != null
+                                            ? Column(
+                                                children: [
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                12)),
+                                                    child: Image.file(
+                                                      File(image!.path),
+                                                      fit: BoxFit.cover,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      height: 300,
+                                                    ),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      myAlert();
+                                                    },
+                                                    child:
+                                                        Text('เลือกรูปภาพใหม่'),
+                                                  ),
+                                                ],
+                                              )
+                                            : Container(
+                                                width: double.infinity,
+                                                child: Column(
+                                                  children: [
+                                                    Text(
+                                                      "ไม่ได้เลือกรูปภาพ",
+                                                      style: TextStyle(
+                                                          fontSize: 18),
+                                                    ),
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        myAlert();
+                                                      },
+                                                      child: Text('อัพโหลดรูป'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                      ),
+                                    )
+                                  : Container(),
+                            ],
                           ),
                         )
                       : Container(),
@@ -359,14 +416,14 @@ class _LeaveReportState extends State<LeaveReport> {
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 16, horizontal: 16),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
+                            borderRadius: BorderRadius.circular(20.0),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
+                            borderRadius: BorderRadius.circular(20.0),
                             borderSide: BorderSide(color: AppTheme.ognGreen),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
+                            borderRadius: BorderRadius.circular(20.0),
                             borderSide: BorderSide(color: Colors.grey),
                           ),
                         ),
@@ -425,8 +482,7 @@ class _LeaveReportState extends State<LeaveReport> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                                'วันที่ : $endDate'),
+                            Text('วันที่ : $endDate'),
                             ElevatedButton(
                               onPressed: () => _selectDate(context, 2),
                               child: Text('เลือกวันที่'),
@@ -520,6 +576,7 @@ class _LeaveReportState extends State<LeaveReport> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            backgroundColor: Colors.white,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             title: Text('กรุณาเลือกรูป'),
