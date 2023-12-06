@@ -86,14 +86,14 @@ class _LoginPageState extends State<LoginPage> {
                       'ลงชื่อเข้าใช้',
                       style: TextStyle(
                         color: AppTheme.ognGreen,
-                        fontSize: 40,
+                        fontSize: 35,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       'ระบบ Organics HR',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         // color: Colors.black.withOpacity(.6),
                         fontWeight: FontWeight.bold,
                       ),
@@ -101,35 +101,63 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
                 Image.asset(
-                  'img/organics_legendary.png',
-                  width: 170,
+                  'assets/img/organics_legendary.png',
+                  width: 150,
                 ),
               ],
             ),
             SizedBox(height: screenHeight * .05),
-            InputField(
+            TextField(
               onChanged: (value) {
                 setState(() {
                   empId = value;
                 });
               },
-              labelText: 'รหัสพนักงาน',
-              errorText: empIdError,
-              textInputAction: TextInputAction.next,
-              autoFocus: true,
-            ),
-            SizedBox(height: screenHeight * .025),
-            InputField(
-              onChanged: (value) {
-                setState(() {
-                  password = value;
-                });
-              },
               onSubmitted: (val) => submit(),
-              labelText: 'รหัสผ่าน',
-              errorText: passwordError,
+              decoration: InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                labelText: 'รหัสพนักงาน',
+                errorText: empIdError,
+                alignLabelWithHint: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(color: AppTheme.ognGreen),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+              ),
+            ),
+            SizedBox(height: screenHeight * .02),
+            TextField(
               obscureText: true,
-              textInputAction: TextInputAction.next,
+              onChanged: (value) => setState(() {
+                password = value;
+              }),
+              onSubmitted: (val) => submit(),
+              decoration: InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 7, horizontal: 16),
+                labelText: 'รหัสผ่าน',
+                errorText: passwordError,
+                alignLabelWithHint: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(color: AppTheme.ognGreen),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+              ),
             ),
             Align(
               alignment: Alignment.centerRight,
@@ -152,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               // onPressed: submit,
               onPressed: () {
-                Get.toNamed('home');
+                Get.offAndToNamed('home');
               },
               child: Container(
                 child: Padding(

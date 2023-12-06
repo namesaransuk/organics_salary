@@ -38,40 +38,42 @@ class _SalaryScreenState extends State<SalaryScreen>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: SegmentedTabControl(
-              radius: const Radius.circular(0),
-              backgroundColor: Colors.grey.shade500,
-              indicatorColor: Color.fromARGB(255, 19, 110, 104),
-              tabTextColor: Colors.white,
-              selectedTabTextColor: Colors.white,
-              squeezeIntensity: 2,
-              height: 55,
-              tabPadding: const EdgeInsets.symmetric(horizontal: 8),
-              textStyle: Theme.of(context).textTheme.bodyLarge,
-              tabs: [
-                SegmentTab(label: 'เงินเดือน'),
-                SegmentTab(label: 'ขอสลิป'),
-              ],
+    return SafeArea(
+      child: DefaultTabController(
+        length: 2,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: SegmentedTabControl(
+                radius: const Radius.circular(0),
+                backgroundColor: Colors.grey.shade500,
+                indicatorColor: Color.fromARGB(255, 19, 110, 104),
+                tabTextColor: Colors.white,
+                selectedTabTextColor: Colors.white,
+                squeezeIntensity: 2,
+                height: 55,
+                tabPadding: const EdgeInsets.symmetric(horizontal: 8),
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+                tabs: [
+                  SegmentTab(label: 'เงินเดือน'),
+                  SegmentTab(label: 'ขอสลิป'),
+                ],
+              ),
             ),
-          ),
-          // Sample pages
-          Container(
-            padding: EdgeInsets.only(top: 55),
-            child: TabBarView(
-              physics: const BouncingScrollPhysics(),
-              children: [
-                SlipView(),
-                SlipRequest(),
-              ],
+            // Sample pages
+            Container(
+              padding: EdgeInsets.only(top: 55),
+              child: TabBarView(
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  SlipView(),
+                  SlipRequest(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -427,13 +429,13 @@ class _SlipRequestState extends State<SlipRequest> {
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: List.generate(
-                            4,
+                            6,
                             (row) => Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: List.generate(
-                                3,
+                                2,
                                 (col) {
-                                  int index = row * 3 + col;
+                                  int index = row * 2 + col;
                                   return Expanded(
                                     child: Row(
                                       mainAxisAlignment:
@@ -444,6 +446,7 @@ class _SlipRequestState extends State<SlipRequest> {
                                           onChanged: (value) {
                                             setState(() {
                                               selectedMonths[index] = value!;
+                                              print(selectedMonths.toString());
                                             });
                                           },
                                         ),

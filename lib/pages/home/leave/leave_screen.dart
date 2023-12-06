@@ -27,40 +27,42 @@ class _LeaveScreenState extends State<LeaveScreen>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: SegmentedTabControl(
-              radius: const Radius.circular(0),
-              backgroundColor: Colors.grey.shade500,
-              indicatorColor: Color.fromARGB(255, 19, 110, 104),
-              tabTextColor: Colors.white,
-              selectedTabTextColor: Colors.white,
-              squeezeIntensity: 2,
-              height: 55,
-              tabPadding: const EdgeInsets.symmetric(horizontal: 8),
-              textStyle: Theme.of(context).textTheme.bodyLarge,
-              tabs: [
-                SegmentTab(label: 'แจ้งลา'),
-                SegmentTab(label: 'ประวัติการลา'),
-              ],
+    return SafeArea(
+      child: DefaultTabController(
+        length: 2,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: SegmentedTabControl(
+                radius: const Radius.circular(0),
+                backgroundColor: Colors.grey.shade500,
+                indicatorColor: Color.fromARGB(255, 19, 110, 104),
+                tabTextColor: Colors.white,
+                selectedTabTextColor: Colors.white,
+                squeezeIntensity: 2,
+                height: 55,
+                tabPadding: const EdgeInsets.symmetric(horizontal: 8),
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+                tabs: [
+                  SegmentTab(label: 'แจ้งลา'),
+                  SegmentTab(label: 'ประวัติการลา'),
+                ],
+              ),
             ),
-          ),
-          // Sample pages
-          Container(
-            padding: EdgeInsets.only(top: 55),
-            child: TabBarView(
-              physics: const BouncingScrollPhysics(),
-              children: [
-                LeaveReport(),
-                LeaveHistory(),
-              ],
+            // Sample pages
+            Container(
+              padding: EdgeInsets.only(top: 55),
+              child: TabBarView(
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  LeaveReport(),
+                  LeaveHistory(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -108,10 +110,10 @@ class _LeaveReportState extends State<LeaveReport> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-    final String formattedDate =
-        DateFormat('dd MMMM yyyy', 'th').format(picked!.toLocal());
 
     if (picked != null && picked != selectedDate) {
+      final String formattedDate =
+          DateFormat('dd MMMM yyyy', 'th').format(picked!.toLocal());
       setState(() {
         if (mode == 1) {
           startDate = formattedDate;
@@ -194,6 +196,7 @@ class _LeaveReportState extends State<LeaveReport> {
                       Expanded(
                         child: TextField(
                           controller: _empIdController,
+                          readOnly: true,
                           decoration: InputDecoration(
                             labelText: 'รหัสพนักงาน',
                             contentPadding: EdgeInsets.symmetric(
@@ -216,6 +219,7 @@ class _LeaveReportState extends State<LeaveReport> {
                       Expanded(
                         child: TextField(
                           controller: _departmentController,
+                          readOnly: true,
                           decoration: InputDecoration(
                             labelText: 'แผนก / ฝ่าย',
                             contentPadding: EdgeInsets.symmetric(
@@ -261,7 +265,7 @@ class _LeaveReportState extends State<LeaveReport> {
                               enabled: false,
                               child: Text(
                                 'เลือกประเภทการลา',
-                                style: const TextStyle(color: Colors.black),
+                                style: const TextStyle(color: Colors.black54),
                               ),
                             ),
                             for (final leave in listLeave)
@@ -412,7 +416,7 @@ class _LeaveReportState extends State<LeaveReport> {
                         keyboardType: TextInputType.multiline,
                         decoration: InputDecoration(
                           alignLabelWithHint: true,
-                          hintText: 'เช่น นำไปทำธุรกรรม',
+                          hintText: '',
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 16, horizontal: 16),
                           border: OutlineInputBorder(

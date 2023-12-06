@@ -43,7 +43,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                image: AssetImage('img/coin/ogn_coin.png'),
+                image: AssetImage('assets/img/coin/ogn_coin.png'),
                 width: 60,
                 height: 60,
               ),
@@ -102,10 +102,37 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                               child: SizedBox(
                                 height: 30,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    showModalBottomSheet<void>(
+                                      showDragHandle: true,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return SizedBox(
+                                          height: 200,
+                                          child: Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                const Text('Modal BottomSheet'),
+                                                ElevatedButton(
+                                                  child: const Text(
+                                                      'Close BottomSheet'),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     elevation: 1,
-                                    backgroundColor: Color.fromARGB(171, 255, 255, 255),
+                                    backgroundColor:
+                                        Color.fromARGB(171, 255, 255, 255),
                                   ),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -114,7 +141,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                                     children: [
                                       Image(
                                         image: AssetImage(
-                                            'img/coin/ogn_coin2.png'),
+                                            'assets/img/coin/ogn_coin2.png'),
                                         width: 14,
                                       ),
                                       SizedBox(

@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
            dividerTheme: DividerThemeData(
-          color: Colors.black,
+          color: Colors.black45,
           // thickness: 2,
         ),
           dividerColor: Colors.black,
@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme: GoogleFonts.promptTextTheme(),
         ),
-        initialRoute: '/',
+        initialRoute: '/login',
         defaultTransition: Transition.cupertino,
         getPages: [
           GetPage(name: '/', page: () => HomePage()),
