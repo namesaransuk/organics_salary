@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:organics_salary/pages/home/coin/coin_screen.dart';
@@ -7,6 +8,7 @@ import 'package:organics_salary/pages/home/profile/profile_screen.dart';
 import 'package:organics_salary/pages/home/salary/salary_screen.dart';
 // import 'package:organics_salary/pages/home/coin/index.dart';
 import 'package:organics_salary/theme.dart';
+import 'package:sidebarx/sidebarx.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,8 +17,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  static TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static List<Widget> _widgetOptions = <Widget>[
     ProfileScreen(),
     SalaryScreen(),
@@ -24,11 +24,22 @@ class _HomePageState extends State<HomePage> {
     CoinScreen(),
   ];
 
+  late bool showNavigationDrawer;
+
   bool get shouldShowAppBar =>
       _selectedIndex == 0 || _selectedIndex == _widgetOptions.length - 1;
 
+  final _controller = SidebarXController(selectedIndex: 0);
+  final _key = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
+    return showNavigationDrawer
+        ? buildDrawerScaffold(context)
+        : buildBottomBarScaffold();
+  }
+
+  Widget buildBottomBarScaffold() {
     return Scaffold(
       // backgroundColor: Colors.white,
       // appBar: AppBar(
@@ -36,24 +47,42 @@ class _HomePageState extends State<HomePage> {
       // title: const Text('GoogleNavBar'),
       // ),
       appBar: shouldShowAppBar
-          ? AppBar(
-              title: _selectedIndex == 0
-                  ? Text(
-                      'ข้อมูลส่วนตัว',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  : Text(
-                      'Organics Coin',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+          ? _selectedIndex == 0
+              ? AppBar(
+                  title: Text(
+                    'ข้อมูลส่วนตัว',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-              centerTitle: true,
-              backgroundColor: AppTheme.ognGreen,
-              foregroundColor: Colors.white,
-            )
+                  ),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Get.toNamed('/setting');
+                      },
+                    )
+                  ],
+                  centerTitle: true,
+                  backgroundColor: AppTheme.ognGreen,
+                  foregroundColor: Colors.white,
+                )
+              : AppBar(
+                  title: Text(
+                    'Organics Coin',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  centerTitle: true,
+                  backgroundColor: AppTheme.ognGreen,
+                  foregroundColor: Colors.white,
+                )
           : null,
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: Container(
@@ -109,4 +138,200 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  Widget buildDrawerScaffold(BuildContext context) {
+    return Scaffold(
+      key: _key,
+      // appBar: shouldShowAppBar
+      //     ? _selectedIndex == 0
+      //         ? AppBar(
+      //             title: Text(
+      //               'ข้อมูลส่วนตัว',
+      //               style: TextStyle(
+      //                 fontSize: 18,
+      //                 fontWeight: FontWeight.bold,
+      //               ),
+      //             ),
+      //             actions: <Widget>[
+      //               IconButton(
+      //                 icon: Icon(
+      //                   Icons.settings,
+      //                   color: Colors.white,
+      //                 ),
+      //                 onPressed: () {
+      //                   Get.toNamed('/setting');
+      //                 },
+      //               )
+      //             ],
+      //             centerTitle: true,
+      //             backgroundColor: AppTheme.ognGreen,
+      //             foregroundColor: Colors.white,
+      //           )
+      //         : AppBar(
+      //             title: Text(
+      //               'Organics Coin',
+      //               style: TextStyle(
+      //                 fontSize: 18,
+      //                 fontWeight: FontWeight.bold,
+      //               ),
+      //             ),
+      //             centerTitle: true,
+      //             backgroundColor: AppTheme.ognGreen,
+      //             foregroundColor: Colors.white,
+      //           )
+      //     : null,
+      // drawer: exampleSidebarX(),
+      body: Row(
+        children: [
+          exampleSidebarX(),
+          const VerticalDivider(
+            thickness: 2,
+            width: 1,
+            color: AppTheme.ognSoftGreen,
+          ),
+          Expanded(
+            child: Center(
+              child: _widgetOptions.elementAt(_selectedIndex),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget exampleSidebarX() {
+    return SidebarX(
+      controller: _controller,
+      theme: SidebarXTheme(
+        // margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: AppTheme.ognGreen,
+          // borderRadius: BorderRadius.circular(20),
+        ),
+        // hoverColor: scaffoldBackgroundColor,
+        hoverTextStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+        textStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+        selectedTextStyle: const TextStyle(color: Colors.white),
+        itemTextPadding: const EdgeInsets.only(left: 30),
+        selectedItemTextPadding: const EdgeInsets.only(left: 30),
+        itemDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: AppTheme.ognGreen),
+        ),
+        selectedItemDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: AppTheme.ognSoftGreen.withOpacity(0.37),
+          ),
+          gradient: const LinearGradient(
+            colors: [AppTheme.ognGreen, AppTheme.ognGreen],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.28),
+              blurRadius: 20,
+            )
+          ],
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.white.withOpacity(0.7),
+          size: 20,
+        ),
+        selectedIconTheme: const IconThemeData(
+          color: Colors.white,
+          size: 20,
+        ),
+      ),
+      extendedTheme: const SidebarXTheme(
+        width: 200,
+        decoration: BoxDecoration(
+          color: AppTheme.ognGreen,
+        ),
+      ),
+      // footerDivider: divider,
+      headerBuilder: (context, extended) {
+        return SizedBox(
+          height: 100,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Image.network(
+                'https://synergysoft.co.th/images/2022/06/30/user.png'),
+          ),
+        );
+      },
+      items: [
+        SidebarXItem(
+          icon: LineIcons.user,
+          label: 'โปรไฟล์',
+          onTap: () {
+            setState(() {
+              _selectedIndex = 0;
+            });
+          },
+        ),
+        SidebarXItem(
+          icon: LineIcons.moneyCheck,
+          label: 'สลิปเงินเดือน',
+          onTap: () {
+            setState(() {
+              _selectedIndex = 1;
+            });
+          },
+        ),
+        SidebarXItem(
+          icon: LineIcons.businessTime,
+          label: 'แจ้งลา',
+          onTap: () {
+            setState(() {
+              _selectedIndex = 2;
+            });
+          },
+        ),
+        SidebarXItem(
+          icon: LineIcons.coins,
+          label: 'คอยน์',
+          onTap: () {
+            setState(() {
+              _selectedIndex = 3;
+            });
+          },
+        ),
+        // const SidebarXItem(
+        //   iconWidget: FlutterLogo(size: 20),
+        //   label: 'Flutter',
+        // ),
+      ],
+      footerItems: [
+        SidebarXItem(
+          icon: Icons.settings,
+          label: 'ตั้งค่า',
+          onTap: () {
+            Get.toNamed('setting');
+          },
+        ),
+      ],
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    showNavigationDrawer = MediaQuery.of(context).size.width >= 600;
+  }
 }
+
+// const primaryColor = Color(0xFF685BFF);
+// const canvasColor = Color(0xFF2E2E48);
+// const scaffoldBackgroundColor = Color(0xFF464667);
+// const accentCanvasColor = Color(0xFF3E3E61);
+// const white = Colors.white;
+// final actionColor = const Color(0xFF5F5FA7).withOpacity(0.6);
+// final divider = Divider(color: white.withOpacity(0.3), height: 1);
+
+const primaryColor = Color(0xFF136e68);
+const canvasColor = Color(0xFF136e68);
+const scaffoldBackgroundColor = Colors.white;
+const accentCanvasColor = Color(0xFF136e68);
+const white = Colors.white;
+final actionColor = const Color(0xFF2b9d91).withOpacity(0.6);
+final divider = Divider(color: white.withOpacity(0.3), height: 1);

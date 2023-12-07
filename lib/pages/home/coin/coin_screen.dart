@@ -37,7 +37,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
       padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        // mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -96,11 +96,13 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                               ),
                             ),
                             Positioned(
-                              bottom: 10,
+                              bottom: 15,
                               left: MediaQuery.of(context).padding.left + 30,
                               right: MediaQuery.of(context).padding.right + 30,
                               child: SizedBox(
-                                height: 30,
+                                width: double.infinity,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.045,
                                 child: ElevatedButton(
                                   onPressed: () {
                                     showModalBottomSheet<void>(

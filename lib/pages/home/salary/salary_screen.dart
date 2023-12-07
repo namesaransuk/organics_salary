@@ -112,6 +112,7 @@ class SlipView extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 30, right: 30),
                     child: DropdownButton<String>(
                       value: salaryController.monthName.value,
+                      borderRadius: BorderRadius.circular(20),
                       items: [
                         DropdownMenuItem<String>(
                           enabled: false,

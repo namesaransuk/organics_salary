@@ -178,14 +178,14 @@ class _LeaveReportState extends State<LeaveReport> {
                       labelText: 'ชื่อ-นามสกุล',
                       alignLabelWithHint: true,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(30.0),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(30.0),
                         borderSide: BorderSide(color: AppTheme.ognGreen),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(30.0),
                         borderSide: BorderSide(color: Colors.grey),
                       ),
                     ),
@@ -202,14 +202,14 @@ class _LeaveReportState extends State<LeaveReport> {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 7, horizontal: 16),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(30.0),
                               borderSide: BorderSide(color: AppTheme.ognGreen),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(30.0),
                               borderSide: BorderSide(color: Colors.grey),
                             ),
                           ),
@@ -225,14 +225,14 @@ class _LeaveReportState extends State<LeaveReport> {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 7, horizontal: 16),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(30.0),
                               borderSide: BorderSide(color: AppTheme.ognGreen),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(30.0),
                               borderSide: BorderSide(color: Colors.grey),
                             ),
                           ),

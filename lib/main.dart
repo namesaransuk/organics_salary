@@ -6,6 +6,9 @@ import 'package:organics_salary/pages/home/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:organics_salary/pages/setting/setting_page.dart';
+// import 'package:organics_salary/theme.dart';
+// import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +34,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   statusBarColor: AppTheme.ognGreen,
+    //   statusBarBrightness: Brightness.dark,
+    // ));
+
     return GetMaterialApp(
         title: 'Organics Salary',
         localizationsDelegates: [
@@ -46,10 +54,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
-           dividerTheme: DividerThemeData(
-          color: Colors.black45,
-          // thickness: 2,
-        ),
+          dividerTheme: DividerThemeData(
+            color: Colors.black45,
+            // thickness: 2,
+          ),
           dividerColor: Colors.black,
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: MaterialColor(0xFF136E68, {
@@ -74,6 +82,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/', page: () => HomePage()),
           GetPage(name: '/login', page: () => const LoginPage()),
           GetPage(name: '/register', page: () => const RegisterPage()),
+          GetPage(name: '/setting', page: () => const SettingPage()),
         ]);
   }
 }

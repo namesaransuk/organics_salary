@@ -73,9 +73,11 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: ListView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: screenHeight * .2),
+            // SizedBox(height: screenHeight * .05),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -183,12 +185,15 @@ class _LoginPageState extends State<LoginPage> {
                 Get.offAndToNamed('home');
               },
               child: Container(
+                width: double.infinity,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Text(
-                    'เข้าสู่ระบบ',
-                    style: TextStyle(
-                      color: Colors.white,
+                  child: Center(
+                    child: Text(
+                      'เข้าสู่ระบบ',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
