@@ -11,7 +11,7 @@ final SalaryController salaryController = Get.put(SalaryController());
 String reason = '';
 int selectedIndex = 2;
 
-List<String> listMonth = <String>[
+List listMonth = [
   'มกราคม',
   'กุมภาพันธ์',
   'มีนาคม',
@@ -368,7 +368,7 @@ class SlipView extends StatelessWidget {
 }
 
 class SlipRequest extends StatefulWidget {
-  const SlipRequest({super.key});
+  const SlipRequest({Key? key}) : super(key: key);
 
   @override
   State<SlipRequest> createState() => _SlipRequestState();
@@ -379,7 +379,27 @@ class _SlipRequestState extends State<SlipRequest> {
   Widget build(BuildContext context) {
     DateRangePickerController _datePickerController =
         DateRangePickerController();
-    List<bool> selectedMonths = List.generate(12, (index) => false);
+    List<String> _listMonth = [
+      'มกราคม',
+      'กุมภาพันธ์',
+      'มีนาคม',
+      'เมษายน',
+      'พฤษภาคม',
+      'มิถุนายน',
+      'กรกฎาคม',
+      'สิงหาคม',
+      'กันยายน',
+      'ตุลาคม',
+      'พฤศจิกายน',
+      'ธันวาคม',
+    ];
+    List<bool> selectedMonths = [];
+
+    @override
+    void initState() {
+      super.initState();
+      selectedMonths = List.generate(_listMonth.length, (index) => false);
+    }
 
     String _selectedDate = '';
     void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
@@ -426,53 +446,56 @@ class _SlipRequestState extends State<SlipRequest> {
                     ),
                     Container(
                       color: Colors.white,
-                      padding: const EdgeInsets.all(16.0),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: (listMonth.length / 2).ceil(),
-                        itemBuilder: (context, rowIndex) {
-                          int startIndex = rowIndex * 2;
-                          int endIndex = (rowIndex + 1) * 2;
-                          if (endIndex > listMonth.length) {
-                            endIndex = listMonth.length;
-                          }
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: (_listMonth.length / 2).ceil(),
+                          itemBuilder: (context, rowIndex) {
+                            int startIndex = rowIndex * 2;
+                            int endIndex = (rowIndex + 1) * 2;
+                            if (endIndex > _listMonth.length) {
+                              endIndex = _listMonth.length;
+                            }
 
-                          return Row(
-                            children: List.generate(endIndex - startIndex,
-                                (colIndex) {
-                              int index = startIndex + colIndex;
-                              return Expanded(
-                                child: Row(
-                                  children: [
-                                    Checkbox(
-                                      value: selectedMonths[index],
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedMonths[index] =
-                                              value ?? false;
-                                          if (value ?? false) {
-                                            print(
-                                                'Checkbox at index $index is selected');
-                                          } else {
-                                            print(
-                                                'Checkbox at index $index is deselected');
-                                          }
-                                        });
-                                      },
-                                    ),
-                                    Text(
-                                      listMonth[index],
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }),
-                          );
-                        },
+                            return Row(
+                              children: List.generate(endIndex - startIndex,
+                                  (colIndex) {
+                                int index = startIndex + colIndex;
+                                return Expanded(
+                                  child: Row(
+                                    children: [
+                                      Checkbox(
+                                        value: index < selectedMonths.length ? selectedMonths[index] : false,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            if (value != null) {
+                                              selectedMonths[index] = value;
+                                              if (value) {
+                                                print(
+                                                    'Checkbox at index $index is selected');
+                                              } else {
+                                                print(
+                                                    'Checkbox at index $index is deselected');
+                                              }
+                                            }
+                                          });
+                                        },
+                                      ),
+                                      Text(
+                                        _listMonth[index],
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            );
+                          },
+                        ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),
