@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:organics_salary/pages/home/coin/resorces_list.dart';
+import 'package:organics_salary/pages/coin/resorces_list.dart';
 
 class Details extends StatefulWidget {
   final int index;

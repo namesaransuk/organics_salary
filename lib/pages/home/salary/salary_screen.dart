@@ -426,45 +426,51 @@ class _SlipRequestState extends State<SlipRequest> {
                     ),
                     Container(
                       color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: List.generate(
-                            6,
-                            (row) => Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: List.generate(
-                                2,
-                                (col) {
-                                  int index = row * 2 + col;
-                                  return Expanded(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Checkbox(
-                                          value: selectedMonths[index],
-                                          onChanged: (value) {
-                                            setState(() {
-                                              selectedMonths[index] = value!;
-                                              print(selectedMonths.toString());
-                                            });
-                                          },
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            listMonth[index],
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                      ],
+                      padding: const EdgeInsets.all(16.0),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: (listMonth.length / 2).ceil(),
+                        itemBuilder: (context, rowIndex) {
+                          int startIndex = rowIndex * 2;
+                          int endIndex = (rowIndex + 1) * 2;
+                          if (endIndex > listMonth.length) {
+                            endIndex = listMonth.length;
+                          }
+
+                          return Row(
+                            children: List.generate(endIndex - startIndex,
+                                (colIndex) {
+                              int index = startIndex + colIndex;
+                              return Expanded(
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: selectedMonths[index],
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedMonths[index] =
+                                              value ?? false;
+                                          if (value ?? false) {
+                                            print(
+                                                'Checkbox at index $index is selected');
+                                          } else {
+                                            print(
+                                                'Checkbox at index $index is deselected');
+                                          }
+                                        });
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
+                                    Text(
+                                      listMonth[index],
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                          );
+                        },
                       ),
                     ),
                   ],

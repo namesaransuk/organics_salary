@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:organics_salary/theme.dart';
 
-import 'package:organics_salary/pages/home/coin/details.dart';
-import 'package:organics_salary/pages/home/coin/resorces_list.dart';
+import 'package:organics_salary/pages/coin/details.dart';
+import 'package:organics_salary/pages/coin/resorces_list.dart';
 
-class CoinScreen extends StatelessWidget {
+class CoinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ListView(
-          // shrinkWrap: true,
-          children: const [
-            GetMainUI(),
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Organics Coin',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        SizedBox(
-          height: MediaQuery.of(context).padding.bottom,
-        ),
-      ],
+        centerTitle: true,
+        backgroundColor: AppTheme.ognGreen,
+        foregroundColor: Colors.white,
+      ),
+      body: Stack(
+        children: [
+          ListView(
+            // shrinkWrap: true,
+            children: const [
+              GetMainUI(),
+            ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).padding.bottom,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -31,6 +45,8 @@ class GetMainUI extends StatefulWidget {
 }
 
 class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
+  late bool screenMode;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -62,7 +78,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
           GridView.builder(
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: screenMode ? 3 : 1,
               // crossAxisSpacing: 100.0,
               // mainAxisSpacing: 100.0,
             ),
@@ -96,50 +112,54 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                               ),
                             ),
                             Positioned(
-                              bottom: 15,
+                              bottom: 10,
                               left: MediaQuery.of(context).padding.left + 30,
                               right: MediaQuery.of(context).padding.right + 30,
-                              child: SizedBox(
-                                width: double.infinity,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.045,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    showModalBottomSheet<void>(
-                                      showDragHandle: true,
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return SizedBox(
-                                          height: 200,
-                                          child: Center(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                const Text('Modal BottomSheet'),
-                                                ElevatedButton(
-                                                  child: const Text(
-                                                      'Close BottomSheet'),
-                                                  onPressed: () =>
-                                                      Navigator.pop(context),
-                                                ),
-                                              ],
-                                            ),
+                              child: InkWell(
+                                onTap: () {
+                                  showModalBottomSheet<void>(
+                                    showDragHandle: true,
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return SizedBox(
+                                        height: 200,
+                                        child: Center(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              const Text('Modal BottomSheet'),
+                                              ElevatedButton(
+                                                child: const Text(
+                                                    'Close BottomSheet'),
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                              ),
+                                            ],
                                           ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 1,
-                                    backgroundColor:
-                                        Color.fromARGB(171, 255, 255, 255),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 25, vertical: 10),
+                                  decoration: BoxDecoration(
+                                    color: Color.fromARGB(186, 240, 240, 240),
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    boxShadow: <BoxShadow>[
+                                      BoxShadow(
+                                        color: Color.fromRGBO(0, 0, 0, 0.57),
+                                        blurRadius: 5,
+                                      )
+                                    ],
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Image(
                                         image: AssetImage(
@@ -174,5 +194,11 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
         ],
       ),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    screenMode = MediaQuery.of(context).size.width >= 600;
   }
 }

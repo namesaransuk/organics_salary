@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:organics_salary/pages/auth/login_page.dart';
 import 'package:organics_salary/pages/auth/register_page.dart';
+import 'package:organics_salary/pages/coin/coin_page.dart';
 import 'package:organics_salary/pages/home/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:organics_salary/pages/setting/setting_page.dart';
+import 'package:organics_salary/pages/worh_history/work_history_page.dart';
 // import 'package:organics_salary/theme.dart';
 // import 'package:flutter/services.dart';
 
@@ -83,6 +85,8 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/login', page: () => const LoginPage()),
           GetPage(name: '/register', page: () => const RegisterPage()),
           GetPage(name: '/setting', page: () => const SettingPage()),
+          GetPage(name: '/coin', page: () => CoinPage()),
+          GetPage(name: '/work-history', page: () => WorkHistoryPage()),
         ]);
   }
 }

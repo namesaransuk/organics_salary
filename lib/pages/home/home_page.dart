@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:organics_salary/pages/home/coin/coin_screen.dart';
 import 'package:organics_salary/pages/home/leave/leave_screen.dart';
+import 'package:organics_salary/pages/home/emp_list/emp_list_screen.dart';
 import 'package:organics_salary/pages/home/profile/profile_screen.dart';
 import 'package:organics_salary/pages/home/salary/salary_screen.dart';
 // import 'package:organics_salary/pages/home/coin/index.dart';
@@ -21,10 +21,10 @@ class _HomePageState extends State<HomePage> {
     ProfileScreen(),
     SalaryScreen(),
     LeaveScreen(),
-    CoinScreen(),
+    EmpListScreen(),
   ];
 
-  late bool showNavigationDrawer;
+  late bool screenMode;
 
   bool get shouldShowAppBar =>
       _selectedIndex == 0 || _selectedIndex == _widgetOptions.length - 1;
@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return showNavigationDrawer
+    return screenMode
         ? buildDrawerScaffold(context)
         : buildBottomBarScaffold();
   }
@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> {
       // elevation: 20,
       // title: const Text('GoogleNavBar'),
       // ),
+      backgroundColor: Color.fromARGB(255, 245, 245, 245),
       appBar: shouldShowAppBar
           ? _selectedIndex == 0
               ? AppBar(
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                 )
               : AppBar(
                   title: Text(
-                    'Organics Coin',
+                    'รายการอื่น',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -114,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                   text: 'โปรไฟล์',
                 ),
                 GButton(
-                  icon: LineIcons.moneyCheck,
+                  icon: Icons.receipt_long_rounded,
                   text: 'สลิปเงินเดือน',
                 ),
                 GButton(
@@ -122,8 +123,8 @@ class _HomePageState extends State<HomePage> {
                   text: 'แจ้งลา',
                 ),
                 GButton(
-                  icon: LineIcons.coins,
-                  text: 'คอยน์',
+                  icon: Icons.format_list_bulleted_rounded,
+                  text: 'รายการอื่น',
                 ),
               ],
               selectedIndex: _selectedIndex,
@@ -183,7 +184,7 @@ class _HomePageState extends State<HomePage> {
       // drawer: exampleSidebarX(),
       body: Row(
         children: [
-          exampleSidebarX(),
+          _drawer(),
           const VerticalDivider(
             thickness: 2,
             width: 1,
@@ -199,7 +200,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget exampleSidebarX() {
+  Widget _drawer() {
     return SidebarX(
       controller: _controller,
       theme: SidebarXTheme(
@@ -270,7 +271,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         SidebarXItem(
-          icon: LineIcons.moneyCheck,
+          icon: Icons.receipt_long,
           label: 'สลิปเงินเดือน',
           onTap: () {
             setState(() {
@@ -288,8 +289,8 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         SidebarXItem(
-          icon: LineIcons.coins,
-          label: 'คอยน์',
+          icon: Icons.format_list_bulleted_rounded,
+          label: 'รายการอื่น',
           onTap: () {
             setState(() {
               _selectedIndex = 3;
@@ -316,7 +317,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    showNavigationDrawer = MediaQuery.of(context).size.width >= 600;
+    screenMode = MediaQuery.of(context).size.width >= 600;
   }
 }
 
