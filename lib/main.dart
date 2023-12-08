@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:organics_salary/pages/setting/setting_page.dart';
-import 'package:organics_salary/pages/worh_history/work_history_page.dart';
+import 'package:organics_salary/pages/work_history/work_history_page.dart';
 // import 'package:organics_salary/theme.dart';
 // import 'package:flutter/services.dart';
 
