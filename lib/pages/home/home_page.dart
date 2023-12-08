@@ -116,6 +116,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 GButton(
                   icon: Icons.receipt_long_rounded,
+                  iconSize: 23,
                   text: 'สลิปเงินเดือน',
                 ),
                 GButton(
