@@ -8,7 +8,7 @@ class LoadingController extends GetxController {
       Get.dialog(
         Center(
           child: SpinKitFadingCube(
-            color:Color.fromRGBO(43, 157, 145, 5),
+            color: Color.fromRGBO(43, 157, 145, 5),
             size: 50.0,
           ),
         ),

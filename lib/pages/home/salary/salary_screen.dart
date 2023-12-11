@@ -467,7 +467,9 @@ class _SlipRequestState extends State<SlipRequest> {
                                   child: Row(
                                     children: [
                                       Checkbox(
-                                        value: index < selectedMonths.length ? selectedMonths[index] : false,
+                                        value: index < selectedMonths.length
+                                            ? selectedMonths[index]
+                                            : false,
                                         onChanged: (value) {
                                           setState(() {
                                             if (value != null) {

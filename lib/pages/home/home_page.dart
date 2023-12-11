@@ -9,6 +9,7 @@ import 'package:organics_salary/pages/home/salary/salary_screen.dart';
 // import 'package:organics_salary/pages/home/coin/index.dart';
 import 'package:organics_salary/theme.dart';
 import 'package:sidebarx/sidebarx.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -34,9 +35,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return screenMode
-        ? buildDrawerScaffold(context)
-        : buildBottomBarScaffold();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      // statusBarColor: AppTheme.ognSoftGreen,
+      statusBarColor: Color.fromARGB(255, 0, 0, 0),
+      statusBarIconBrightness: Brightness.light,
+    ));
+
+    return screenMode ? buildDrawerScaffold(context) : buildBottomBarScaffold();
   }
 
   Widget buildBottomBarScaffold() {
@@ -144,6 +149,7 @@ class _HomePageState extends State<HomePage> {
   Widget buildDrawerScaffold(BuildContext context) {
     return Scaffold(
       key: _key,
+      backgroundColor: Color.fromARGB(255, 245, 245, 245),
       // appBar: shouldShowAppBar
       //     ? _selectedIndex == 0
       //         ? AppBar(
@@ -252,12 +258,15 @@ class _HomePageState extends State<HomePage> {
       ),
       // footerDivider: divider,
       headerBuilder: (context, extended) {
-        return SizedBox(
-          height: 100,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Image.network(
-                'https://synergysoft.co.th/images/2022/06/30/user.png'),
+        return Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: SizedBox(
+            height: 100,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Image.network(
+                  'https://synergysoft.co.th/images/2022/06/30/user.png'),
+            ),
           ),
         );
       },
