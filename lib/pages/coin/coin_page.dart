@@ -10,6 +10,7 @@ class CoinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 250, 250, 250),
       appBar: AppBar(
         title: Text(
           'Organics Coin',
@@ -48,20 +49,22 @@ class GetMainUI extends StatefulWidget {
 
 class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
   late bool screenMode;
+  final CoinController coinController = Get.put(CoinController());
 
   @override
   Widget build(BuildContext context) {
-    final CoinController coinController = Get.put(CoinController());
-    coinController.loadData();
-
     return Column(
       children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.3,
-          child: Placeholder(),
+        Container(
+          width: double.infinity,
+          color: AppTheme.bgSoftGreen,
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: Image.asset('img/coin/titleimg.jpg'),
+          ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -101,391 +104,165 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          InkWell(
-                            onTap: () {},
-                            borderRadius: BorderRadius.circular(20),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 8),
-                              child: Text(
-                                '1-100',
-                                style: TextStyle(
-                                  color: AppTheme.ognGreen,
-                                ),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            borderRadius: BorderRadius.circular(20),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 8),
-                              child: Text(
-                                '100-500',
-                                style: TextStyle(
-                                  color: AppTheme.ognGreen,
-                                ),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            borderRadius: BorderRadius.circular(20),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 8),
-                              child: Text(
-                                '500-1000',
-                                style: TextStyle(
-                                  color: AppTheme.ognGreen,
-                                ),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            borderRadius: BorderRadius.circular(20),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 8),
-                              child: Text(
-                                '1000 ขึ้นไป',
-                                style: TextStyle(
-                                  color: AppTheme.ognGreen,
-                                ),
-                              ),
-                            ),
-                          ),
+                          _buildFilterItems(0, 'ทั้งหมด'),
+                          _buildFilterItems(1, '1-100'),
+                          _buildFilterItems(2, '100-500'),
+                          _buildFilterItems(3, '500-1000'),
+                          _buildFilterItems(4, '1000 ขึ้นไป'),
                         ],
                       ),
                     )
                   ],
                 ),
               ),
-              GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: screenMode ? 4 : 2,
-                ),
-                itemCount: coinController.coinList.length,
-                itemBuilder: (context, index) {
-                  var coin = coinController.coinList[index];
+              SizedBox(
+                height: 10,
+              ),
+              Obx(
+                () => GridView.builder(
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: screenMode ? 3 : 2,
+                  ),
+                  itemCount: coinController.coinList.length,
+                  itemBuilder: (context, index) {
+                    var coin = coinController.coinList[index];
 
-                  return InkWell(
-                    onTap: () {
-                      showModalBottomSheet<void>(
-                          showDragHandle: true,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return SizedBox(
-                              height: 200,
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    const Text('Modal BottomSheet'),
-                                    ElevatedButton(
-                                      child: const Text('Close BottomSheet'),
-                                      onPressed: () => Navigator.pop(context),
+                    return InkWell(
+                      onTap: () {
+                        showModalBottomSheet<void>(
+                            showDragHandle: true,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SizedBox(
+                                height: 200,
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      const Text('Modal BottomSheet'),
+                                      ElevatedButton(
+                                        child: const Text('Close BottomSheet'),
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Stack(
+                            alignment: Alignment.topCenter,
+                            children: [
+                              Image.asset(
+                                '${coin.img}',
+                                width:
+                                    MediaQuery.of(context).size.height * 0.15,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      '${coin.coin}' ?? '',
+                                      style: TextStyle(
+                                        color: AppTheme.ognGreen,
+                                      ),
+                                    ),
+                                    Image(
+                                      image: AssetImage(
+                                          'assets/img/coin/ogn_coin.png'),
+                                      width: 20,
+                                      height: 20,
                                     ),
                                   ],
                                 ),
                               ),
-                            );
-                          });
-                    },
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.topCenter,
-                          children: [
-                            Image.asset(
-                              '${coin.img}',
-                              width: MediaQuery.of(context).size.height * 0.15,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Transform.scale(
-                                    scale: 0.8,
-                                    child: IconButton.filled(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.filter_drama),
-                                      iconSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              coin.name ?? '',
-                              style: TextStyle(
-                                  color: AppTheme.ognGreen,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '${coin.coin}' ?? '',
-                                  style: TextStyle(
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                coin.name ?? '',
+                                style: TextStyle(
                                     color: AppTheme.ognGreen,
-                                  ),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {},
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Text('แลกรางวัล'),
                                 ),
-                                Image(
-                                  image: AssetImage(
-                                      'assets/img/coin/ogn_coin.png'),
-                                  width: 20,
-                                  height: 20,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-              GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: screenMode ? 4 : 2,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-                itemCount: coinController.coinList.length,
-                itemBuilder: (context, index) {
-                  var coin = coinController.coinList[index];
-
-                  return InkWell(
-                    onTap: () {
-                      showModalBottomSheet<void>(
-                          showDragHandle: true,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return SizedBox(
-                              height: 200,
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    const Text('Modal BottomSheet'),
-                                    ElevatedButton(
-                                      child: const Text('Close BottomSheet'),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          });
-                    },
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.topCenter,
-                          children: [
-                            Image.asset(
-                              '${coin.img}',
-                              width: MediaQuery.of(context).size.height * 0.15,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    '${coin.coin}' ?? '',
-                                    style: TextStyle(
-                                      color: AppTheme.ognGreen,
-                                    ),
-                                  ),
-                                  Image(
-                                    image: AssetImage(
-                                        'assets/img/coin/ogn_coin.png'),
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              coin.name ?? '',
-                              style: TextStyle(
-                                  color: AppTheme.ognGreen,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {},
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text('แลกรางวัล'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+              )
 
               // ----------------------------------------------------------------------------
-
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     Image(
-              //       image: AssetImage('assets/img/coin/ogn_coin.png'),
-              //       width: 60,
-              //       height: 60,
-              //     ),
-              //     Text(
-              //       "1000",
-              //       style: TextStyle(
-              //           color: Colors.teal,
-              //           fontWeight: FontWeight.bold,
-              //           fontSize: 30),
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(
-              //   height: 5,
-              // ),
-              // GridView.builder(
-              //   shrinkWrap: true,
-              //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //     crossAxisCount: screenMode ? 3 : 1,
-              //     // crossAxisSpacing: 100.0,
-              //     // mainAxisSpacing: 100.0,
-              //   ),
-              //   itemCount: 3,
-              //   itemBuilder: (context, index) {
-              //     return Card(
-              //       color: AppTheme.ognGreen,
-              //       child: Column(
-              //         children: [
-              //           Padding(
-              //             padding: const EdgeInsets.all(8.0),
-              //             child: Text(
-              //               names[index],
-              //               style: TextStyle(
-              //                 fontSize: 16,
-              //                 color: Colors.white,
-              //               ),
-              //             ),
-              //           ),
-              //           Expanded(
-              //             child: Container(
-              //               color: Colors.white,
-              //               child: Stack(
-              //                 children: [
-              //                   InkWell(
-              //                     onTap: () {},
-              //                     child: Image(
-              //                       width: double.infinity,
-              //                       image: images[index],
-              //                       // fit: BoxFit.cover,
-              //                     ),
-              //                   ),
-              //                   Positioned(
-              //                     bottom: 10,
-              //                     left: MediaQuery.of(context).padding.left + 30,
-              //                     right: MediaQuery.of(context).padding.right + 30,
-              //                     child: InkWell(
-              //                       onTap: () {
-              //                         showModalBottomSheet<void>(
-              //                           showDragHandle: true,
-              //                           context: context,
-              //                           builder: (BuildContext context) {
-              //                             return SizedBox(
-              //                               height: 200,
-              //                               child: Center(
-              //                                 child: Column(
-              //                                   mainAxisAlignment:
-              //                                       MainAxisAlignment.center,
-              //                                   mainAxisSize: MainAxisSize.min,
-              //                                   children: <Widget>[
-              //                                     const Text('Modal BottomSheet'),
-              //                                     ElevatedButton(
-              //                                       child: const Text(
-              //                                           'Close BottomSheet'),
-              //                                       onPressed: () =>
-              //                                           Navigator.pop(context),
-              //                                     ),
-              //                                   ],
-              //                                 ),
-              //                               ),
-              //                             );
-              //                           },
-              //                         );
-              //                       },
-              //                       child: Container(
-              //                         padding: EdgeInsets.symmetric(
-              //                             horizontal: 25, vertical: 10),
-              //                         decoration: BoxDecoration(
-              //                           color: Color.fromARGB(186, 240, 240, 240),
-              //                           borderRadius: BorderRadius.circular(20.0),
-              //                           boxShadow: <BoxShadow>[
-              //                             BoxShadow(
-              //                               color: Color.fromRGBO(0, 0, 0, 0.57),
-              //                               blurRadius: 5,
-              //                             )
-              //                           ],
-              //                         ),
-              //                         child: Row(
-              //                           crossAxisAlignment:
-              //                               CrossAxisAlignment.center,
-              //                           mainAxisAlignment: MainAxisAlignment.center,
-              //                           children: [
-              //                             Image(
-              //                               image: AssetImage(
-              //                                   'assets/img/coin/ogn_coin2.png'),
-              //                               width: 14,
-              //                             ),
-              //                             SizedBox(
-              //                               width: 5,
-              //                             ),
-              //                             Text(
-              //                               prices[index],
-              //                               style: const TextStyle(
-              //                                 color: Colors.black,
-              //                                 fontWeight: FontWeight.bold,
-              //                                 fontSize: 10,
-              //                               ),
-              //                             ),
-              //                           ],
-              //                         ),
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 ],
-              //               ),
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     );
-              //   },
-              // )
             ],
           ),
         ),
       ],
     );
+  }
+
+  Widget _buildFilterItems(int mode, String title) {
+    coinController.loadData(0);
+
+    return Obx(() {
+      final isSelected = coinController.selectedMode.value == mode;
+
+      return InkWell(
+        onTap: () {
+          coinController.loadData(mode);
+        },
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.white : null,
+            // border:
+            //     isSelected ? Border.all(width: 0.15, color: Colors.grey) : null,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 0.5,
+                      // blurRadius: 7,
+                      offset: Offset(0, 1),
+                    ),
+                  ]
+                : null,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: isSelected ? AppTheme.ognGold : AppTheme.ognGreen,
+                fontWeight: isSelected ? FontWeight.bold : null,
+              ),
+            ),
+          ),
+        ),
+      );
+    });
   }
 
   @override

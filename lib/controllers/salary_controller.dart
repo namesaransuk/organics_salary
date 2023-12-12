@@ -1,27 +1,25 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:organics_salary/controllers/loading_controller.dart';
+import 'package:organics_salary/models/salary_model.dart';
 
 class SalaryController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
   RxInt monthId = 0.obs;
   RxString monthName = 'กรุณาเลือกเดือน'.obs;
-  RxList<Map<String, dynamic>> dataList = RxList<Map<String, dynamic>>();
+  var salaryList = RxList<SalaryModel>();
 
   void getMonthName(String mName) {
     monthName.value = mName;
-    // print(monthName);
   }
 
   void loadData(int month) async {
     loadingController.dialogLoading();
 
-    await Future.delayed(const Duration(seconds: 1), () {
-      Get.back();
+    var response = [];
 
-      dataList.clear();
-      if (month == 1) {
-        dataList.addAll([
+    switch (month) {
+      case 1:
+        response = [
           {
             'name': 'Dr.Jel Organics',
             'customer': 'IT1234',
@@ -46,9 +44,10 @@ class SalaryController extends GetxController {
             'td': 15700,
             'total': 49800,
           },
-        ]);
-      } else if (month == 2) {
-        dataList.addAll([
+        ];
+        break;
+      case 2:
+        response = [
           {
             'name': 'Dr.Jel Organics',
             'customer': 'IT1234',
@@ -73,9 +72,10 @@ class SalaryController extends GetxController {
             'td': 15700,
             'total': 49800,
           },
-        ]);
-      } else if (month == 3) {
-        dataList.addAll([
+        ];
+        break;
+      case 3:
+        response = [
           {
             'name': 'Dr.Jel Organics',
             'customer': 'IT1234',
@@ -100,8 +100,26 @@ class SalaryController extends GetxController {
             'td': 15700,
             'total': 49800,
           },
-        ]);
-      }
+        ];
+        break;
+      default:
+        response = [];
+    }
+
+    var salaryJSONList = response;
+
+    var mappedSalaryList = salaryJSONList.map(
+      (salaryJSON) {
+        return SalaryModel.fromJson(salaryJSON);
+      },
+    );
+
+    var convertedSalaryList = RxList<SalaryModel>.of(mappedSalaryList);
+
+    salaryList.assignAll(convertedSalaryList);
+
+    await Future.delayed(const Duration(seconds: 1), () {
+      Get.back();
     });
   }
 }

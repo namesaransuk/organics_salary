@@ -5,6 +5,7 @@ class AppTheme {
   static const Color nearlyWhite = Color(0xFFFAFAFA);
   static const Color white = Color(0xFFFFFFFF);
   static const Color background = Color(0xFFF2F3F8);
+  static const Color bgSoftGreen = Color(0xFFeff8f7);
   static const Color ognGreen = Color(0xFF136e68);
   static const Color ognSoftGreen = Color(0xFF2b9d91);
   static const Color ognGold = Color(0xFFd69832);

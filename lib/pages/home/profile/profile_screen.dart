@@ -54,8 +54,6 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
   }
 
   Widget buildProfile() {
-    final color = Theme.of(context).colorScheme.primary;
-
     return Center(
       child: ClipOval(
         child: Material(

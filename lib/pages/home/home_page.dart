@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
       // elevation: 20,
       // title: const Text('GoogleNavBar'),
       // ),
-      backgroundColor: Color.fromARGB(255, 245, 245, 245),
+      backgroundColor: Color.fromARGB(255, 250, 250, 250),
       appBar: shouldShowAppBar
           ? _selectedIndex == 0
               ? AppBar(
@@ -330,19 +330,3 @@ class _HomePageState extends State<HomePage> {
     screenMode = MediaQuery.of(context).size.width >= 600;
   }
 }
-
-// const primaryColor = Color(0xFF685BFF);
-// const canvasColor = Color(0xFF2E2E48);
-// const scaffoldBackgroundColor = Color(0xFF464667);
-// const accentCanvasColor = Color(0xFF3E3E61);
-// const white = Colors.white;
-// final actionColor = const Color(0xFF5F5FA7).withOpacity(0.6);
-// final divider = Divider(color: white.withOpacity(0.3), height: 1);
-
-const primaryColor = Color(0xFF136e68);
-const canvasColor = Color(0xFF136e68);
-const scaffoldBackgroundColor = Colors.white;
-const accentCanvasColor = Color(0xFF136e68);
-const white = Colors.white;
-final actionColor = const Color(0xFF2b9d91).withOpacity(0.6);
-final divider = Divider(color: white.withOpacity(0.3), height: 1);

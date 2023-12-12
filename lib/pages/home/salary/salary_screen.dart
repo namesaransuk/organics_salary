@@ -86,8 +86,15 @@ class _SalaryScreenState extends State<SalaryScreen>
   }
 }
 
-class SlipView extends StatelessWidget {
+class SlipView extends StatefulWidget {
   const SlipView({super.key});
+
+  @override
+  State<SlipView> createState() => _SlipViewState();
+}
+
+class _SlipViewState extends State<SlipView> {
+  late bool screenMode;
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +166,7 @@ class SlipView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              _buildSlip(context)
+              screenMode ? _buildSlipTablet(context) : _buildSlip(context),
             ],
           ),
         ),
@@ -171,7 +178,7 @@ class SlipView extends StatelessWidget {
     // salaryController.loadData(month);
 
     return Obx(() {
-      if (salaryController.dataList.isNotEmpty) {
+      if (salaryController.salaryList.isNotEmpty) {
         return Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -185,7 +192,7 @@ class SlipView extends StatelessWidget {
             ],
           ),
           child: Column(
-            children: salaryController.dataList.map((item) {
+            children: salaryController.salaryList.map((item) {
               return Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
@@ -224,20 +231,20 @@ class SlipView extends StatelessWidget {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      '${item['name']}',
+                      '${item.name}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                       ),
                     ),
-                    Text("รหัสพนักงาน : ${item['customer']}"),
-                    Text("ตำแหน่ง : ${item['role']}"),
+                    Text("รหัสพนักงาน : ${item.customer}"),
+                    Text("ตำแหน่ง : ${item.role}"),
                     SizedBox(height: 20),
                     Center(
                       child: Column(
                         children: [
                           Text(
-                            "เงินเดือนประจำเดือน ${item['salaryMonth']} ${item['yearValue']}",
+                            "เงินเดือนประจำเดือน ${item.salaryMonth} ${item.yearValue}",
                             style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontSize: 14,
@@ -255,15 +262,15 @@ class SlipView extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     // รายการเงินเดือน
-                    _buildEarningItem("เงินเดือนค่าจ้าง", item['salary']),
-                    _buildEarningItem("เบี้ยขยัน", item['da']),
-                    _buildEarningItem("ค่าล่วงเวลา", item['ot']),
-                    _buildEarningItem("ค่าน้ำมัน", item['fc']),
-                    _buildEarningItem("โบนัส", item['bonus']),
-                    _buildEarningItem("ดอกเบี้ย", item['interest']),
-                    _buildEarningItem("เงินประจำตำแหน่ง", item['pm']),
-                    _buildEarningItem("ค่าคอมมิชชั่น", item['oi']),
-                    _buildEarningItem("รวมเงินได้", item['ti'], bold: true),
+                    _buildEarningItem("เงินเดือนค่าจ้าง", item.salary ?? 0),
+                    _buildEarningItem("เบี้ยขยัน", item.da ?? 0),
+                    _buildEarningItem("ค่าล่วงเวลา", item.ot ?? 0),
+                    _buildEarningItem("ค่าน้ำมัน", item.fc ?? 0),
+                    _buildEarningItem("โบนัส", item.bonus ?? 0),
+                    _buildEarningItem("ดอกเบี้ย", item.interest ?? 0),
+                    _buildEarningItem("เงินประจำตำแหน่ง", item.pm ?? 0),
+                    _buildEarningItem("ค่าคอมมิชชั่น", item.oi ?? 0),
+                    _buildEarningItem("รวมเงินได้", item.ti ?? 0, bold: true),
                     SizedBox(height: 10),
                     Divider(),
                     SizedBox(height: 10),
@@ -278,13 +285,14 @@ class SlipView extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     // รายการหัก
-                    _buildDeductionItem("ประกันสังคม", item['ss']),
-                    _buildDeductionItem("ภาษี", item['tax']),
-                    _buildDeductionItem("ขาด/ลา/มาสาย", item['agl']),
-                    _buildDeductionItem("เงินกู้ยืม", item['loan']),
-                    _buildDeductionItem("กองทุนเงินฝาก", item['df']),
-                    _buildDeductionItem("รายการหักอื่นๆ", item['od']),
-                    _buildDeductionItem("รวมรายการหัก", item['td'], bold: true),
+                    _buildDeductionItem("ประกันสังคม", item.ss ?? 0),
+                    _buildDeductionItem("ภาษี", item.tax ?? 0),
+                    _buildDeductionItem("ขาด/ลา/มาสาย", item.agl ?? 0),
+                    _buildDeductionItem("เงินกู้ยืม", item.loan ?? 0),
+                    _buildDeductionItem("กองทุนเงินฝาก", item.df ?? 0),
+                    _buildDeductionItem("รายการหักอื่นๆ", item.od ?? 0),
+                    _buildDeductionItem("รวมรายการหัก", item.td ?? 0,
+                        bold: true),
                     SizedBox(height: 10),
                     Divider(),
                     SizedBox(height: 10),
@@ -293,7 +301,187 @@ class SlipView extends StatelessWidget {
                       children: [
                         Text("รวมเป็นเงิน",
                             style: TextStyle(fontWeight: FontWeight.bold)),
-                        Text(numberToStringCurrency(item['total']),
+                        Text(numberToStringCurrency(item.total),
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        );
+      } else {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "ไม่มีข้อมูล",
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        );
+      }
+    });
+  }
+
+  Widget _buildSlipTablet(context) {
+    // salaryController.loadData(month);
+
+    return Obx(() {
+      if (salaryController.salaryList.isNotEmpty) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey,
+                blurRadius: 4,
+                offset: Offset(2, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            children: salaryController.salaryList.map((item) {
+              return Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Image.network(
+                          "https://organicscosme.com/image/bg_head/organics.png",
+                          width: 40,
+                          height: 40,
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Organics Cosme CO.,LTD.",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.green,
+                              ),
+                            ),
+                            Text(
+                              "บริษัท ออกานิกส์ คอสเม่ จำกัด",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                                color: Colors.green,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      '${item.name}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    ),
+                    Text("รหัสพนักงาน : ${item.customer}"),
+                    Text("ตำแหน่ง : ${item.role}"),
+                    SizedBox(height: 10),
+                    // Center(
+                    //   child: Column(
+                    //     children: [
+                    //       Text(
+                    //         "เงินเดือนประจำเดือน ${item['salaryMonth']} ${item['yearValue']}",
+                    //         style: TextStyle(
+                    //           decoration: TextDecoration.underline,
+                    //           fontSize: 14,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    Divider(),
+                    SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // รายการเงินเดือน
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Center(
+                                child: Text(
+                                  "รายการเงินเดือน (Earnings)",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              _buildEarningItem(
+                                  "เงินเดือนค่าจ้าง", item.salary ?? 0),
+                              _buildEarningItem("เบี้ยขยัน", item.da ?? 0),
+                              _buildEarningItem("ค่าล่วงเวลา", item.ot ?? 0),
+                              _buildEarningItem("ค่าน้ำมัน", item.fc ?? 0),
+                              _buildEarningItem("โบนัส", item.bonus ?? 0),
+                              _buildEarningItem("ดอกเบี้ย", item.interest ?? 0),
+                              _buildEarningItem(
+                                  "เงินประจำตำแหน่ง", item.pm ?? 0),
+                              _buildEarningItem("ค่าคอมมิชชั่น", item.oi ?? 0),
+                              _buildEarningItem("รวมเงินได้", item.ti ?? 0,
+                                  bold: true),
+                            ],
+                          ),
+                        ),
+                        VerticalDivider(
+                          thickness: 2,
+                          width: 30,
+                        ),
+                        // รายการหัก
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Center(
+                                child: Text(
+                                  "รายการเงินหัก (Deductions)",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              _buildDeductionItem("ประกันสังคม", item.ss ?? 0),
+                              _buildDeductionItem("ภาษี", item.tax ?? 0),
+                              _buildDeductionItem(
+                                  "ขาด/ลา/มาสาย", item.agl ?? 0),
+                              _buildDeductionItem("เงินกู้ยืม", item.loan ?? 0),
+                              _buildDeductionItem(
+                                  "กองทุนเงินฝาก", item.df ?? 0),
+                              _buildDeductionItem(
+                                  "รายการหักอื่นๆ", item.od ?? 0),
+                              _buildDeductionItem("รวมรายการหัก", item.td ?? 0,
+                                  bold: true),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Divider(),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("รวมเป็นเงิน",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text(numberToStringCurrency(item.total),
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ],
                     ),
@@ -360,10 +548,16 @@ class SlipView extends StatelessWidget {
     );
   }
 
-  String numberToStringCurrency(int amount) {
-    // int value = amount.value;
-    String formattedAmount = NumberFormat('#,###.##', 'en_US').format(amount);
-    return formattedAmount != null ? "$formattedAmount บาท" : "0 บาท";
+  String numberToStringCurrency(int? amount) {
+    String formattedAmount =
+        NumberFormat('#,###.##', 'en_US').format(amount ?? 0);
+    return "$formattedAmount บาท";
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    screenMode = MediaQuery.of(context).size.width >= 600;
   }
 }
 
