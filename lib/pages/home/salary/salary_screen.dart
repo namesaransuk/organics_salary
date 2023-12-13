@@ -587,7 +587,8 @@ class _SlipRequestState extends State<SlipRequest> {
       'พฤศจิกายน',
       'ธันวาคม',
     ];
-    List<bool> selectedMonths = [];
+
+    late List<bool> selectedMonths;
 
     @override
     void initState() {
@@ -657,6 +658,7 @@ class _SlipRequestState extends State<SlipRequest> {
                               children: List.generate(endIndex - startIndex,
                                   (colIndex) {
                                 int index = startIndex + colIndex;
+
                                 return Expanded(
                                   child: Row(
                                     children: [
