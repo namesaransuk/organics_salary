@@ -7,7 +7,8 @@ class CoinController extends GetxController {
   var coinList = RxList<CoinModel>();
   var selectedMode = 0.obs;
 
-  Future<void> loadData(int mode) async {
+  void loadData(int mode) async {
+    coinList.clear();
     loadingController.dialogLoading();
 
     var response = [];
@@ -17,20 +18,24 @@ class CoinController extends GetxController {
         response = [
           {
             'id': '1',
-            'name': 'DR.X',
+            'name': 'DR.X (Hulk)',
             'img': 'img/coin/xy.png',
+            'description':
+                'Dr.X Hulx เพิ่มประสิทฑิภาพทางเพศ เพิ่มความอึด ยืดเวลาแห่งความสุข แข็งตัวได้เต็มที่ เพิ่มขนาดความเป็นชาย ไม่มีผลข้างเคียง',
             'coin': 700,
           },
           {
             'id': '2',
             'name': 'IPHONE 15 (Black)',
             'img': 'img/coin/iphone15.png',
+            'description': '',
             'coin': 1500,
           },
           {
             'id': '3',
             'name': 'iPad Air (Silver)',
             'img': 'img/coin/ipadair.png',
+            'description': '',
             'coin': 2000,
           },
         ];
@@ -41,10 +46,13 @@ class CoinController extends GetxController {
             'id': '1',
             'name': 'DR.X',
             'img': 'img/coin/xy.png',
+            'description': '',
             'coin': 700,
           },
         ];
         break;
+      default:
+        response = [];
     }
 
     var coinJSONList = response;

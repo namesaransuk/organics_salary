@@ -11,21 +11,35 @@ final SalaryController salaryController = Get.put(SalaryController());
 String reason = '';
 int selectedIndex = 2;
 
+// List listMonth = [
+//   'มกราคม',
+//   'กุมภาพันธ์',
+//   'มีนาคม',
+//   'เมษายน',
+//   'พฤษภาคม',
+//   'มิถุนายน',
+//   'กรกฎาคม',
+//   'สิงหาคม',
+//   'กันยายน',
+//   'ตุลาคม',
+//   'พฤศจิกายน',
+//   'ธันวาคม',
+// ];
+
 List listMonth = [
-  'มกราคม',
-  'กุมภาพันธ์',
-  'มีนาคม',
-  'เมษายน',
-  'พฤษภาคม',
-  'มิถุนายน',
-  'กรกฎาคม',
-  'สิงหาคม',
-  'กันยายน',
-  'ตุลาคม',
-  'พฤศจิกายน',
-  'ธันวาคม',
+  'ม.ค.',
+  'ก.พ.',
+  'มี.ค.',
+  'เม.ย',
+  'พ.ค.',
+  'มิ.ย.',
+  'ก.ค.',
+  'ส.ค.',
+  'ก.ย.',
+  'ต.ค.',
+  'พ.ย.',
+  'ธ.ค.',
 ];
-// List<String> listYear = <String>['2566', '2567', '2568', '2569'];
 
 class SalaryScreen extends StatefulWidget {
   @override
@@ -36,6 +50,7 @@ class SalaryScreen extends StatefulWidget {
 
 class _SalaryScreenState extends State<SalaryScreen>
     with TickerProviderStateMixin {
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -95,7 +110,6 @@ class SlipView extends StatefulWidget {
 
 class _SlipViewState extends State<SlipView> {
   late bool screenMode;
-
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -573,35 +587,10 @@ class _SlipRequestState extends State<SlipRequest> {
   Widget build(BuildContext context) {
     DateRangePickerController _datePickerController =
         DateRangePickerController();
-    List<String> _listMonth = [
-      'มกราคม',
-      'กุมภาพันธ์',
-      'มีนาคม',
-      'เมษายน',
-      'พฤษภาคม',
-      'มิถุนายน',
-      'กรกฎาคม',
-      'สิงหาคม',
-      'กันยายน',
-      'ตุลาคม',
-      'พฤศจิกายน',
-      'ธันวาคม',
-    ];
-
-    late List<bool> selectedMonths;
 
     @override
     void initState() {
       super.initState();
-      selectedMonths = List.generate(_listMonth.length, (index) => false);
-    }
-
-    String _selectedDate = '';
-    void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-      // setState(() {
-      //   _selectedDate = args.value.toString();
-      //   print(_selectedDate);
-      // });
     }
 
     return ListView(
@@ -646,12 +635,12 @@ class _SlipRequestState extends State<SlipRequest> {
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: (_listMonth.length / 2).ceil(),
+                          itemCount: (listMonth.length / 4).ceil(),
                           itemBuilder: (context, rowIndex) {
-                            int startIndex = rowIndex * 2;
-                            int endIndex = (rowIndex + 1) * 2;
-                            if (endIndex > _listMonth.length) {
-                              endIndex = _listMonth.length;
+                            int startIndex = rowIndex * 4;
+                            int endIndex = (rowIndex + 1) * 4;
+                            if (endIndex > listMonth.length) {
+                              endIndex = listMonth.length;
                             }
 
                             return Row(
@@ -663,26 +652,32 @@ class _SlipRequestState extends State<SlipRequest> {
                                   child: Row(
                                     children: [
                                       Checkbox(
-                                        value: index < selectedMonths.length
-                                            ? selectedMonths[index]
+                                        value: index <
+                                                salaryController
+                                                    .checkedMonths.length
+                                            ? salaryController
+                                                .checkedMonths[index]
                                             : false,
                                         onChanged: (value) {
                                           setState(() {
                                             if (value != null) {
-                                              selectedMonths[index] = value;
+                                              salaryController
+                                                  .checkedMonths[index] = value;
                                               if (value) {
-                                                print(
-                                                    'Checkbox at index $index is selected');
+                                                salaryController.selectedMonths
+                                                    .add(index + 1);
                                               } else {
-                                                print(
-                                                    'Checkbox at index $index is deselected');
+                                                salaryController.selectedMonths
+                                                    .remove(index + 1);
                                               }
+                                              print(salaryController
+                                                  .selectedMonths);
                                             }
                                           });
                                         },
                                       ),
                                       Text(
-                                        _listMonth[index],
+                                        listMonth[index],
                                         textAlign: TextAlign.left,
                                       ),
                                     ],
@@ -717,7 +712,10 @@ class _SlipRequestState extends State<SlipRequest> {
                       height: 10,
                     ),
                     TextField(
-                      minLines: 6,
+                      onChanged: (value) {
+                        salaryController.updateInputCause(value);
+                      },
+                      minLines: 3,
                       maxLines: null,
                       keyboardType: TextInputType.multiline,
                       decoration: InputDecoration(
@@ -750,11 +748,13 @@ class _SlipRequestState extends State<SlipRequest> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'ระบุวันที่ต้องการนำไปใช้',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    Obx(
+                      () => Text(
+                        'ระบุวันที่ต้องการนำไปใช้ : ${salaryController.formatDate}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -769,7 +769,14 @@ class _SlipRequestState extends State<SlipRequest> {
                         showNavigationArrow: true,
                         onSelectionChanged:
                             (DateRangePickerSelectionChangedArgs args) {
-                          _onSelectionChanged(args);
+                          DateTime selectedDate = args.value;
+                          String formattedDate =
+                              DateFormat('dd MMMM yyyy', 'th_TH')
+                                  .format(selectedDate);
+
+                          String _selectedDate = args.value.toString();
+                          salaryController.selectedUsedDate(
+                              _selectedDate, formattedDate);
                         },
                         view: DateRangePickerView.month,
                         selectionMode: DateRangePickerSelectionMode.single,
@@ -787,7 +794,9 @@ class _SlipRequestState extends State<SlipRequest> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.ognGreen,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      salaryController.sendSlipRequest();
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Text(

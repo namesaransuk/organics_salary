@@ -3,9 +3,6 @@ import 'package:get/get.dart';
 import 'package:organics_salary/controllers/coin_controller.dart';
 import 'package:organics_salary/theme.dart';
 
-import 'package:organics_salary/pages/coin/details.dart';
-import 'package:organics_salary/pages/coin/resorces_list.dart';
-
 class CoinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -101,8 +98,10 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      child: Wrap(
+                        spacing: 10,
+                        alignment: WrapAlignment.center,
+                        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           _buildFilterItems(0, 'ทั้งหมด'),
                           _buildFilterItems(1, '1-100'),
@@ -122,8 +121,9 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                 () => GridView.builder(
                   shrinkWrap: true,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: screenMode ? 3 : 2,
-                  ),
+                      crossAxisCount: screenMode ? 3 : 2,
+                      // childAspectRatio: MediaQuery.of(context).size.width * 0.001
+                      childAspectRatio: 0.8),
                   itemCount: coinController.coinList.length,
                   itemBuilder: (context, index) {
                     var coin = coinController.coinList[index];
@@ -134,20 +134,115 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                             showDragHandle: true,
                             context: context,
                             builder: (BuildContext context) {
-                              return SizedBox(
-                                height: 200,
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      const Text('Modal BottomSheet'),
-                                      ElevatedButton(
-                                        child: const Text('Close BottomSheet'),
-                                        onPressed: () => Navigator.pop(context),
+                              return Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 40),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  // mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    // const Text('Modal BottomSheet'),
+                                    // ElevatedButton(
+                                    //   child: const Text('Close BottomSheet'),
+                                    //   onPressed: () => Navigator.pop(context),
+                                    // ),
+                                    Image.asset(
+                                      '${coin.img}',
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            coin.name ?? '',
+                                            style: TextStyle(
+                                                color: AppTheme.ognGreen,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.circle,
+                                                color: AppTheme.ognGreen,
+                                                size: 15,
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(
+                                                'รายละเอียด',
+                                                style: TextStyle(
+                                                    color: AppTheme.ognGreen,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 20),
+                                            child: Text(
+                                              coin.description ?? '',
+                                              style: TextStyle(
+                                                color: AppTheme.ognGreen,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    Spacer(),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 20),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.3,
+                                        child: ElevatedButton(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text('${coin.coin}'),
+                                                Image(
+                                                  image: AssetImage(
+                                                      'assets/img/coin/ogn_coin.png'),
+                                                  width: 20,
+                                                  height: 20,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                      ),
+                                    ),
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(bottom: 20),
+                                    //   child: ElevatedButton(
+                                    //     child: const Text('Close BottomSheet'),
+                                    //     onPressed: () => Navigator.pop(context),
+                                    //   ),
+                                    // ),
+                                  ],
                                 ),
                               );
                             });
@@ -198,6 +293,9 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                                     color: AppTheme.ognGreen,
                                     fontWeight: FontWeight.bold),
                               ),
+                              SizedBox(
+                                height: 5,
+                              ),
                               ElevatedButton(
                                 onPressed: () {},
                                 child: Padding(
@@ -224,7 +322,6 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
 
   Widget _buildFilterItems(int mode, String title) {
     coinController.loadData(0);
-
     return Obx(() {
       final isSelected = coinController.selectedMode.value == mode;
 

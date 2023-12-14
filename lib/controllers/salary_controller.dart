@@ -1,12 +1,20 @@
 import 'package:get/get.dart';
 import 'package:organics_salary/controllers/loading_controller.dart';
 import 'package:organics_salary/models/salary_model.dart';
+import 'package:intl/intl.dart';
 
 class SalaryController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
+
   RxInt monthId = 0.obs;
   RxString monthName = 'กรุณาเลือกเดือน'.obs;
   var salaryList = RxList<SalaryModel>();
+
+  var checkedMonths = List<bool>.generate(12, (index) => false).obs;
+  RxList<int> selectedMonths = RxList<int>();
+  RxString inputCause = RxString('');
+  RxString formatDate = RxString('ยังไม่ได้เลือก');
+  RxString usedDate = RxString('');
 
   void getMonthName(String mName) {
     monthName.value = mName;
@@ -121,5 +129,22 @@ class SalaryController extends GetxController {
     await Future.delayed(const Duration(seconds: 1), () {
       Get.back();
     });
+  }
+
+  void updateInputCause(String value) {
+    inputCause.value = value;
+    print(inputCause);
+  }
+
+  void selectedUsedDate(String selectedDate, String formattedDate) {
+    formatDate.value = formattedDate;
+    usedDate.value = selectedDate;
+    print(usedDate);
+  }
+
+  void sendSlipRequest() {
+    print('selectedMonths: $selectedMonths');
+    print('inputCause: $inputCause');
+    print('usedDate: $usedDate');
   }
 }

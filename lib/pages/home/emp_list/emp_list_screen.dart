@@ -20,8 +20,8 @@ class EmpListScreen extends StatelessWidget {
                 '/coin',
               ),
               buildListTile(
-                'ประวัติการทำงาน',
-                'coin : 1000',
+                'ประวัติการลงเวลา',
+                '',
                 Icons.work,
                 '/work-history',
                 isLastTile: true,
