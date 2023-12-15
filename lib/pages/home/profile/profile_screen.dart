@@ -114,31 +114,26 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
   Widget buildSubDetail(BuildContext context, String value, String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: MaterialButton(
-        padding: EdgeInsets.symmetric(vertical: 4),
-        onPressed: () {},
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              value,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                // fontSize: 16,
-              ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            value,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              // fontSize: 16,
             ),
-            SizedBox(height: 2),
-            Text(
-              text,
-              style: TextStyle(
-                fontSize: 18,
-                // fontWeight: FontWeight.bold,
-              ),
+          ),
+          SizedBox(height: 2),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 18,
+              // fontWeight: FontWeight.bold,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

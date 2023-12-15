@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:organics_salary/controllers/loading_controller.dart';
 import 'package:organics_salary/models/salary_model.dart';
-import 'package:intl/intl.dart';
 
 class SalaryController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
@@ -130,6 +129,8 @@ class SalaryController extends GetxController {
       Get.back();
     });
   }
+
+// ----------------------------------------------------------------------
 
   void updateInputCause(String value) {
     inputCause.value = value;

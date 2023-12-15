@@ -11,22 +11,22 @@ final SalaryController salaryController = Get.put(SalaryController());
 String reason = '';
 int selectedIndex = 2;
 
-// List listMonth = [
-//   'มกราคม',
-//   'กุมภาพันธ์',
-//   'มีนาคม',
-//   'เมษายน',
-//   'พฤษภาคม',
-//   'มิถุนายน',
-//   'กรกฎาคม',
-//   'สิงหาคม',
-//   'กันยายน',
-//   'ตุลาคม',
-//   'พฤศจิกายน',
-//   'ธันวาคม',
-// ];
-
 List listMonth = [
+  'มกราคม',
+  'กุมภาพันธ์',
+  'มีนาคม',
+  'เมษายน',
+  'พฤษภาคม',
+  'มิถุนายน',
+  'กรกฎาคม',
+  'สิงหาคม',
+  'กันยายน',
+  'ตุลาคม',
+  'พฤศจิกายน',
+  'ธันวาคม',
+];
+
+List abbrelistMonth = [
   'ม.ค.',
   'ก.พ.',
   'มี.ค.',
@@ -50,7 +50,6 @@ class SalaryScreen extends StatefulWidget {
 
 class _SalaryScreenState extends State<SalaryScreen>
     with TickerProviderStateMixin {
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -122,7 +121,7 @@ class _SlipViewState extends State<SlipView> {
                 () => DecoratedBox(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.all(color: AppTheme.ognGreen, width: 1),
+                    border: Border.all(color: Colors.grey, width: 1),
                     borderRadius: BorderRadius.circular(50),
                     // boxShadow: <BoxShadow>[
                     //   BoxShadow(
@@ -583,16 +582,12 @@ class SlipRequest extends StatefulWidget {
 }
 
 class _SlipRequestState extends State<SlipRequest> {
+  DateRangePickerController _datePickerController = DateRangePickerController();
+  int _stepIndex = 0;
+  bool hide = false;
+
   @override
   Widget build(BuildContext context) {
-    DateRangePickerController _datePickerController =
-        DateRangePickerController();
-
-    @override
-    void initState() {
-      super.initState();
-    }
-
     return ListView(
       children: [
         Padding(
@@ -612,202 +607,298 @@ class _SlipRequestState extends State<SlipRequest> {
                   ),
                 ),
               ),
-              Card(
-                color: AppTheme.ognGreen,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'ระบุเดือนที่ต้องการขอสลิป',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: (listMonth.length / 4).ceil(),
-                          itemBuilder: (context, rowIndex) {
-                            int startIndex = rowIndex * 4;
-                            int endIndex = (rowIndex + 1) * 4;
-                            if (endIndex > listMonth.length) {
-                              endIndex = listMonth.length;
-                            }
-
-                            return Row(
-                              children: List.generate(endIndex - startIndex,
-                                  (colIndex) {
-                                int index = startIndex + colIndex;
-
-                                return Expanded(
-                                  child: Row(
-                                    children: [
-                                      Checkbox(
-                                        value: index <
-                                                salaryController
-                                                    .checkedMonths.length
-                                            ? salaryController
-                                                .checkedMonths[index]
-                                            : false,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            if (value != null) {
-                                              salaryController
-                                                  .checkedMonths[index] = value;
-                                              if (value) {
-                                                salaryController.selectedMonths
-                                                    .add(index + 1);
-                                              } else {
-                                                salaryController.selectedMonths
-                                                    .remove(index + 1);
-                                              }
-                                              print(salaryController
-                                                  .selectedMonths);
-                                            }
-                                          });
-                                        },
-                                      ),
-                                      Text(
-                                        listMonth[index],
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }),
-                            );
-                          },
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'ระบุสาเหตุที่ต้องการนำไปใช้',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextField(
-                      onChanged: (value) {
-                        salaryController.updateInputCause(value);
-                      },
-                      minLines: 3,
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      decoration: InputDecoration(
-                        alignLabelWithHint: true,
-                        hintText: 'เช่น นำไปทำธุรกรรม',
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(color: AppTheme.ognGreen),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Obx(
-                      () => Text(
-                        'ระบุวันที่ต้องการนำไปใช้ : ${salaryController.formatDate}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Card(
-                      child: SfDateRangePicker(
-                        headerHeight: 60,
-                        headerStyle: DateRangePickerHeaderStyle(
-                          textAlign: TextAlign.center,
-                        ),
-                        showNavigationArrow: true,
-                        onSelectionChanged:
-                            (DateRangePickerSelectionChangedArgs args) {
-                          DateTime selectedDate = args.value;
-                          String formattedDate =
-                              DateFormat('dd MMMM yyyy', 'th_TH')
-                                  .format(selectedDate);
-
-                          String _selectedDate = args.value.toString();
-                          salaryController.selectedUsedDate(
-                              _selectedDate, formattedDate);
-                        },
-                        view: DateRangePickerView.month,
-                        selectionMode: DateRangePickerSelectionMode.single,
-                        controller: _datePickerController,
-                        selectionColor: AppTheme.ognGreen,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.ognGreen,
-                    ),
-                    onPressed: () {
-                      salaryController.sendSlipRequest();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(
-                        'ส่งคำร้อง',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
+              Stepper(
+                currentStep: _stepIndex,
+                onStepCancel: () {
+                  if (_stepIndex > 0) {
+                    setState(() {
+                      _stepIndex -= 1;
+                    });
+                  }
+                },
+                onStepContinue: () {
+                  setState(() {
+                    _stepIndex += 1;
+                  });
+                },
+                onStepTapped: (int index) {
+                  setState(() {
+                    _stepIndex = index;
+                  });
+                },
+                steps: <Step>[
+                  Step(
+                    title: Text('ระบุเดือนที่ต้องการขอสลิป'),
+                    content: _buildChoseMonthItem(),
+                    isActive: _stepIndex == 0,
                   ),
-                ),
-              )
+                  Step(
+                    title: Text('ระบุสาเหตุที่ต้องการนำไปใช้'),
+                    content: _buildCauseItem(),
+                    isActive: _stepIndex == 1,
+                  ),
+                  Step(
+                    title: Text('ระบุวันที่ต้องการนำไปใช้'),
+                    content: _buildUsedDateItem(),
+                    isActive: _stepIndex == 2,
+                  ),
+                ],
+                controlsBuilder: (BuildContext ctx, ControlsDetails dtl) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        _stepIndex == 0
+                            ? Container()
+                            : ElevatedButton(
+                                onPressed: dtl.onStepCancel,
+                                child: Text('ย้อนกลับ'),
+                              ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        _stepIndex == 2
+                            ? Container()
+                            : ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll(
+                                        AppTheme.ognGreen)),
+                                onPressed: dtl.onStepContinue,
+                                child: Text(
+                                  'ต่อไป',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                      ],
+                    ),
+                  );
+                  // return _stepIndex == 2
+                  //     ? SizedBox.shrink()
+                  //     : Padding(
+                  //         padding: const EdgeInsets.only(top: 10),
+                  //         child: Row(
+                  //           crossAxisAlignment: CrossAxisAlignment.center,
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           children: <Widget>[
+                  //             _stepIndex == 0
+                  //                 ? Container()
+                  //                 : ElevatedButton(
+                  //                     onPressed: dtl.onStepCancel,
+                  //                     child: Text('ย้อนกลับ'),
+                  //                   ),
+                  //             SizedBox(
+                  //               width: 10,
+                  //             ),
+                  //             _stepIndex == 2
+                  //                 ? Container()
+                  //                 : ElevatedButton(
+                  //                     style: ButtonStyle(
+                  //                         backgroundColor:
+                  //                             MaterialStatePropertyAll(
+                  //                                 AppTheme.ognGreen)),
+                  //                     onPressed: dtl.onStepContinue,
+                  //                     child: Text(
+                  //                       'ต่อไป',
+                  //                       style: TextStyle(color: Colors.white),
+                  //                     ),
+                  //                   ),
+                  //           ],
+                  //         ),
+                  //       );
+                },
+              ),
             ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildChoseMonthItem() {
+    return Card(
+      color: AppTheme.ognGreen,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'ระบุเดือนที่ต้องการขอสลิป',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: (abbrelistMonth.length / 4).ceil(),
+                itemBuilder: (context, rowIndex) {
+                  int startIndex = rowIndex * 4;
+                  int endIndex = (rowIndex + 1) * 4;
+                  if (endIndex > abbrelistMonth.length) {
+                    endIndex = abbrelistMonth.length;
+                  }
+
+                  return Row(
+                    children: List.generate(endIndex - startIndex, (colIndex) {
+                      int index = startIndex + colIndex;
+
+                      return Expanded(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              value:
+                                  index < salaryController.checkedMonths.length
+                                      ? salaryController.checkedMonths[index]
+                                      : false,
+                              onChanged: (value) {
+                                setState(() {
+                                  if (value != null) {
+                                    salaryController.checkedMonths[index] =
+                                        value;
+                                    if (value) {
+                                      salaryController.selectedMonths
+                                          .add(index + 1);
+                                    } else {
+                                      salaryController.selectedMonths
+                                          .remove(index + 1);
+                                    }
+                                    print(salaryController.selectedMonths);
+                                  }
+                                });
+                              },
+                            ),
+                            Text(
+                              abbrelistMonth[index],
+                              textAlign: TextAlign.left,
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+                  );
+                },
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCauseItem() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Text(
+        //   'ระบุสาเหตุที่ต้องการนำไปใช้',
+        //   style: TextStyle(
+        //     fontSize: 16,
+        //     fontWeight: FontWeight.bold,
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: 10,
+        // ),
+        TextField(
+          onChanged: (value) {
+            salaryController.updateInputCause(value);
+          },
+          minLines: 3,
+          maxLines: null,
+          keyboardType: TextInputType.multiline,
+          decoration: InputDecoration(
+            alignLabelWithHint: true,
+            hintText: 'เช่น นำไปทำธุรกรรม',
+            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(color: AppTheme.ognGreen),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(color: Colors.grey),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUsedDateItem() {
+    return Column(
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Obx(
+            //   () => Text(
+            //     'ระบุวันที่ต้องการนำไปใช้ : ${salaryController.formatDate}',
+            //     style: TextStyle(
+            //       fontSize: 16,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: 10,
+            // ),
+            Card(
+              child: SfDateRangePicker(
+                headerHeight: 60,
+                headerStyle: DateRangePickerHeaderStyle(
+                  textAlign: TextAlign.center,
+                ),
+                showNavigationArrow: true,
+                onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+                  DateTime selectedDate = args.value;
+                  String formattedDate =
+                      DateFormat('dd MMMM yyyy', 'th_TH').format(selectedDate);
+
+                  String _selectedDate = args.value.toString();
+                  salaryController.selectedUsedDate(
+                      _selectedDate, formattedDate);
+                },
+                view: DateRangePickerView.month,
+                selectionMode: DateRangePickerSelectionMode.single,
+                controller: _datePickerController,
+                selectionColor: AppTheme.ognGreen,
+              ),
+            )
+          ],
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: Center(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.ognGreen,
+              ),
+              onPressed: () {
+                salaryController.sendSlipRequest();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  'ส่งคำร้อง',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
           ),
         )
       ],

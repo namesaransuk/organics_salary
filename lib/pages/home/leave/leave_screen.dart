@@ -248,7 +248,7 @@ class _LeaveReportState extends State<LeaveReport> {
                       DecoratedBox(
                         decoration: BoxDecoration(
                           border:
-                              Border.all(color: AppTheme.ognGreen, width: 1),
+                              Border.all(color: Colors.grey, width: 1),
                           borderRadius: BorderRadius.circular(50),
                           // boxShadow: <BoxShadow>[
                           //   BoxShadow(
