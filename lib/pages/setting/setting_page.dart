@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:babstrap_settings_screen/babstrap_settings_screen.dart';
 import 'package:organics_salary/theme.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -24,129 +26,111 @@ class _SettingPageState extends State<SettingPage> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListView(
-          children: [
-            // User card
-            // SmallUserCard(
-            //   cardColor: AppTheme.ognGreen,
-            //   userName: "Babacar Ndong",
-            //   userProfilePic: AssetImage("assets/img/organics_legendary.png",),
-            //   onTap: (){},
-            // ),
-            SettingsGroup(
-              items: [
-                SettingsItem(
-                  onTap: () {},
-                  icons: Icons.notifications_active,
-                  iconStyle: IconStyle(
-                    backgroundColor: AppTheme.ognGreen,
-                  ),
-                  title: 'การแจ้งเตือน',
-                  titleStyle: TextStyle(
-                    fontWeight: FontWeight.normal,
-                  ),
-                  // subtitle: "Make Ziar'App yours",
-                ),
-                SettingsItem(
-                  onTap: () {},
-                  icons: Icons.dark_mode_rounded,
-                  iconStyle: IconStyle(
-                    iconsColor: Colors.white,
-                    withBackground: true,
-                    backgroundColor: AppTheme.ognGreen,
-                  ),
-                  title: 'โหมดมืด',
-                  titleStyle: TextStyle(
-                    fontWeight: FontWeight.normal,
-                  ),
-                  subtitle: "Automatic",
-                  trailing: Switch.adaptive(
-                    // overlayColor:MaterialStatePropertyAll(Colors.black),
-                    // activeColor: Colors.black,
-                    // focusColor: Colors.black,
-                    thumbColor: MaterialStatePropertyAll(Colors.black),
-                    trackOutlineColor: MaterialStatePropertyAll(Colors.black),
-                    value: false,
-                    onChanged: (value) {},
+      body: ListView(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: const BorderRadius.only(
+                bottomRight: Radius.circular(50),
+              ),
+            ),
+            child: Column(
+              children: [
+                const SizedBox(height: 50),
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 30),
+                  title: Text('Hello Ahad!',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(color: Colors.white)),
+                  subtitle: Text('Good Morning',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: Colors.white54)),
+                  trailing: const CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage('assets/img/organics_legendary.png'),
                   ),
                 ),
+                const SizedBox(height: 30)
               ],
             ),
-            SettingsGroup(
-              items: [
-                SettingsItem(
-                  onTap: () {},
-                  icons: Icons.home_work,
-                  iconStyle: IconStyle(
-                    backgroundColor: AppTheme.ognGreen,
-                  ),
-                  title: 'เว็บไซต์บริษัท',
-                  titleStyle: TextStyle(
-                    fontWeight: FontWeight.normal,
-                  ),
-                  // subtitle: "Learn more about Ziar'App",
-                ),
-                SettingsItem(
-                  onTap: () {},
-                  icons: Icons.facebook,
-                  iconStyle: IconStyle(
-                    backgroundColor: AppTheme.ognGreen,
-                  ),
-                  title: 'เฟสบุ๊คบริษัท',
-                  titleStyle: TextStyle(
-                    fontWeight: FontWeight.normal,
-                  ),
-                  // subtitle: "Learn more about Ziar'App",
-                ),
-                SettingsItem(
-                  onTap: () {},
-                  icons: Icons.info_rounded,
-                  iconStyle: IconStyle(
-                    backgroundColor: AppTheme.ognGreen,
-                  ),
-                  title: 'ติดต่อ',
-                  titleStyle: TextStyle(
-                    fontWeight: FontWeight.normal,
-                  ),
-                  // subtitle: "Learn more about Ziar'App",
-                ),
-              ],
+          ),
+          Container(
+            color: Theme.of(context).primaryColor,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius:
+                      BorderRadius.only(topLeft: Radius.circular(200))),
+              child: GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                crossAxisSpacing: 40,
+                mainAxisSpacing: 30,
+                children: [
+                  itemDashboard('Videos', Icons.ondemand_video_rounded,
+                      Colors.deepOrange),
+                  itemDashboard(
+                      'Analytics', Icons.auto_graph_rounded, Colors.green),
+                  itemDashboard(
+                      'Audience', Icons.supervised_user_circle_rounded, Colors.purple),
+                  itemDashboard(
+                      'Comments', Icons.messenger_rounded, Colors.brown),
+                  itemDashboard('Revenue', Icons.monetization_on_rounded,
+                      Colors.indigo),
+                  itemDashboard(
+                      'Upload', Icons.arrow_circle_up_rounded, Colors.teal),
+                  itemDashboard(
+                      'About', Icons.info, Colors.blue),
+                  itemDashboard(
+                      'Contact', Icons.devices, Colors.pinkAccent),
+                ],
+              ),
             ),
-            // You can add a settings title
-            SettingsGroup(
-              // settingsGroupTitle: "Account",
-              items: [
-                SettingsItem(
-                  onTap: () {},
-                  icons: Icons.exit_to_app_rounded,
-                  iconStyle: IconStyle(
-                      iconsColor: Colors.red, backgroundColor: Colors.white),
-                  title: "ออกจากระบบ",
-                  titleStyle: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  trailing: Switch.adaptive(
-                    value: false,
-                    onChanged: (value) {},
-                  ),
-                ),
-                // SettingsItem(
-                //   onTap: () {},
-                //   icons: Icons.delete,
-                //   title: "Delete account",
-                //   titleStyle: TextStyle(
-                //     color: Colors.red,
-                //     fontWeight: FontWeight.bold,
-                //   ),
-                // ),
-              ],
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 20)
+        ],
       ),
     );
+  }
+
+  itemDashboard(String title, IconData iconData, Color background) => Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                  offset: const Offset(0, 5),
+                  color: Theme.of(context).primaryColor.withOpacity(.2),
+                  spreadRadius: 2,
+                  blurRadius: 5)
+            ]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: background,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(iconData, color: Colors.white)),
+            const SizedBox(height: 8),
+            Text(title.toUpperCase(),
+                style: Theme.of(context).textTheme.titleMedium)
+          ],
+        ),
+      );
+
+  _open(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      launchUrl(Uri.parse(url));
+    }
   }
 }

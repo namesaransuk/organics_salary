@@ -195,7 +195,7 @@ class _TimeHistoryPageState extends State<TimeHistoryPage> {
                 }
 
                 return Card(
-                  margin: EdgeInsets.symmetric(vertical: 2),
+                  margin: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
                   color: cardColor,
                   child: Padding(
                     padding:

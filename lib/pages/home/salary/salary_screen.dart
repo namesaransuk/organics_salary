@@ -617,30 +617,87 @@ class _SlipRequestState extends State<SlipRequest> {
                   }
                 },
                 onStepContinue: () {
-                  setState(() {
-                    _stepIndex += 1;
-                  });
+                  if (_stepIndex == 0) {
+                    if (salaryController.selectedMonths.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alertEmptyData(
+                              'แจ้งเตือน', 'กรุณาเลือกเดือนที่ต้องการขอสลิป');
+                        },
+                      );
+                    } else {
+                      setState(() {
+                        _stepIndex += 1;
+                      });
+                    }
+                  } else if (_stepIndex == 1) {
+                    if (salaryController.inputCause.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alertEmptyData(
+                              'แจ้งเตือน', 'กรุณาระบุสาเหตุที่ต้องการขอสลิป');
+                        },
+                      );
+                    } else {
+                      setState(() {
+                        _stepIndex += 1;
+                      });
+                    }
+                  } else if (_stepIndex == 2) {
+                    if (salaryController.usedDate.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alertEmptyData(
+                              'แจ้งเตือน', 'กรุณาระบุวันที่ต้องการนำไปใช้');
+                        },
+                      );
+                    } else {
+                      setState(() {
+                        _stepIndex += 1;
+                      });
+                    }
+                  }
                 },
-                onStepTapped: (int index) {
-                  setState(() {
-                    _stepIndex = index;
-                  });
-                },
+                // onStepTapped: (int index) {
+                //   setState(() {
+                //     _stepIndex = index;
+                //   });
+                // },
                 steps: <Step>[
                   Step(
                     title: Text('ระบุเดือนที่ต้องการขอสลิป'),
                     content: _buildChoseMonthItem(),
-                    isActive: _stepIndex == 0,
+                    isActive: _stepIndex == 0 ||
+                        salaryController.selectedMonths.isNotEmpty,
+                    state: salaryController.selectedMonths.isNotEmpty
+                        ? StepState.complete
+                        : StepState.indexed,
                   ),
                   Step(
                     title: Text('ระบุสาเหตุที่ต้องการนำไปใช้'),
                     content: _buildCauseItem(),
-                    isActive: _stepIndex == 1,
+                    isActive: _stepIndex == 1 ||
+                        salaryController.inputCause.isNotEmpty,
+                    state: salaryController.inputCause.isNotEmpty
+                        ? StepState.complete
+                        : StepState.indexed,
                   ),
                   Step(
                     title: Text('ระบุวันที่ต้องการนำไปใช้'),
                     content: _buildUsedDateItem(),
-                    isActive: _stepIndex == 2,
+                    isActive:
+                        _stepIndex == 2 || salaryController.usedDate.isNotEmpty,
+                    state: salaryController.usedDate.isNotEmpty
+                        ? StepState.complete
+                        : StepState.indexed,
+                  ),
+                  Step(
+                    title: Text('ตรวจสอบข้อมูล'),
+                    content: _buildCheckSelectedValues(),
+                    isActive: _stepIndex == 3,
                   ),
                 ],
                 controlsBuilder: (BuildContext ctx, ControlsDetails dtl) {
@@ -659,8 +716,24 @@ class _SlipRequestState extends State<SlipRequest> {
                         SizedBox(
                           width: 10,
                         ),
-                        _stepIndex == 2
-                            ? Container()
+                        _stepIndex == 3
+                            ? Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20),
+                                child: Center(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppTheme.ognGreen,
+                                    ),
+                                    onPressed: () {
+                                      salaryController.sendSlipRequest();
+                                    },
+                                    child: Text(
+                                      'ส่งคำร้อง',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              )
                             : ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStatePropertyAll(
@@ -674,44 +747,27 @@ class _SlipRequestState extends State<SlipRequest> {
                       ],
                     ),
                   );
-                  // return _stepIndex == 2
-                  //     ? SizedBox.shrink()
-                  //     : Padding(
-                  //         padding: const EdgeInsets.only(top: 10),
-                  //         child: Row(
-                  //           crossAxisAlignment: CrossAxisAlignment.center,
-                  //           mainAxisAlignment: MainAxisAlignment.center,
-                  //           children: <Widget>[
-                  //             _stepIndex == 0
-                  //                 ? Container()
-                  //                 : ElevatedButton(
-                  //                     onPressed: dtl.onStepCancel,
-                  //                     child: Text('ย้อนกลับ'),
-                  //                   ),
-                  //             SizedBox(
-                  //               width: 10,
-                  //             ),
-                  //             _stepIndex == 2
-                  //                 ? Container()
-                  //                 : ElevatedButton(
-                  //                     style: ButtonStyle(
-                  //                         backgroundColor:
-                  //                             MaterialStatePropertyAll(
-                  //                                 AppTheme.ognGreen)),
-                  //                     onPressed: dtl.onStepContinue,
-                  //                     child: Text(
-                  //                       'ต่อไป',
-                  //                       style: TextStyle(color: Colors.white),
-                  //                     ),
-                  //                   ),
-                  //           ],
-                  //         ),
-                  //       );
                 },
               ),
             ],
           ),
         )
+      ],
+    );
+  }
+
+  Widget alertEmptyData(String title, String detail) {
+    return AlertDialog(
+      backgroundColor: Colors.white,
+      title: Text(title),
+      content: Text(detail),
+      actions: <Widget>[
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text("ตกลง"),
+        ),
       ],
     );
   }
@@ -881,27 +937,42 @@ class _SlipRequestState extends State<SlipRequest> {
             )
           ],
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 20),
-          child: Center(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.ognGreen,
-              ),
-              onPressed: () {
-                salaryController.sendSlipRequest();
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text(
-                  'ส่งคำร้อง',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-        )
       ],
+    );
+  }
+
+  Widget _buildCheckSelectedValues() {
+    String? formattedDate;
+    List<String> monthNames = [];
+    String? resultMonthNames;
+
+    for (int index in salaryController.selectedMonths) {
+      if (index >= 1 && index <= listMonth.length) {
+        monthNames.add(listMonth[index - 1]);
+        resultMonthNames = monthNames.join(', ');
+      } else {
+        monthNames.add('Invalid Index');
+      }
+    }
+
+    if (salaryController.usedDate.isNotEmpty) {
+      String originalDate = "${salaryController.usedDate}";
+      DateTime dateTime = DateTime.parse(originalDate);
+
+      formattedDate = DateFormat('dd MMMM yyyy', 'th').format(dateTime);
+    }
+
+    return Container(
+      alignment: Alignment.centerLeft,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text('เดือนที่ขอสลิป : $resultMonthNames'),
+          Text('สาเหตุที่นำไปใช้ : ${salaryController.inputCause}'),
+          Text('วันที่จะนำไปใช้ : $formattedDate'),
+        ],
+      ),
     );
   }
 }
