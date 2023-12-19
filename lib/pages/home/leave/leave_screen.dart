@@ -247,8 +247,7 @@ class _LeaveReportState extends State<LeaveReport> {
                       Text('ประเภทการลา'),
                       DecoratedBox(
                         decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Colors.grey, width: 1),
+                          border: Border.all(color: Colors.grey, width: 1),
                           borderRadius: BorderRadius.circular(50),
                           // boxShadow: <BoxShadow>[
                           //   BoxShadow(

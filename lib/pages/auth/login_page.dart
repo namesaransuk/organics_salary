@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:organics_salary/controllers/login_controller.dart';
 import 'package:organics_salary/pages/auth/extention.dart';
 import 'package:organics_salary/theme.dart';
 
@@ -16,6 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   String? empIdError, passwordError;
   Function(String? empId, String? password)? get onSubmitted =>
       widget.onSubmitted;
+  final LoginController loginController = Get.put(LoginController());
 
   @override
   void initState() {
@@ -182,7 +184,17 @@ class _LoginPageState extends State<LoginPage> {
               ),
               // onPressed: submit,
               onPressed: () {
-                Get.offAndToNamed('home');
+                if (empId.isNotEmpty && password.isNotEmpty) {
+                  loginController.login(context, empId, password);
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alertEmptyData('แจ้งเตือน',
+                          'กรุณากรอกข้อมูลให้ครบถ้วนเพื่อลงชื่อเข้าใช้');
+                    },
+                  );
+                }
               },
               child: Container(
                 width: double.infinity,
@@ -231,6 +243,22 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget alertEmptyData(String title, String detail) {
+    return AlertDialog(
+      backgroundColor: Colors.white,
+      title: Text(title),
+      content: Text(detail),
+      actions: <Widget>[
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text("ตกลง"),
+        ),
+      ],
     );
   }
 }

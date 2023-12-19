@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:organics_salary/theme.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -37,21 +38,99 @@ class GetMainUI extends StatefulWidget {
 class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
+    final box = GetStorage();
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 30, 154, 141),
+      ),
       child: Column(
         children: [
-          buildProfile(),
-          const SizedBox(height: 24),
-          buildName(),
-          const SizedBox(height: 24),
-          buildNumbers(),
-          const SizedBox(height: 24),
-          buildAbout(),
+          const SizedBox(height: 30),
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 30),
+            title: Text('${box.read('f_name')} ${box.read('l_name')}',
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineSmall
+                    ?.copyWith(color: Colors.white)),
+            subtitle: Text('Good Morning',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: Colors.white54)),
+            trailing: CircleAvatar(
+              radius: 30,
+              child: Image.asset(
+                'assets/img/organics_legendary.png',
+                width: 130,
+              ),
+            ),
+          ),
+          const SizedBox(height: 30),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            decoration: BoxDecoration(
+                color: Color.fromARGB(255, 240, 240, 240),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(200),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromARGB(255, 45, 45, 45).withOpacity(0.2),
+                    spreadRadius: 0.5,
+                    blurRadius: 7,
+                    offset: Offset(0, -5),
+                  ),
+                ]),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                crossAxisSpacing: 40,
+                mainAxisSpacing: 30,
+                children: [
+                  itemDashboard('ลาป่วย / วัน', '0'),
+                  itemDashboard('ลากิจ / วัน', '0'),
+                  itemDashboard('ลาพักร้อน / วัน', '0'),
+                  itemDashboard('มาสาย / ครั้ง', '0'),
+                  itemDashboard('ลาอื่นๆ / วัน', '0'),
+                  itemDashboard('การมาทำงาน', '100%'),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
+
+  itemDashboard(String title, String num) => Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                  offset: const Offset(0, 5),
+                  color: Theme.of(context).primaryColor.withOpacity(.2),
+                  spreadRadius: 2,
+                  blurRadius: 5)
+            ]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              num,
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(title.toUpperCase(),
+                style: Theme.of(context).textTheme.titleMedium)
+          ],
+        ),
+      );
 
   Widget buildProfile() {
     return Center(
@@ -80,12 +159,13 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
       children: [
         Text(
           'Dr.Jel Organics',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white),
         ),
         const SizedBox(height: 4),
         Text(
           'บริษัท ออกานิกส์ คอสเม่ จำกัด',
-          style: TextStyle(color: Colors.grey),
+          style: TextStyle(color: const Color.fromARGB(255, 225, 225, 225)),
         )
       ],
     );

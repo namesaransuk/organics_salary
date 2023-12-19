@@ -52,7 +52,8 @@ class _SettingPageState extends State<SettingPage> {
                           ?.copyWith(color: Colors.white54)),
                   trailing: const CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage('assets/img/organics_legendary.png'),
+                    backgroundImage:
+                        AssetImage('assets/img/organics_legendary.png'),
                   ),
                 ),
                 const SizedBox(height: 30)
@@ -64,33 +65,34 @@ class _SettingPageState extends State<SettingPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: Color.fromARGB(255, 245, 245, 245),
                   borderRadius:
                       BorderRadius.only(topLeft: Radius.circular(200))),
-              child: GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 40,
-                mainAxisSpacing: 30,
-                children: [
-                  itemDashboard('Videos', Icons.ondemand_video_rounded,
-                      Colors.deepOrange),
-                  itemDashboard(
-                      'Analytics', Icons.auto_graph_rounded, Colors.green),
-                  itemDashboard(
-                      'Audience', Icons.supervised_user_circle_rounded, Colors.purple),
-                  itemDashboard(
-                      'Comments', Icons.messenger_rounded, Colors.brown),
-                  itemDashboard('Revenue', Icons.monetization_on_rounded,
-                      Colors.indigo),
-                  itemDashboard(
-                      'Upload', Icons.arrow_circle_up_rounded, Colors.teal),
-                  itemDashboard(
-                      'About', Icons.info, Colors.blue),
-                  itemDashboard(
-                      'Contact', Icons.devices, Colors.pinkAccent),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 40,
+                  mainAxisSpacing: 30,
+                  children: [
+                    itemDashboard('Videos', Icons.ondemand_video_rounded,
+                        Colors.deepOrange),
+                    itemDashboard(
+                        'Analytics', Icons.auto_graph_rounded, Colors.green),
+                    itemDashboard('Audience',
+                        Icons.supervised_user_circle_rounded, Colors.purple),
+                    itemDashboard(
+                        'Comments', Icons.messenger_rounded, Colors.brown),
+                    itemDashboard('Revenue', Icons.monetization_on_rounded,
+                        Colors.indigo),
+                    itemDashboard(
+                        'Upload', Icons.arrow_circle_up_rounded, Colors.teal),
+                    itemDashboard('About', Icons.info, Colors.blue),
+                    itemDashboard('Contact', Icons.devices, Colors.pinkAccent),
+                  ],
+                ),
               ),
             ),
           ),

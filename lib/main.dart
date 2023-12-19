@@ -9,11 +9,15 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:organics_salary/pages/setting/setting_page.dart';
 import 'package:organics_salary/pages/time_history/time_history_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:organics_salary/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('th', null);
+  dotenv.load();
+  await GetStorage.init();
   Get.lazyPut(() => GetConnect());
   runApp(const MyApp());
 }
@@ -35,6 +39,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isLogged = GetStorage().read('isLogged') ?? false;
+
     return GetMaterialApp(
         title: 'Organics Salary',
         localizationsDelegates: [
@@ -72,7 +78,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme: GoogleFonts.promptTextTheme(),
         ),
-        initialRoute: '/login',
+        initialRoute: isLogged ? '/' : '/login',
         defaultTransition: Transition.cupertino,
         getPages: [
           GetPage(name: '/', page: () => HomePage()),
