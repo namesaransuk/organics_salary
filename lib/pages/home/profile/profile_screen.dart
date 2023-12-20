@@ -12,19 +12,25 @@ class _ProfileScreenState extends State<ProfileScreen>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ListView(
-          // shrinkWrap: true,
-          children: const [
-            GetMainUI(),
-          ],
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).padding.bottom,
-        ),
+    return ListView(
+      // shrinkWrap: true,
+      children: const [
+        GetMainUI(),
       ],
     );
+    // return Stack(
+    //   children: [
+    //     ListView(
+    //       // shrinkWrap: true,
+    //       children: const [
+    //         GetMainUI(),
+    //       ],
+    //     ),
+    //     SizedBox(
+    //       height: MediaQuery.of(context).padding.bottom,
+    //     )
+    //   ],
+    // );
   }
 }
 
@@ -40,77 +46,97 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final box = GetStorage();
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Color.fromARGB(255, 30, 154, 141),
-      ),
-      child: Column(
-        children: [
-          const SizedBox(height: 30),
-          ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 30),
-            title: Text('${box.read('f_name')} ${box.read('l_name')}',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(color: Colors.white)),
-            subtitle: Text('Good Morning',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(color: Colors.white54)),
-            trailing: CircleAvatar(
-              radius: 30,
-              child: Image.asset(
-                'assets/img/organics_legendary.png',
-                width: 130,
-              ),
-            ),
-          ),
-          const SizedBox(height: 30),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            decoration: BoxDecoration(
-                color: Color.fromARGB(255, 240, 240, 240),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(200),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          color: AppTheme.ognSoftGreen,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${box.read('f_name')} ${box.read('l_name')}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall
+                            ?.copyWith(color: Colors.white)),
+                    Text(box.read('company_name_th'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(color: Colors.white54)),
+                  ],
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color.fromARGB(255, 45, 45, 45).withOpacity(0.2),
-                    spreadRadius: 0.5,
-                    blurRadius: 7,
-                    offset: Offset(0, -5),
+                CircleAvatar(
+                  radius: 30,
+                  child: Image.asset(
+                    '${box.read('image')}',
+                    width: 200,
                   ),
-                ]),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 40,
-                mainAxisSpacing: 30,
-                children: [
-                  itemDashboard('ลาป่วย / วัน', '0'),
-                  itemDashboard('ลากิจ / วัน', '0'),
-                  itemDashboard('ลาพักร้อน / วัน', '0'),
-                  itemDashboard('มาสาย / ครั้ง', '0'),
-                  itemDashboard('ลาอื่นๆ / วัน', '0'),
-                  itemDashboard('การมาทำงาน', '100%'),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+        Stack(
+          children: [
+            Container(
+              color: AppTheme.ognSoftGreen,
+              height: 200,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  // color: Color.fromARGB(255, 245, 245, 245),
+                  color: AppTheme.bgSoftGreen,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(70),
+                    // topRight: Radius.circular(20),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(255, 45, 45, 45).withOpacity(0.2),
+                      // spreadRadius: 0.1,
+                      blurRadius: 5,
+                      offset: Offset(0, -5),
+                    ),
+                  ]),
+              child: Padding(
+                // padding: const EdgeInsets.all(12.0),
+                padding: EdgeInsets.fromLTRB(40, 40, 40, 40),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 40,
+                  mainAxisSpacing: 30,
+                  children: [
+                    itemDashboard('ลาป่วย / วัน', '0'),
+                    itemDashboard('ลากิจ / วัน', '0'),
+                    itemDashboard('ลาพักร้อน / วัน', '0'),
+                    itemDashboard('มาสาย / ครั้ง', '0'),
+                    itemDashboard('ลาอื่นๆ / วัน', '0'),
+                    itemDashboard('การมาทำงาน', '100%'),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
   itemDashboard(String title, String num) => Container(
         decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
+            // color: AppTheme.bgSoftGreen,
+            borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
                   offset: const Offset(0, 5),

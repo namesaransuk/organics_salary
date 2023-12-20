@@ -8,6 +8,7 @@ import 'package:get_storage/get_storage.dart';
 class LoginController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
   var loginList = RxList<LoginModel>();
+  final box = GetStorage();
 
   void login(BuildContext context, username, String password) async {
     var connect = Get.find<GetConnect>();
@@ -26,34 +27,46 @@ class LoginController extends GetxController {
       var loginJSONList = LoginModel.fromJson(response.body);
       Get.back();
       if (loginJSONList.statusCode == '00') {
-        GetStorage().write('isLogged', true);
-        GetStorage().write('id', loginJSONList.id);
-        GetStorage().write('company_id', loginJSONList.companyId);
-        GetStorage().write('position_id', loginJSONList.positionId);
-        GetStorage().write('department_id', loginJSONList.departmentId);
-        GetStorage().write('employee_card_id', loginJSONList.employeeCardId);
-        GetStorage().write('employee_code', loginJSONList.employeeCode);
-        GetStorage().write('pre_name', loginJSONList.preName);
-        GetStorage().write('f_name', loginJSONList.fName);
-        GetStorage().write('l_name', loginJSONList.lName);
-        GetStorage().write('n_name', loginJSONList.nName);
-        GetStorage().write('gender_id', loginJSONList.genderId);
-        GetStorage().write('birthday', loginJSONList.birthday);
-        GetStorage().write('mobile', loginJSONList.mobile);
-        GetStorage().write('card_add', loginJSONList.cardAdd);
-        GetStorage().write('current_add', loginJSONList.currentAdd);
-        GetStorage().write('id_card', loginJSONList.idCard);
-        GetStorage().write('start_date', loginJSONList.startDate);
-        GetStorage().write('end_date', loginJSONList.endDate);
-        GetStorage().write('y_experience', loginJSONList.yExperience);
-        GetStorage().write('image', loginJSONList.image);
-        GetStorage().write('record_status', loginJSONList.recordStatus);
-        GetStorage().write('coins', loginJSONList.coins);
-        GetStorage().write('username', loginJSONList.username);
-        GetStorage().write('password', loginJSONList.password);
-        // GetStorage().write('created_at', loginJSONList.createdAt);
-        // GetStorage().write('updated_at', loginJSONList.updatedAt);
-        GetStorage().write('access_token', loginJSONList.accessToken);
+        box.write('isLogged', true);
+        box.write('id', loginJSONList.id);
+        box.write('company_id', loginJSONList.companyId);
+        box.write('company_name_th', loginJSONList.companyNameTh);
+        box.write('company_name_en', loginJSONList.companyNameEn);
+        box.write('position_id', loginJSONList.positionId);
+        box.write('position_name_th', loginJSONList.positionNameTh);
+        box.write('position_name_en', loginJSONList.positionNameEn);
+        box.write('department_id', loginJSONList.departmentId);
+        box
+            .write('department_name_th', loginJSONList.departmentNameTh);
+        box
+            .write('department_name_en', loginJSONList.departmentNameEn);
+        box.write('employee_card_id', loginJSONList.employeeCardId);
+        box.write('employee_code', loginJSONList.employeeCode);
+        box.write('pre_name', loginJSONList.preName);
+        box.write('f_name', loginJSONList.fName);
+        box.write('l_name', loginJSONList.lName);
+        box.write('n_name', loginJSONList.nName);
+        box.write('gender_id', loginJSONList.genderId);
+        box.write('birthday', loginJSONList.birthday);
+        box.write('mobile', loginJSONList.mobile);
+        box.write('card_add', loginJSONList.cardAdd);
+        box.write('current_add', loginJSONList.currentAdd);
+        box.write('id_card', loginJSONList.idCard);
+        box.write('start_date', loginJSONList.startDate);
+        box.write('end_date', loginJSONList.endDate);
+        box.write('y_experience', loginJSONList.yExperience);
+        box.write(
+            'image',
+            loginJSONList.image != null
+                ? loginJSONList.image
+                : 'assets/img/user.png');
+        box.write('record_status', loginJSONList.recordStatus);
+        box.write('coins', loginJSONList.coins);
+        box.write('username', loginJSONList.username);
+        box.write('password', loginJSONList.password);
+        // box.write('created_at', loginJSONList.createdAt);
+        // box.write('updated_at', loginJSONList.updatedAt);
+        box.write('access_token', loginJSONList.accessToken);
 
         Get.offAndToNamed('home');
       } else {
@@ -61,6 +74,7 @@ class LoginController extends GetxController {
             context, 'แจ้งเตือน', 'รหัสพนักงานหรือรหัสผ่านไม่ถูกต้อง');
       }
     } catch (e) {
+      Get.back();
       alertEmptyData(
           context, 'แจ้งเตือน', 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
       print(e);

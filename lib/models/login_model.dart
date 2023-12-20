@@ -1,8 +1,14 @@
 class LoginModel {
   int? id;
   int? companyId;
+  String? companyNameTh;
+  String? companyNameEn;
   int? positionId;
-  dynamic departmentId;
+  String? positionNameTh;
+  String? positionNameEn;
+  int? departmentId;
+  String? departmentNameTh;
+  String? departmentNameEn;
   String? employeeCardId;
   String? employeeCode;
   String? preName;
@@ -20,7 +26,7 @@ class LoginModel {
   dynamic yExperience;
   dynamic image;
   int? recordStatus;
-  dynamic coins;
+  String? coins;
   String? username;
   String? password;
   DateTime? createdAt;
@@ -32,8 +38,14 @@ class LoginModel {
   LoginModel({
     this.id,
     this.companyId,
+    this.companyNameTh,
+    this.companyNameEn,
     this.positionId,
+    this.positionNameTh,
+    this.positionNameEn,
     this.departmentId,
+    this.departmentNameTh,
+    this.departmentNameEn,
     this.employeeCardId,
     this.employeeCode,
     this.preName,
@@ -64,8 +76,14 @@ class LoginModel {
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
         id: json['id'] as int?,
         companyId: json['company_id'] as int?,
+        companyNameTh: json['company_name_th'] as String?,
+        companyNameEn: json['company_name_en'] as String?,
         positionId: json['position_id'] as int?,
-        departmentId: json['department_id'] as dynamic,
+        positionNameTh: json['position_name_th'] as String?,
+        positionNameEn: json['position_name_en'] as String?,
+        departmentId: json['department_id'] as int?,
+        departmentNameTh: json['department_name_th'] as String?,
+        departmentNameEn: json['department_name_en'] as String?,
         employeeCardId: json['employee_card_id'] as String?,
         employeeCode: json['employee_code'] as String?,
         preName: json['pre_name'] as String?,
@@ -83,7 +101,7 @@ class LoginModel {
         yExperience: json['y_experience'] as dynamic,
         image: json['image'] as dynamic,
         recordStatus: json['record_status'] as int?,
-        coins: json['coins'] as dynamic,
+        coins: json['coins'] as String?,
         username: json['username'] as String?,
         password: json['password'] as String?,
         // createdAt: json['created_at'] == null
@@ -100,8 +118,14 @@ class LoginModel {
   Map<String, dynamic> toJson() => {
         'id': id,
         'company_id': companyId,
+        'company_name_th': companyNameTh,
+        'company_name_en': companyNameEn,
         'position_id': positionId,
+        'position_name_th': positionNameTh,
+        'position_name_en': positionNameEn,
         'department_id': departmentId,
+        'department_name_th': departmentNameTh,
+        'department_name_en': departmentNameEn,
         'employee_card_id': employeeCardId,
         'employee_code': employeeCode,
         'pre_name': preName,
@@ -122,8 +146,8 @@ class LoginModel {
         'coins': coins,
         'username': username,
         'password': password,
-        // 'created_at': createdAt!.toIso8601String(),
-        // 'updated_at': updatedAt!.toIso8601String(),
+        // 'created_at': createdAt?.toIso8601String(),
+        // 'updated_at': updatedAt?.toIso8601String(),
         'access_token': accessToken,
         'status': status,
         'statusCode': statusCode,

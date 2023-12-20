@@ -59,7 +59,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
               color: AppTheme.bgSoftGreen,
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.3,
-                child: Image.asset('img/coin/titleimg.jpg'),
+                child: Image.asset('assets/img/coin/titleimg.jpg'),
               ),
             ),
             Padding(
@@ -120,11 +120,12 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                     height: 10,
                   ),
                   GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: screenMode ? 3 : 2,
                         // childAspectRatio: MediaQuery.of(context).size.width * 0.001
-                        childAspectRatio: 0.8),
+                        childAspectRatio: 0.7),
                     itemCount: coinController.coinList.length,
                     itemBuilder: (context, index) {
                       var coin = coinController.coinList[index];

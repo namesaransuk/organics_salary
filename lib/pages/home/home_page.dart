@@ -37,8 +37,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       // statusBarColor: AppTheme.ognSoftGreen,
-      statusBarColor: Color.fromARGB(255, 0, 0, 0),
-      statusBarIconBrightness: Brightness.light,
+      // statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
     ));
 
     return screenMode ? buildDrawerScaffold(context) : buildBottomBarScaffold();
@@ -51,7 +51,10 @@ class _HomePageState extends State<HomePage> {
       // elevation: 20,
       // title: const Text('GoogleNavBar'),
       // ),
-      backgroundColor: Color.fromARGB(255, 245, 245, 245),
+      extendBody: true,
+      backgroundColor: _selectedIndex == 0
+          ? AppTheme.bgSoftGreen
+          : Color.fromARGB(255, 245, 245, 245),
       appBar: shouldShowAppBar
           ? _selectedIndex == 0
               ? AppBar(
@@ -116,20 +119,20 @@ class _HomePageState extends State<HomePage> {
               color: Colors.black,
               tabs: [
                 GButton(
-                  icon: LineIcons.user,
+                  icon: Icons.person_outline_outlined,
                   text: 'โปรไฟล์',
                 ),
                 GButton(
-                  icon: Icons.receipt_long_rounded,
+                  icon: Icons.receipt_long_outlined,
                   iconSize: 23,
                   text: 'สลิปเงินเดือน',
                 ),
                 GButton(
-                  icon: LineIcons.businessTime,
+                  icon: Icons.share_arrival_time_outlined,
                   text: 'แจ้งลา',
                 ),
                 GButton(
-                  icon: Icons.format_list_bulleted_rounded,
+                  icon: Icons.format_list_bulleted_outlined,
                   text: 'รายการอื่น',
                 ),
               ],
@@ -149,6 +152,7 @@ class _HomePageState extends State<HomePage> {
   Widget buildDrawerScaffold(BuildContext context) {
     return Scaffold(
       key: _key,
+      extendBody: true,
       backgroundColor: Color.fromARGB(255, 245, 245, 245),
       // appBar: shouldShowAppBar
       //     ? _selectedIndex == 0
@@ -272,7 +276,7 @@ class _HomePageState extends State<HomePage> {
       },
       items: [
         SidebarXItem(
-          icon: LineIcons.user,
+          icon: Icons.person_outline_outlined,
           label: 'โปรไฟล์',
           onTap: () {
             setState(() {
@@ -290,7 +294,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         SidebarXItem(
-          icon: LineIcons.businessTime,
+          icon: Icons.punch_clock_rounded,
           label: 'แจ้งลา',
           onTap: () {
             setState(() {

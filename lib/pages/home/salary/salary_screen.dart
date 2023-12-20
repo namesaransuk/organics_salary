@@ -591,7 +591,7 @@ class _SlipRequestState extends State<SlipRequest> {
     return ListView(
       children: [
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(5.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -773,82 +773,127 @@ class _SlipRequestState extends State<SlipRequest> {
   }
 
   Widget _buildChoseMonthItem() {
-    return Card(
-      color: AppTheme.ognGreen,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'ระบุเดือนที่ต้องการขอสลิป',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: (abbrelistMonth.length / 4).ceil(),
+      itemBuilder: (context, rowIndex) {
+        int startIndex = rowIndex * 4;
+        int endIndex = (rowIndex + 1) * 4;
+        if (endIndex > abbrelistMonth.length) {
+          endIndex = abbrelistMonth.length;
+        }
+    
+        return Row(
+          children: List.generate(endIndex - startIndex, (colIndex) {
+            int index = startIndex + colIndex;
+    
+            return Expanded(
+              child: Row(
+                children: [
+                  Checkbox(
+                    value: index < salaryController.checkedMonths.length
+                        ? salaryController.checkedMonths[index]
+                        : false,
+                    onChanged: (value) {
+                      setState(() {
+                        if (value != null) {
+                          salaryController.checkedMonths[index] = value;
+                          if (value) {
+                            salaryController.selectedMonths.add(index + 1);
+                          } else {
+                            salaryController.selectedMonths.remove(index + 1);
+                          }
+                          print(salaryController.selectedMonths);
+                        }
+                      });
+                    },
+                  ),
+                  Text(
+                    abbrelistMonth[index],
+                    textAlign: TextAlign.left,
+                  ),
+                ],
               ),
-            ),
-          ),
-          Container(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: (abbrelistMonth.length / 4).ceil(),
-                itemBuilder: (context, rowIndex) {
-                  int startIndex = rowIndex * 4;
-                  int endIndex = (rowIndex + 1) * 4;
-                  if (endIndex > abbrelistMonth.length) {
-                    endIndex = abbrelistMonth.length;
-                  }
-
-                  return Row(
-                    children: List.generate(endIndex - startIndex, (colIndex) {
-                      int index = startIndex + colIndex;
-
-                      return Expanded(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              value:
-                                  index < salaryController.checkedMonths.length
-                                      ? salaryController.checkedMonths[index]
-                                      : false,
-                              onChanged: (value) {
-                                setState(() {
-                                  if (value != null) {
-                                    salaryController.checkedMonths[index] =
-                                        value;
-                                    if (value) {
-                                      salaryController.selectedMonths
-                                          .add(index + 1);
-                                    } else {
-                                      salaryController.selectedMonths
-                                          .remove(index + 1);
-                                    }
-                                    print(salaryController.selectedMonths);
-                                  }
-                                });
-                              },
-                            ),
-                            Text(
-                              abbrelistMonth[index],
-                              textAlign: TextAlign.left,
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-                  );
-                },
-              ),
-            ),
-          )
-        ],
-      ),
+            );
+          }),
+        );
+      },
     );
+    // return Card(
+    //   color: AppTheme.ognGreen,
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       Padding(
+    //         padding: const EdgeInsets.all(16.0),
+    //         child: Text(
+    //           'ระบุเดือนที่ต้องการขอสลิป',
+    //           style: TextStyle(
+    //             fontSize: 16,
+    //             fontWeight: FontWeight.bold,
+    //             color: Colors.white,
+    //           ),
+    //         ),
+    //       ),
+    //       Container(
+    //         color: Colors.white,
+    //         child: Padding(
+    //           padding: const EdgeInsets.all(8.0),
+    //           child: ListView.builder(
+    //             shrinkWrap: true,
+    //             physics: NeverScrollableScrollPhysics(),
+    //             itemCount: (abbrelistMonth.length / 4).ceil(),
+    //             itemBuilder: (context, rowIndex) {
+    //               int startIndex = rowIndex * 4;
+    //               int endIndex = (rowIndex + 1) * 4;
+    //               if (endIndex > abbrelistMonth.length) {
+    //                 endIndex = abbrelistMonth.length;
+    //               }
+    //               return Row(
+    //                 children: List.generate(endIndex - startIndex, (colIndex) {
+    //                   int index = startIndex + colIndex;
+    //                   return Expanded(
+    //                     child: Row(
+    //                       children: [
+    //                         Checkbox(
+    //                           value:
+    //                               index < salaryController.checkedMonths.length
+    //                                   ? salaryController.checkedMonths[index]
+    //                                   : false,
+    //                           onChanged: (value) {
+    //                             setState(() {
+    //                               if (value != null) {
+    //                                 salaryController.checkedMonths[index] =
+    //                                     value;
+    //                                 if (value) {
+    //                                   salaryController.selectedMonths
+    //                                       .add(index + 1);
+    //                                 } else {
+    //                                   salaryController.selectedMonths
+    //                                       .remove(index + 1);
+    //                                 }
+    //                                 print(salaryController.selectedMonths);
+    //                               }
+    //                             });
+    //                           },
+    //                         ),
+    //                         Text(
+    //                           abbrelistMonth[index],
+    //                           textAlign: TextAlign.left,
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   );
+    //                 }),
+    //               );
+    //             },
+    //           ),
+    //         ),
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 
   Widget _buildCauseItem() {

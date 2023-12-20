@@ -42,7 +42,7 @@ class EmpListScreen extends StatelessWidget {
         children: [
           ListTile(
             contentPadding:
-                const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
             leading: CircleAvatar(child: Icon(iconData)),
             title: Text(
               title,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:organics_salary/theme.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -78,9 +79,9 @@ class LeaveReport extends StatefulWidget {
 }
 
 class _LeaveReportState extends State<LeaveReport> {
-  late TextEditingController _nameController;
-  late TextEditingController _empIdController;
-  late TextEditingController _departmentController;
+  // late TextEditingController _nameController;
+  // late TextEditingController _empIdController;
+  // late TextEditingController _departmentController;
 
   String? selectedLeave;
 
@@ -149,11 +150,13 @@ class _LeaveReportState extends State<LeaveReport> {
 
   int? selectedOption;
 
+  final box = GetStorage();
+
   @override
   void initState() {
-    _nameController = TextEditingController(text: 'Dr.Jel Organics');
-    _empIdController = TextEditingController(text: 'IT 1234');
-    _departmentController = TextEditingController(text: 'CEO');
+    // _nameController = TextEditingController(text: '${box.read('f_name')} ${box.read('l_name')}');
+    // _empIdController = TextEditingController(text: box.read('employee_code'));
+    // _departmentController = TextEditingController(text: box.read('position_name_th'));
 
     super.initState();
   }
@@ -163,84 +166,84 @@ class _LeaveReportState extends State<LeaveReport> {
     return ListView(
       children: [
         Padding(
-          padding: const EdgeInsets.all(30.0),
+          padding: const EdgeInsets.all(25.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
                 children: [
-                  TextField(
-                    controller: _nameController,
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 7, horizontal: 16),
-                      labelText: 'ชื่อ-นามสกุล',
-                      alignLabelWithHint: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide(color: AppTheme.ognGreen),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _empIdController,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            labelText: 'รหัสพนักงาน',
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 7, horizontal: 16),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              borderSide: BorderSide(color: AppTheme.ognGreen),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      Expanded(
-                        child: TextField(
-                          controller: _departmentController,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            labelText: 'แผนก / ฝ่าย',
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 7, horizontal: 16),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              borderSide: BorderSide(color: AppTheme.ognGreen),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Divider(height: 40, color: Colors.black45),
+                  // TextField(
+                  //   controller: _nameController,
+                  //   readOnly: true,
+                  //   decoration: InputDecoration(
+                  //     contentPadding:
+                  //         EdgeInsets.symmetric(vertical: 7, horizontal: 16),
+                  //     labelText: 'ชื่อ-นามสกุล',
+                  //     alignLabelWithHint: true,
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(30.0),
+                  //     ),
+                  //     focusedBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(30.0),
+                  //       borderSide: BorderSide(color: AppTheme.ognGreen),
+                  //     ),
+                  //     enabledBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(30.0),
+                  //       borderSide: BorderSide(color: Colors.grey),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 16),
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //       child: TextField(
+                  //         controller: _empIdController,
+                  //         readOnly: true,
+                  //         decoration: InputDecoration(
+                  //           labelText: 'รหัสพนักงาน',
+                  //           contentPadding: EdgeInsets.symmetric(
+                  //               vertical: 7, horizontal: 16),
+                  //           border: OutlineInputBorder(
+                  //             borderRadius: BorderRadius.circular(30.0),
+                  //           ),
+                  //           focusedBorder: OutlineInputBorder(
+                  //             borderRadius: BorderRadius.circular(30.0),
+                  //             borderSide: BorderSide(color: AppTheme.ognGreen),
+                  //           ),
+                  //           enabledBorder: OutlineInputBorder(
+                  //             borderRadius: BorderRadius.circular(30.0),
+                  //             borderSide: BorderSide(color: Colors.grey),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 16),
+                  //     Expanded(
+                  //       child: TextField(
+                  //         controller: _departmentController,
+                  //         readOnly: true,
+                  //         decoration: InputDecoration(
+                  //           labelText: 'แผนก / ฝ่าย',
+                  //           contentPadding: EdgeInsets.symmetric(
+                  //               vertical: 7, horizontal: 16),
+                  //           border: OutlineInputBorder(
+                  //             borderRadius: BorderRadius.circular(30.0),
+                  //           ),
+                  //           focusedBorder: OutlineInputBorder(
+                  //             borderRadius: BorderRadius.circular(30.0),
+                  //             borderSide: BorderSide(color: AppTheme.ognGreen),
+                  //           ),
+                  //           enabledBorder: OutlineInputBorder(
+                  //             borderRadius: BorderRadius.circular(30.0),
+                  //             borderSide: BorderSide(color: Colors.grey),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // Divider(height: 40, color: Colors.black45),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

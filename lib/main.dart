@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
     var isLogged = GetStorage().read('isLogged') ?? false;
 
     return GetMaterialApp(
+        initialBinding: MyBinding(),
         title: 'Organics Salary',
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
@@ -88,5 +89,12 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/coin', page: () => CoinPage()),
           GetPage(name: '/time-history', page: () => TimeHistoryPage()),
         ]);
+  }
+}
+
+class MyBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.put(GetConnect());
   }
 }
