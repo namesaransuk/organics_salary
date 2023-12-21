@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:organics_salary/pages/auth/login_page.dart';
+import 'package:organics_salary/pages/auth/change_pass_page/change_pass_page.dart';
+import 'package:organics_salary/pages/auth/login_page/login_page.dart';
+import 'package:organics_salary/pages/auth/pin_page/confirm_pin_auth_page.dart';
 import 'package:organics_salary/pages/auth/register_page.dart';
 import 'package:organics_salary/pages/coin/coin_page.dart';
 import 'package:organics_salary/pages/home/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:organics_salary/pages/auth/pin_page/pin_auth_page.dart';
 import 'package:organics_salary/pages/setting/setting_page.dart';
 import 'package:organics_salary/pages/time_history/time_history_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -39,7 +42,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isLogged = GetStorage().read('isLogged') ?? false;
+    final box = GetStorage();
+    var isLogged = box.read('isLogged') ?? false;
+    var apppin = box.read('pin');
 
     return GetMaterialApp(
         initialBinding: MyBinding(),
@@ -56,7 +61,7 @@ class MyApp extends StatelessWidget {
         locale: Locale('th'),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
+          scaffoldBackgroundColor: const Color.fromARGB(255, 245, 245, 245),
           dividerTheme: DividerThemeData(
             color: Colors.black45,
             // thickness: 2,
@@ -79,12 +84,15 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme: GoogleFonts.promptTextTheme(),
         ),
-        initialRoute: isLogged ? '/' : '/login',
+        initialRoute: !isLogged ? '/login' : '/',
         defaultTransition: Transition.cupertino,
         getPages: [
           GetPage(name: '/', page: () => HomePage()),
           GetPage(name: '/login', page: () => const LoginPage()),
           GetPage(name: '/register', page: () => const RegisterPage()),
+          GetPage(name: '/pin', page: () => const PinAuthPage()),
+          GetPage(name: '/confirm-pin', page: () => const ConfirmPinAuthpage()),
+          GetPage(name: '/changepass', page: () => const ChangePassPage()),
           GetPage(name: '/setting', page: () => const SettingPage()),
           GetPage(name: '/coin', page: () => CoinPage()),
           GetPage(name: '/time-history', page: () => TimeHistoryPage()),

@@ -36,10 +36,8 @@ class LoginController extends GetxController {
         box.write('position_name_th', loginJSONList.positionNameTh);
         box.write('position_name_en', loginJSONList.positionNameEn);
         box.write('department_id', loginJSONList.departmentId);
-        box
-            .write('department_name_th', loginJSONList.departmentNameTh);
-        box
-            .write('department_name_en', loginJSONList.departmentNameEn);
+        box.write('department_name_th', loginJSONList.departmentNameTh);
+        box.write('department_name_en', loginJSONList.departmentNameEn);
         box.write('employee_card_id', loginJSONList.employeeCardId);
         box.write('employee_code', loginJSONList.employeeCode);
         box.write('pre_name', loginJSONList.preName);
@@ -66,9 +64,14 @@ class LoginController extends GetxController {
         box.write('password', loginJSONList.password);
         // box.write('created_at', loginJSONList.createdAt);
         // box.write('updated_at', loginJSONList.updatedAt);
-        box.write('access_token', loginJSONList.accessToken);
+        box.write('pin', loginJSONList.pin);
+        box.write('accessa_token', loginJSONList.accessToken);
 
-        Get.offAndToNamed('home');
+        if (box.read('pin') == null) {
+          Get.offAndToNamed('pin');
+        } else {
+          Get.offAndToNamed('home');
+        }
       } else {
         alertEmptyData(
             context, 'แจ้งเตือน', 'รหัสพนักงานหรือรหัสผ่านไม่ถูกต้อง');

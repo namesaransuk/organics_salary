@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:organics_salary/controllers/coin_controller.dart';
 import 'package:organics_salary/theme.dart';
 
@@ -46,6 +47,7 @@ class GetMainUI extends StatefulWidget {
 
 class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
   late bool screenMode;
+  final box = GetStorage();
   final CoinController coinController = Get.put(CoinController());
 
   @override
@@ -68,22 +70,35 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Image(
-                        image: AssetImage('assets/img/coin/ogn_coin.png'),
-                        width: 40,
-                        height: 40,
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      width: 90,
+                      height: 35,
+                      decoration: BoxDecoration(
+                          color: AppTheme.ognGreen,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image(
+                            image: AssetImage('assets/img/coin/ogn_coin.png'),
+                            width: 30,
+                            height: 30,
+                          ),
+                          Text(
+                            box.read('coins'),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                        ],
                       ),
-                      Text(
-                        "1000",
-                        style: TextStyle(
-                            color: AppTheme.ognGreen,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
-                      ),
-                    ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                   Center(
                     child: Column(

@@ -19,7 +19,7 @@ class _SettingPageState extends State<SettingPage> {
     final box = GetStorage();
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 245, 245, 245),
+      backgroundColor: AppTheme.bgSoftGreen,
       appBar: AppBar(
         title: Text(
           'การตั้งค่า',
@@ -33,10 +33,13 @@ class _SettingPageState extends State<SettingPage> {
       body: ListView(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            padding: EdgeInsets.symmetric(
+              vertical: 20,
+            ),
+            color: AppTheme.ognSoftGreen,
+            width: double.infinity,
             child: Column(
               children: [
-                /// -- IMAGE
                 SizedBox(
                   width: 120,
                   height: 120,
@@ -50,52 +53,78 @@ class _SettingPageState extends State<SettingPage> {
                 const SizedBox(height: 10),
                 Text(
                   '${box.read('f_name')} ${box.read('l_name')}',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.white),
                 ),
-                Text('รหัสพนักงาน : ${box.read('employee_code')}'),
-                Text('แผนก : ${box.read('position_name_th')}'),
+                Text(
+                  'รหัสพนักงาน : ${box.read('employee_code')}',
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text(
+                  'แผนก : ${box.read('position_name_th')}',
+                  style: TextStyle(color: Colors.white),
+                ),
                 const SizedBox(height: 20),
 
                 /// -- BUTTON
                 SizedBox(
-                  // width: 200,
+                  width: 170,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.toNamed('/changepass');
+                    },
                     style: ElevatedButton.styleFrom(
                         // backgroundColor: tPrimaryColor,
                         side: BorderSide.none,
                         shape: const StadiumBorder()),
-                    child: const Text(
-                      'เปลี่ยนรหัสผ่าน',
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.edit, size: 18.0, color: AppTheme.ognGreen),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'เปลี่ยนรหัสผ่าน',
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 30),
-                _bildDivider(),
-                const SizedBox(height: 10),
-
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 10,
+            ),
+            child: Column(
+              children: [
                 /// -- MENU
                 ProfileMenuWidget(
                     title: "การแจ้งเตือน",
                     icon: Icons.notifications_active_rounded,
                     onPress: () {}),
-                const SizedBox(height: 10),
+                const SizedBox(height: 2),
                 ProfileMenuWidget(
                     title: "เว็ปไซต์บริษัท",
                     icon: Icons.home_work_rounded,
                     onPress: () {
                       _open('https://www.organicscosme.com');
                     }),
-                const SizedBox(height: 10),
+                const SizedBox(height: 2),
                 ProfileMenuWidget(
                     title: "เฟสบุ๊คบริษัท",
                     icon: Icons.facebook_rounded,
                     onPress: () {
                       _open('https://www.facebook.com/organicscosme/');
                     }),
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
                 _bildDivider(),
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
                 ProfileMenuWidget(
                     title: "ออกจากระบบ",
                     icon: Icons.exit_to_app,
@@ -138,7 +167,7 @@ class _SettingPageState extends State<SettingPage> {
                     }),
               ],
             ),
-          ),
+          )
         ],
       ),
     );
@@ -146,7 +175,7 @@ class _SettingPageState extends State<SettingPage> {
 
   Widget _bildDivider() {
     return Divider(
-      color: Colors.grey,
+      color: Colors.grey.withOpacity(0.2),
       indent: MediaQuery.of(context).size.width * 0.05,
       endIndent: MediaQuery.of(context).size.width * 0.05,
     );
@@ -182,31 +211,35 @@ class ProfileMenuWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var iconColor = endIcon ? AppTheme.ognSoftGreen : Colors.red;
 
-    return ListTile(
-      onTap: onPress,
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: iconColor.withOpacity(0.1),
-        ),
-        child: Icon(icon, color: iconColor),
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(color: Colors.white),
       ),
-      title: Text(title,
-          style:
-              Theme.of(context).textTheme.bodyText1?.apply(color: textColor)),
-      trailing: endIcon
-          ? Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: Colors.grey.withOpacity(0.1),
-              ),
-              child: const Icon(Icons.arrow_forward_ios_rounded,
-                  size: 18.0, color: Colors.grey))
-          : null,
+      child: ListTile(
+        tileColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: Colors.white),
+        ),
+        onTap: onPress,
+        leading: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            color: iconColor.withOpacity(0.1),
+          ),
+          child: Icon(icon, color: iconColor),
+        ),
+        title: Text(title,
+            style:
+                Theme.of(context).textTheme.bodyText1?.apply(color: textColor)),
+        trailing: endIcon
+            ? const Icon(Icons.arrow_forward_ios_rounded,
+                size: 18.0, color: Colors.grey)
+            : null,
+      ),
     );
   }
 }

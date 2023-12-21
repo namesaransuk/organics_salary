@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:organics_salary/controllers/login_controller.dart';
-import 'package:organics_salary/pages/auth/extention.dart';
 import 'package:organics_salary/theme.dart';
 
 class LoginPage extends StatefulWidget {
@@ -73,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Image.asset(
                   'assets/img/organics_legendary.png',
-                  width: 150,
+                  width: 145,
                 ),
               ],
             ),
@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 labelText: 'รหัสพนักงาน',
-                errorText: empIdError,
+                // errorText: empIdError,
                 alignLabelWithHint: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -148,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 7, horizontal: 16),
                 labelText: 'รหัสผ่าน',
-                errorText: passwordError,
+                // errorText: passwordError,
                 alignLabelWithHint: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
