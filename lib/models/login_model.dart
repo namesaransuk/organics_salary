@@ -31,7 +31,7 @@ class LoginModel {
   String? password;
   DateTime? createdAt;
   DateTime? updatedAt;
-  dynamic? pin;
+  int? pin;
   String? accessToken;
   String? status;
   String? statusCode;
@@ -112,7 +112,7 @@ class LoginModel {
         // updatedAt: json['updated_at'] == null
         //     ? null
         //     : DateTime.parse(json['updated_at'] as String),
-        pin: json['pin'] as dynamic,
+        pin: json['pin'] as int?,
         accessToken: json['access_token'] as String?,
         status: json['status'] as String?,
         statusCode: json['statusCode'] as String?,

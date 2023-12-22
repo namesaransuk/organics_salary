@@ -5,6 +5,7 @@ import 'package:organics_salary/pages/auth/login_page/login_page.dart';
 import 'package:organics_salary/pages/auth/pin_page/confirm_pin_auth_page.dart';
 import 'package:organics_salary/pages/auth/register_page.dart';
 import 'package:organics_salary/pages/coin/coin_page.dart';
+import 'package:organics_salary/pages/home/check_pin_page.dart';
 import 'package:organics_salary/pages/home/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -62,13 +63,13 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: const Color.fromARGB(255, 245, 245, 245),
-          dividerTheme: DividerThemeData(
+          dividerTheme: const DividerThemeData(
             color: Colors.black45,
             // thickness: 2,
           ),
           dividerColor: Colors.black,
           colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: MaterialColor(0xFF136E68, {
+            primarySwatch: const MaterialColor(0xFF136E68, {
               50: Color(0xFF136E68),
               100: Color(0xFF136E68),
               200: Color(0xFF136E68),
@@ -84,14 +85,16 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme: GoogleFonts.promptTextTheme(),
         ),
-        initialRoute: !isLogged ? '/login' : '/',
+        initialRoute: !isLogged ? '/login' : '/pin',
         defaultTransition: Transition.cupertino,
         getPages: [
+          GetPage(name: '/pin', page: () => const CheckPinPage()),
           GetPage(name: '/', page: () => HomePage()),
           GetPage(name: '/login', page: () => const LoginPage()),
           GetPage(name: '/register', page: () => const RegisterPage()),
-          GetPage(name: '/pin', page: () => const PinAuthPage()),
-          GetPage(name: '/confirm-pin', page: () => const ConfirmPinAuthpage()),
+          GetPage(name: '/pinauth', page: () => const PinAuthPage()),
+          GetPage(
+              name: '/confirm-pinauth', page: () => const ConfirmPinAuthpage()),
           GetPage(name: '/changepass', page: () => const ChangePassPage()),
           GetPage(name: '/setting', page: () => const SettingPage()),
           GetPage(name: '/coin', page: () => CoinPage()),

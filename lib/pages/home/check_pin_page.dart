@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:custom_pin_screen/custom_pin_screen.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:organics_salary/controllers/pin_controller.dart';
 import 'package:organics_salary/theme.dart';
 
-class PinAuthPage extends StatefulWidget {
-  const PinAuthPage({Key? key}) : super(key: key);
+class CheckPinPage extends StatefulWidget {
+  const CheckPinPage({Key? key}) : super(key: key);
 
   @override
-  State<PinAuthPage> createState() => _PinAuthPageState();
+  State<CheckPinPage> createState() => _CheckPinPageState();
 }
 
-class _PinAuthPageState extends State<PinAuthPage> {
+class _CheckPinPageState extends State<CheckPinPage> {
+  final box = GetStorage();
+  final storedPin = GetStorage().read('pin');
   final PinController pinController = Get.put(PinController());
   String pin = "";
   PinTheme pinTheme = PinTheme(
@@ -34,7 +37,7 @@ class _PinAuthPageState extends State<PinAuthPage> {
                   vertical: 10.0,
                 ),
                 child: Text(
-                  "ระบุรหัส PIN",
+                  "ใส่รหัส PIN",
                   style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -44,14 +47,15 @@ class _PinAuthPageState extends State<PinAuthPage> {
               // const SizedBox(
               //   height: 5,
               // ),
-              const Text(
-                "กรอกรหัส 4 หลักเพื่อเข้าใช้งานในครั้งต่อไป",
-                style: TextStyle(
-                    // color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.white),
-              ),
+              // const Text(
+              //   "กรอกรหัส 4 หลักเพื่อเข้าใช้งานในครั้งต่อไป",
+              //   style: TextStyle(
+              //     // color: Colors.white,
+              //     fontSize: 14,
+              //     fontWeight: FontWeight.normal,
+              //     color: Colors.white
+              //   ),
+              // ),
               const SizedBox(
                 height: 40,
               ),
@@ -71,18 +75,39 @@ class _PinAuthPageState extends State<PinAuthPage> {
               CustomKeyBoard(
                 pinTheme: pinTheme,
                 onChanged: (v) {
-                  if (kDebugMode) {
-                    print(v);
-                    pin = v;
-                    setState(() {
-                      if (pin.length == 4 && int.tryParse(pin) != null) {
-                        // Get.offAndToNamed('/');
-                        pinController.savepin(pin);
+                  pin = v;
+                  setState(() {
+                    if (pin.length == 4 && int.tryParse(pin) != null) {
+                      // print('pin ${pin}');
+                      // print('storepin ${storedPin}');
+                      if (pin == storedPin) {
+                        Get.offAndToNamed('/');
                       } else {
-                        print('Invalid input');
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              backgroundColor: Colors.white,
+                              title: Text('แจ้งเตือน'),
+                              content:
+                                  Text('PIN ไม่ถูกต้อง โปรดลองใหม่อีกครั้ง'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('ตกลง'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        pin = '';
                       }
-                    });
-                  }
+                    } else {
+                      print('Invalid input');
+                    }
+                  });
                 },
                 specialKey: Icon(
                   Icons.fingerprint,
@@ -91,9 +116,7 @@ class _PinAuthPageState extends State<PinAuthPage> {
                   size: 50,
                 ),
                 specialKeyOnTap: () {
-                  if (kDebugMode) {
-                    print('fingerprint');
-                  }
+                  print('fingerprint');
                 },
                 maxLength: 4,
               ),
@@ -113,13 +136,10 @@ class PinCodeField extends StatelessWidget {
     required this.theme,
   }) : super(key: key);
 
-  /// The pin code
   final String pin;
 
-  /// The the index of the pin code field
   final PinTheme theme;
 
-  /// The index of the pin code field
   final int pinCodeFieldIndex;
 
   Color get getFillColorFromIndex {

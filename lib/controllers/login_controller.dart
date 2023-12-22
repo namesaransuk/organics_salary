@@ -64,13 +64,14 @@ class LoginController extends GetxController {
         box.write('password', loginJSONList.password);
         // box.write('created_at', loginJSONList.createdAt);
         // box.write('updated_at', loginJSONList.updatedAt);
-        box.write('pin', loginJSONList.pin);
+        box.write('pin', '${loginJSONList.pin}');
         box.write('accessa_token', loginJSONList.accessToken);
 
         if (box.read('pin') == null) {
-          Get.offAndToNamed('pin');
+          Get.offAndToNamed('pinauth');
         } else {
-          Get.offAndToNamed('home');
+          Get.offAndToNamed('pin');
+          // Get.offAndToNamed('home');
         }
       } else {
         alertEmptyData(
