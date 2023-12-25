@@ -21,6 +21,11 @@ class _CheckPinPageState extends State<CheckPinPage> {
   PinTheme pinTheme = PinTheme(
     keysColor: Colors.white,
   );
+  final List<GlobalKey<_PinCodeFieldState>> pinCodeFieldKeys = List.generate(
+    4,
+    (index) => GlobalKey<_PinCodeFieldState>(),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +69,7 @@ class _CheckPinPageState extends State<CheckPinPage> {
                 children: [
                   for (int i = 0; i < 4; i++)
                     PinCodeField(
-                      key: Key('pinField$i'),
+                      key: pinCodeFieldKeys[i],
                       pin: pin,
                       pinCodeFieldIndex: i,
                       theme: pinTheme,
@@ -81,7 +86,7 @@ class _CheckPinPageState extends State<CheckPinPage> {
                       // print('pin ${pin}');
                       // print('storepin ${storedPin}');
                       if (pin == storedPin) {
-                        Get.offAndToNamed('/');
+                        Get.offAllNamed('/');
                       } else {
                         showDialog(
                           context: context,
@@ -94,7 +99,7 @@ class _CheckPinPageState extends State<CheckPinPage> {
                               actions: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pop(context);
+                                    Get.offNamedUntil('/pin', (route) => false);
                                   },
                                   child: Text('ตกลง'),
                                 ),
@@ -102,7 +107,6 @@ class _CheckPinPageState extends State<CheckPinPage> {
                             );
                           },
                         );
-                        pin = '';
                       }
                     } else {
                       print('Invalid input');
@@ -128,7 +132,7 @@ class _CheckPinPageState extends State<CheckPinPage> {
   }
 }
 
-class PinCodeField extends StatelessWidget {
+class PinCodeField extends StatefulWidget {
   const PinCodeField({
     Key? key,
     required this.pin,
@@ -137,20 +141,14 @@ class PinCodeField extends StatelessWidget {
   }) : super(key: key);
 
   final String pin;
-
   final PinTheme theme;
-
   final int pinCodeFieldIndex;
 
-  Color get getFillColorFromIndex {
-    if (pin.length > pinCodeFieldIndex) {
-      return AppTheme.ognSoftGreen;
-    } else if (pin.length == pinCodeFieldIndex) {
-      return Colors.white.withOpacity(0.7);
-    }
-    return Colors.grey.withOpacity(0.7);
-  }
+  @override
+  _PinCodeFieldState createState() => _PinCodeFieldState();
+}
 
+class _PinCodeFieldState extends State<PinCodeField> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
@@ -158,16 +156,16 @@ class PinCodeField extends StatelessWidget {
       width: 50,
       margin: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
-        color: getFillColorFromIndex,
+        color: getFillColorFromIndex(),
         borderRadius: BorderRadius.circular(7),
         shape: BoxShape.rectangle,
         border: Border.all(
-          color: getFillColorFromIndex,
+          color: getFillColorFromIndex(),
           width: 2,
         ),
       ),
-      duration: const Duration(microseconds: 40000),
-      child: pin.length > pinCodeFieldIndex
+      duration: const Duration(milliseconds: 400),
+      child: widget.pin.length > widget.pinCodeFieldIndex
           ? const Icon(
               Icons.circle,
               color: Colors.white,
@@ -175,5 +173,18 @@ class PinCodeField extends StatelessWidget {
             )
           : const SizedBox(),
     );
+  }
+
+  Color getFillColorFromIndex() {
+    if (widget.pin.length > widget.pinCodeFieldIndex) {
+      return AppTheme.ognSoftGreen;
+    } else if (widget.pin.length == widget.pinCodeFieldIndex) {
+      return Colors.white.withOpacity(0.7);
+    }
+    return Colors.grey.withOpacity(0.7);
+  }
+
+  void updatePin() {
+    setState(() {});
   }
 }

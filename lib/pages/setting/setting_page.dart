@@ -19,8 +19,9 @@ class _SettingPageState extends State<SettingPage> {
     final box = GetStorage();
 
     return Scaffold(
-      backgroundColor: AppTheme.bgSoftGreen,
       appBar: AppBar(
+        backgroundColor: AppTheme.ognGreen,
+        foregroundColor: Colors.white,
         title: Text(
           'การตั้งค่า',
           style: TextStyle(
@@ -32,68 +33,102 @@ class _SettingPageState extends State<SettingPage> {
       ),
       body: ListView(
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 20,
-            ),
-            color: AppTheme.ognSoftGreen,
-            width: double.infinity,
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 120,
-                  height: 120,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: Image.asset(
-                      '${box.read('image')}',
-                    ),
-                  ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: 20,
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  '${box.read('f_name')} ${box.read('l_name')}',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.white),
+                decoration: BoxDecoration(
+                  color: AppTheme.ognSoftGreen,
+                  // borderRadius: BorderRadius.circular(20),
                 ),
-                Text(
-                  'รหัสพนักงาน : ${box.read('employee_code')}',
-                  style: TextStyle(color: Colors.white),
-                ),
-                Text(
-                  'แผนก : ${box.read('position_name_th')}',
-                  style: TextStyle(color: Colors.white),
-                ),
-                const SizedBox(height: 20),
-
-                /// -- BUTTON
-                SizedBox(
-                  width: 170,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Get.toNamed('/changepass');
-                    },
-                    style: ElevatedButton.styleFrom(
-                        // backgroundColor: tPrimaryColor,
-                        side: BorderSide.none,
-                        shape: const StadiumBorder()),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.edit, size: 18.0, color: AppTheme.ognGreen),
-                        SizedBox(
-                          width: 10,
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: 120,
+                      height: 120,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: Image.asset(
+                          '${box.read('image')}',
                         ),
-                        Text(
-                          'เปลี่ยนรหัสผ่าน',
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '${box.read('f_name')} ${box.read('l_name')}',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.white),
+                    ),
+                    Text(
+                      'รหัสพนักงาน : ${box.read('employee_code')}',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Text(
+                      'แผนก : ${box.read('position_name_th')}',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(height: 20),
+            
+                    /// -- BUTTON
+                    SizedBox(
+                      width: 170,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Get.toNamed('/changepass');
+                        },
+                        style: ElevatedButton.styleFrom(
+                            // backgroundColor: tPrimaryColor,
+                            side: BorderSide.none,
+                            shape: const StadiumBorder()),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.password_rounded,
+                                size: 18.0, color: AppTheme.ognGreen),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'เปลี่ยนรหัสผ่าน',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 170,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Get.toNamed('/changepass');
+                        },
+                        style: ElevatedButton.styleFrom(
+                            // backgroundColor: tPrimaryColor,
+                            side: BorderSide.none,
+                            shape: const StadiumBorder()),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.pin, size: 18.0, color: AppTheme.ognGreen),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'เปลี่ยนรหัส PIN',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
           const SizedBox(height: 10),

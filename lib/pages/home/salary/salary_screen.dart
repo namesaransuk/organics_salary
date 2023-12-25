@@ -117,66 +117,116 @@ class _SlipViewState extends State<SlipView> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: <Widget>[
-              Obx(
-                () => DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey, width: 1),
-                    borderRadius: BorderRadius.circular(50),
-                    // boxShadow: <BoxShadow>[
-                    //   BoxShadow(
-                    //       color: Color.fromRGBO(0, 0, 0, 0.57), blurRadius: 5)
-                    // ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30, right: 30),
-                    child: DropdownButton<String>(
-                      value: salaryController.monthName.value,
-                      borderRadius: BorderRadius.circular(20),
-                      items: [
-                        DropdownMenuItem<String>(
-                          enabled: false,
-                          value: 'กรุณาเลือกเดือน',
-                          child: Text(
-                            'กรุณาเลือกเดือน',
-                            style: const TextStyle(color: Colors.black54),
-                          ),
-                        ),
-                        for (final month in listMonth)
-                          DropdownMenuItem<String>(
-                            value: month,
-                            child: Text(
-                              month,
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                          ),
-                      ],
-                      onChanged: (String? value) {
-                        if (value != null) {
-                          // final selectedValues = value.split(' ');
-                          // final selectedMonthId = selectedValues[0];
-                          // final selectedMonthName = selectedValues[1];
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Obx(() =>
+                      Text('เดือน/ปี : ${salaryController.monthName.value}')),
+                  ElevatedButton(
+                      onPressed: () {
+                        showModalBottomSheet<void>(
+                          showDragHandle: true,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                              height: 200,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Obx(
+                                        () => DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(
+                                                color: Colors.grey, width: 1),
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            // boxShadow: <BoxShadow>[
+                                            //   BoxShadow(
+                                            //       color: Color.fromRGBO(0, 0, 0, 0.57), blurRadius: 5)
+                                            // ],
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 30, right: 30),
+                                            child: DropdownButton<String>(
+                                              value: salaryController
+                                                  .monthName.value,
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              items: [
+                                                DropdownMenuItem<String>(
+                                                  enabled: false,
+                                                  value: 'กรุณาเลือกเดือน',
+                                                  child: Text(
+                                                    'กรุณาเลือกเดือน',
+                                                    style: const TextStyle(
+                                                        color: Colors.black54),
+                                                  ),
+                                                ),
+                                                for (final month in listMonth)
+                                                  DropdownMenuItem<String>(
+                                                    value: month,
+                                                    child: Text(
+                                                      month,
+                                                      style: const TextStyle(
+                                                          color: Colors.black),
+                                                    ),
+                                                  ),
+                                              ],
+                                              onChanged: (String? value) {
+                                                if (value != null) {
+                                                  // final selectedValues = value.split(' ');
+                                                  // final selectedMonthId = selectedValues[0];
+                                                  // final selectedMonthName = selectedValues[1];
 
-                          int selectedIndex = listMonth.indexOf(value) + 1;
-                          salaryController.loadData(selectedIndex);
-                          salaryController.getMonthName(value);
-                        }
+                                                  int selectedIndex =
+                                                      listMonth.indexOf(value) +
+                                                          1;
+                                                  salaryController
+                                                      .loadData(selectedIndex);
+                                                  salaryController
+                                                      .getMonthName(value);
+                                                  Get.back();
+                                                }
+                                              },
+                                              icon: const Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 20),
+                                                child: Icon(
+                                                  Icons.arrow_drop_down,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              iconEnabledColor: Colors.white,
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 15),
+                                              dropdownColor: Colors.white,
+                                              underline: Container(),
+                                              isExpanded: true,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      child: const Text('Close BottomSheet'),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       },
-                      icon: const Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.black,
-                        ),
-                      ),
-                      iconEnabledColor: Colors.white,
-                      style: const TextStyle(color: Colors.black, fontSize: 15),
-                      dropdownColor: Colors.white,
-                      underline: Container(),
-                      isExpanded: true,
-                    ),
-                  ),
-                ),
+                      child: Text('เลือกเดือน/ปี'))
+                ],
               ),
               SizedBox(height: 20),
               screenMode ? _buildSlipTablet(context) : _buildSlip(context),
@@ -281,8 +331,8 @@ class _SlipViewState extends State<SlipView> {
                     _buildEarningItem("ค่าน้ำมัน", item.fc ?? 0),
                     _buildEarningItem("โบนัส", item.bonus ?? 0),
                     _buildEarningItem("ดอกเบี้ย", item.interest ?? 0),
-                    _buildEarningItem("เงินประจำตำแหน่ง", item.pm ?? 0),
                     _buildEarningItem("ค่าคอมมิชชั่น", item.oi ?? 0),
+                    _buildEarningItem("เงินได้อื่นๆ", item.pm ?? 0),
                     _buildEarningItem("รวมเงินได้", item.ti ?? 0, bold: true),
                     SizedBox(height: 10),
                     Divider(),
@@ -300,6 +350,7 @@ class _SlipViewState extends State<SlipView> {
                     // รายการหัก
                     _buildDeductionItem("ประกันสังคม", item.ss ?? 0),
                     _buildDeductionItem("ภาษี", item.tax ?? 0),
+                    _buildDeductionItem("เงินประกัน", item.dp ?? 0),
                     _buildDeductionItem("ขาด/ลา/มาสาย", item.agl ?? 0),
                     _buildDeductionItem("เงินกู้ยืม", item.loan ?? 0),
                     _buildDeductionItem("กองทุนเงินฝาก", item.df ?? 0),

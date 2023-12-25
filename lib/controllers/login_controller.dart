@@ -67,7 +67,7 @@ class LoginController extends GetxController {
         box.write('pin', '${loginJSONList.pin}');
         box.write('accessa_token', loginJSONList.accessToken);
 
-        if (box.read('pin') == null) {
+        if (box.read('pin') == 'null' || box.read('pin') == '') {
           Get.offAndToNamed('pinauth');
         } else {
           Get.offAndToNamed('pin');

@@ -15,6 +15,7 @@ class SalaryModel {
   int? ti;
   int? ss;
   int? tax;
+  int? dp;
   int? agl;
   int? loan;
   int? df;
@@ -39,6 +40,7 @@ class SalaryModel {
     this.ti,
     this.ss,
     this.tax,
+    this.dp,
     this.agl,
     this.loan,
     this.df,
@@ -64,6 +66,7 @@ class SalaryModel {
         ti: json['ti'] as int?,
         ss: json['ss'] as int?,
         tax: json['tax'] as int?,
+        dp: json['dp'] as int?,
         agl: json['agl'] as int?,
         loan: json['loan'] as int?,
         df: json['df'] as int?,
@@ -89,6 +92,7 @@ class SalaryModel {
         'ti': ti,
         'ss': ss,
         'tax': tax,
+        'dp': dp,
         'agl': agl,
         'loan': loan,
         'df': df,

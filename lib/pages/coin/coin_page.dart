@@ -65,36 +65,29 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Align(
                     alignment: Alignment.centerRight,
-                    child: Container(
-                      width: 90,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          color: AppTheme.ognGreen,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image(
-                            image: AssetImage('assets/img/coin/ogn_coin.png'),
-                            width: 30,
-                            height: 30,
-                          ),
-                          Text(
-                            box.read('coins'),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
-                          ),
-                        ],
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'คอยน์ : ${box.read('coins')}',
+                          style: TextStyle(
+                              color: AppTheme.ognGreen,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                        Image(
+                          image: AssetImage('assets/img/coin/ogn_coin.png'),
+                          width: 25,
+                          height: 25,
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(
@@ -108,7 +101,8 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                           style: TextStyle(
                               color: AppTheme.ognGreen,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                              fontSize: 16,
+                              ),
                         ),
                         SizedBox(
                           height: 5,
@@ -145,189 +139,199 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                     itemBuilder: (context, index) {
                       var coin = coinController.coinList[index];
 
-                      return InkWell(
-                        onTap: () {
-                          showModalBottomSheet<void>(
-                              showDragHandle: true,
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 40),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    // mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      // const Text('Modal BottomSheet'),
-                                      // ElevatedButton(
-                                      //   child: const Text('Close BottomSheet'),
-                                      //   onPressed: () => Navigator.pop(context),
-                                      // ),
-                                      Image.asset(
-                                        '${coin.img}',
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.5,
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Stack(
+                            alignment: Alignment.topCenter,
+                            children: [
+                              Image.asset(
+                                '${coin.img}',
+                                width:
+                                    MediaQuery.of(context).size.height * 0.15,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      '${coin.coin}' ?? '',
+                                      style: TextStyle(
+                                        color: AppTheme.ognGreen,
                                       ),
-                                      Container(
-                                        width: double.infinity,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              coin.name ?? '',
-                                              style: TextStyle(
-                                                  color: AppTheme.ognGreen,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.circle,
-                                                  color: AppTheme.ognGreen,
-                                                  size: 15,
-                                                ),
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  'รายละเอียด',
-                                                  style: TextStyle(
-                                                      color: AppTheme.ognGreen,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 20),
-                                              child: Text(
-                                                coin.description ?? '',
-                                                style: TextStyle(
-                                                  color: AppTheme.ognGreen,
+                                    ),
+                                    Image(
+                                      image: AssetImage(
+                                          'assets/img/coin/ogn_coin.png'),
+                                      width: 20,
+                                      height: 20,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                coin.name ?? '',
+                                style: TextStyle(
+                                    color: AppTheme.ognGreen,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  showModalBottomSheet<void>(
+                                      showDragHandle: true,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 40),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            // mainAxisSize: MainAxisSize.max,
+                                            children: <Widget>[
+                                              // const Text('Modal BottomSheet'),
+                                              // ElevatedButton(
+                                              //   child: const Text('Close BottomSheet'),
+                                              //   onPressed: () => Navigator.pop(context),
+                                              // ),
+                                              Image.asset(
+                                                '${coin.img}',
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.5,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      coin.name ?? '',
+                                                      style: TextStyle(
+                                                          color:
+                                                              AppTheme.ognGreen,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.circle,
+                                                          color:
+                                                              AppTheme.ognGreen,
+                                                          size: 15,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(
+                                                          'รายละเอียด',
+                                                          style: TextStyle(
+                                                              color: AppTheme
+                                                                  .ognGreen,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 16),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 20),
+                                                      child: Text(
+                                                        coin.description ?? '',
+                                                        style: TextStyle(
+                                                          color:
+                                                              AppTheme.ognGreen,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 20),
-                                        child: Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.3,
-                                          child: ElevatedButton(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text('${coin.coin}'),
-                                                  Image(
-                                                    image: AssetImage(
-                                                        'assets/img/coin/ogn_coin.png'),
-                                                    width: 20,
-                                                    height: 20,
+                                              Spacer(),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 20),
+                                                child: Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.3,
+                                                  child: ElevatedButton(
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text('${coin.coin}'),
+                                                          Image(
+                                                            image: AssetImage(
+                                                                'assets/img/coin/ogn_coin.png'),
+                                                            width: 20,
+                                                            height: 20,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    onPressed: () =>
+                                                        Navigator.pop(context),
                                                   ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
-                                            onPressed: () =>
-                                                Navigator.pop(context),
+                                              // Padding(
+                                              //   padding: const EdgeInsets.only(bottom: 20),
+                                              //   child: ElevatedButton(
+                                              //     child: const Text('Close BottomSheet'),
+                                              //     onPressed: () => Navigator.pop(context),
+                                              //   ),
+                                              // ),
+                                            ],
                                           ),
-                                        ),
-                                      ),
-                                      // Padding(
-                                      //   padding: const EdgeInsets.only(bottom: 20),
-                                      //   child: ElevatedButton(
-                                      //     child: const Text('Close BottomSheet'),
-                                      //     onPressed: () => Navigator.pop(context),
-                                      //   ),
-                                      // ),
-                                    ],
-                                  ),
-                                );
-                              });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              alignment: Alignment.topCenter,
-                              children: [
-                                Image.asset(
-                                  '${coin.img}',
-                                  width:
-                                      MediaQuery.of(context).size.height * 0.15,
+                                        );
+                                      });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Text('แลกรางวัล'),
                                 ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        '${coin.coin}' ?? '',
-                                        style: TextStyle(
-                                          color: AppTheme.ognGreen,
-                                        ),
-                                      ),
-                                      Image(
-                                        image: AssetImage(
-                                            'assets/img/coin/ogn_coin.png'),
-                                        width: 20,
-                                        height: 20,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Column(
-                              children: [
-                                Text(
-                                  coin.name ?? '',
-                                  style: TextStyle(
-                                      color: AppTheme.ognGreen,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {},
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Text('แลกรางวัล'),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                            ],
+                          ),
+                        ],
                       );
                     },
                   ),

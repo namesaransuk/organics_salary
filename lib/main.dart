@@ -56,8 +56,8 @@ class MyApp extends StatelessWidget {
         ],
         supportedLocales: [
           const Locale('th'),
-          const Locale('en'),
-          const Locale('us'),
+          // const Locale('en'),
+          // const Locale('us'),
         ],
         locale: Locale('th'),
         debugShowCheckedModeBanner: false,
@@ -88,7 +88,10 @@ class MyApp extends StatelessWidget {
         initialRoute: !isLogged ? '/login' : '/pin',
         defaultTransition: Transition.cupertino,
         getPages: [
-          GetPage(name: '/pin', page: () => const CheckPinPage()),
+          GetPage(
+              name: '/pin',
+              page: () => const CheckPinPage(),
+              transition: Transition.noTransition),
           GetPage(name: '/', page: () => HomePage()),
           GetPage(name: '/login', page: () => const LoginPage()),
           GetPage(name: '/register', page: () => const RegisterPage()),
