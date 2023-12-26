@@ -99,10 +99,10 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                         Text(
                           'จำนวน coin ที่ใช้แลก',
                           style: TextStyle(
-                              color: AppTheme.ognGreen,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              ),
+                            color: AppTheme.ognGreen,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
                         SizedBox(
                           height: 5,

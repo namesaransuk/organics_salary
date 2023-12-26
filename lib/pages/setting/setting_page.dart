@@ -75,7 +75,7 @@ class _SettingPageState extends State<SettingPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 20),
-            
+
                     /// -- BUTTON
                     SizedBox(
                       width: 170,
@@ -115,7 +115,8 @@ class _SettingPageState extends State<SettingPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.pin, size: 18.0, color: AppTheme.ognGreen),
+                            Icon(Icons.pin,
+                                size: 18.0, color: AppTheme.ognGreen),
                             SizedBox(
                               width: 10,
                             ),

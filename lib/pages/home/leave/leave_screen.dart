@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:organics_salary/controllers/leave_history_controller.dart';
 import 'package:organics_salary/theme.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'dart:io';
-import 'package:date_format/date_format.dart';
 import 'package:intl/intl.dart';
+import 'package:carousel_grid/carousel_grid.dart';
+
+final LeaveHistoryController leaveHistoryController =
+    Get.put(LeaveHistoryController());
 
 List<Map<String, dynamic>> listLeave = [
   {'lId': 1, 'lName': 'ลาป่วย'},
@@ -15,6 +20,21 @@ List<Map<String, dynamic>> listLeave = [
   {'lId': 4, 'lName': 'ลาพักร้อนประจำปี'},
   {'lId': 5, 'lName': 'ลาคลอด'},
   {'lId': 6, 'lName': 'ลาอื่นๆ'},
+];
+
+List listMonth = [
+  'มกราคม',
+  'กุมภาพันธ์',
+  'มีนาคม',
+  'เมษายน',
+  'พฤษภาคม',
+  'มิถุนายน',
+  'กรกฎาคม',
+  'สิงหาคม',
+  'กันยายน',
+  'ตุลาคม',
+  'พฤศจิกายน',
+  'ธันวาคม',
 ];
 
 class LeaveScreen extends StatefulWidget {
@@ -641,220 +661,205 @@ class LeaveHistory extends StatefulWidget {
 class _LeaveHistoryState extends State<LeaveHistory> {
   @override
   Widget build(BuildContext context) {
+    leaveHistoryController.loadData();
+
+    // List<String> imagesUrls = [
+    //   "https://newhr.organicscosme.com/uploads/images/medical_certificate/01.jpg",
+    //   "https://newhr.organicscosme.com/uploads/images/medical_certificate/01.jpg",
+    //   "https://newhr.organicscosme.com/uploads/images/medical_certificate/01.jpg",
+    //   "https://newhr.organicscosme.com/uploads/images/medical_certificate/01.jpg",
+    //   "https://newhr.organicscosme.com/uploads/images/medical_certificate/01.jpg",
+    // ];
+
     return ListView(
       children: [
         Padding(
           padding: const EdgeInsets.all(30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '28 พ.ย. 2566',
-                    style: TextStyle(color: AppTheme.ognGreen),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: Card(
-                      child: Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'ลาป่วย',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text('ไม่มีใบรับรองแพทย์'),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'สาเหตุการลา',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text('เป็นไข้ ปวดหัว ตัวร้อน นอนไม่หลับ'),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'จำนวนวันที่ลา',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 20),
+          child: Obx(
+            () => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: leaveHistoryController.leaveHistoryList.map((item) {
+                
+                List<String> imagesUrls = [];
+
+                Map<String, dynamic> jsonData = {
+                  "leave_img1": item.leaveImg1,
+                  "leave_img2": item.leaveImg2,
+                  "leave_img3": item.leaveImg3,
+                  "leave_img4": item.leaveImg4,
+                  "leave_img5": item.leaveImg5,
+                };
+
+                jsonData.forEach((key, value) {
+                  if (value is String) {
+                    imagesUrls.add(value);
+                  }
+                });
+
+                return Column(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${item.day} ${listMonth[item.month! - 1]} ${item.year}',
+                          style: TextStyle(color: AppTheme.ognGreen),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          child: Card(
+                            child: Padding(
+                              padding: EdgeInsets.all(20.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('ตั้งแต่ 28 พ.ย. 2566 เวลา 08.00 น.'),
-                                  Text('จนถึง 28 พ.ย. 2566 เวลา 18.00 น.'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '20 ก.ย. 2566',
-                    style: TextStyle(color: AppTheme.ognGreen),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: Card(
-                      child: Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'ลาป่วย',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'ประเภทการลา',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 20),
+                                            child: Text('${item.leaveTypeId}'),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 20),
-                                      child: Text('มีใบรับรองแพทย์'),
-                                    ),
-                                  ],
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {},
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Text('ดูไฟล์'),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                Dialog(
+                                              backgroundColor: Colors.white,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      color: AppTheme.ognGreen,
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(20),
+                                                        topRight:
+                                                            Radius.circular(20),
+                                                      ),
+                                                    ),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 15),
+                                                    child: Center(
+                                                      child: Text(
+                                                        '${item.day} ${listMonth[item.month! - 1]} ${item.year}',
+                                                        style: TextStyle(
+                                                          color: Colors
+                                                              .white, // สีข้อความ
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  CarouselGrid(
+                                                    // height: 285,
+                                                    width: double.infinity,
+                                                    listUrlImages: imagesUrls,
+                                                    iconBack: const Icon(
+                                                      Icons.arrow_back,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 10),
+                                                    child: TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: const Text('ปิด'),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Text('ดูไฟล์'),
+                                      )
+                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'สาเหตุการลา',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text('ติดเชื้อ Covid 19'),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'จำนวนวันที่ลา',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('ตั้งแต่ 20 ก.ย. 2566 เวลา 08.00 น.'),
-                                  Text('จนถึง 25 ก.ย. 2566 เวลา 18.00 น.'),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    'สาเหตุการลา',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 20),
+                                    child: Text('${item.leaveDetail}'),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    'ระยะเวลาวันที่ลา',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                            'ตั้งแต่ : ${dateThaiFormat(item.leaveDateStart)}'),
+                                        Text(
+                                            'จนถึง ${dateThaiFormat(item.leaveDateEnd)}'),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '10 ก.ค. 2566',
-                    style: TextStyle(color: AppTheme.ognGreen),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: Card(
-                      child: Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'ลาพักร้อน',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text('-'),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'สาเหตุการลา',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text('ลาพักร้อนประจำปี'),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'จำนวนวันที่ลา',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('ตั้งแต่ 19 ก.ค. 2566 เวลา 08.00 น.'),
-                                  Text('จนถึง 21 ก.ค. 2566 เวลา 18.00 น.'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    SizedBox(
+                      height: 50,
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                );
+              }).toList(),
+            ),
           ),
-        )
+        ),
       ],
     );
+  }
+
+  String dateThaiFormat(date) {
+    DateTime originalDate = DateTime.parse('$date');
+
+    String thaiFormattedDateTime =
+        DateFormat.yMMMMd('th').add_Hm().format(originalDate);
+
+    thaiFormattedDateTime = thaiFormattedDateTime.replaceAll(' ค.ศ.', '');
+
+    return thaiFormattedDateTime;
   }
 }

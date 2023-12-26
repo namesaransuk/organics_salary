@@ -38,6 +38,8 @@ class PinController extends GetxController {
         if (response.statusCode == 200) {
           Map<String, dynamic> responseBody = response.body;
           if (responseBody['statusCode'] == '00') {
+            box.write('pin', '$secondPin');
+
             Get.offAllNamed('/');
             print('success');
           } else {

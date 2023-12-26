@@ -10,7 +10,6 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen>
     with TickerProviderStateMixin {
-    
   final box = GetStorage();
 
   @override

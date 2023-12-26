@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:custom_pin_screen/custom_pin_screen.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:organics_salary/controllers/pin_controller.dart';
 import 'package:organics_salary/theme.dart';
 
@@ -25,6 +27,24 @@ class _CheckPinPageState extends State<CheckPinPage> {
     4,
     (index) => GlobalKey<_PinCodeFieldState>(),
   );
+
+  late final LocalAuthentication auth;
+  bool _supportState = false;
+
+  bool _supportFingerprint = false;
+  bool _supportFaceID = false;
+
+  @override
+  void initState() {
+    super.initState();
+    auth = LocalAuthentication();
+    _checkBiometricsSupport();
+    // auth.isDeviceSupported().then(
+    //       (bool isSupported) => setState(() {
+    //         _supportState = isSupported;
+    //       }),
+    //     );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,16 +140,71 @@ class _CheckPinPageState extends State<CheckPinPage> {
                   size: 50,
                 ),
                 specialKeyOnTap: () {
+                  _authenticate();
                   print('fingerprint');
                 },
                 maxLength: 4,
               ),
+              // _supportState ? Text('support') : Text('not support')
             ],
           ),
         ),
       ),
     );
   }
+
+  Future<void> _authenticate() async {
+    try {
+      final auth = LocalAuthentication();
+      bool authenticated = await auth.authenticate(
+        localizedReason: 'ยืนยันเข้าใช้งาน',
+        options: AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: true,
+        ),
+      );
+
+      print('Test Success : $authenticated');
+
+      if (authenticated) {
+        await Future.delayed(const Duration(seconds: 1), () {
+          Get.offAllNamed('/');
+        });
+      }
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> _checkBiometricsSupport() async {
+    try {
+      List<BiometricType> availableBiometrics =
+          await auth.getAvailableBiometrics();
+
+      setState(() {
+        _supportFingerprint =
+            availableBiometrics.contains(BiometricType.fingerprint);
+        _supportFaceID = availableBiometrics.contains(BiometricType.face);
+      });
+
+      print('Support: $availableBiometrics');
+      print('Support Fingerprint: $_supportFingerprint');
+      print('Support Face ID: $_supportFaceID');
+    } on PlatformException catch (e) {
+      print('Error checking biometrics support: $e');
+    }
+  }
+
+  // Future<void> _getAvailableBiometrics() async {
+  //   List<BiometricType> availableBiometrics =
+  //       await auth.getAvailableBiometrics();
+
+  //   print('List of availableBiometrics : $availableBiometrics');
+
+  //   if (!mounted) {
+  //     return;
+  //   }
+  // }
 }
 
 class PinCodeField extends StatefulWidget {

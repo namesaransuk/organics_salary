@@ -15,7 +15,6 @@ import 'package:organics_salary/pages/setting/setting_page.dart';
 import 'package:organics_salary/pages/time_history/time_history_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:organics_salary/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +44,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final box = GetStorage();
     var isLogged = box.read('isLogged') ?? false;
-    var apppin = box.read('pin');
+    // var apppin = box.read('pin');
 
     return GetMaterialApp(
         initialBinding: MyBinding(),
