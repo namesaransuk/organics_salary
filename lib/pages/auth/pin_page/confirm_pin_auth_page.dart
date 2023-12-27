@@ -85,17 +85,17 @@ class _ConfirmPinAuthpageState extends State<ConfirmPinAuthpage> {
                     });
                   }
                 },
-                specialKey: Icon(
-                  Icons.fingerprint,
-                  key: const Key('fingerprint'),
-                  color: pinTheme.keysColor,
-                  size: 50,
-                ),
-                specialKeyOnTap: () {
-                  if (kDebugMode) {
-                    print('fingerprint');
-                  }
-                },
+                // specialKey: Icon(
+                //   Icons.fingerprint,
+                //   key: const Key('fingerprint'),
+                //   color: pinTheme.keysColor,
+                //   size: 50,
+                // ),
+                // specialKeyOnTap: () {
+                //   if (kDebugMode) {
+                //     print('fingerprint');
+                //   }
+                // },
                 maxLength: 4,
               ),
             ],

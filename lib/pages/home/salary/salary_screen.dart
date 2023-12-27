@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:organics_salary/controllers/salary_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +11,7 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 final SalaryController salaryController = Get.put(SalaryController());
 String reason = '';
 int selectedIndex = 2;
+final box = GetStorage();
 
 List listMonth = [
   'มกราคม',
@@ -273,7 +275,7 @@ class _SlipViewState extends State<SlipView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Organics Cosme CO.,LTD.",
+                              "${box.read('company_name_en')}",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -281,10 +283,10 @@ class _SlipViewState extends State<SlipView> {
                               ),
                             ),
                             Text(
-                              "บริษัท ออกานิกส์ คอสเม่ จำกัด",
+                              "${box.read('company_name_th')}",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                                fontSize: 14,
                                 color: Colors.green,
                               ),
                             ),
@@ -294,14 +296,14 @@ class _SlipViewState extends State<SlipView> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      '${item.name}',
+                      '${box.read('f_name')} ${box.read('l_name')}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                       ),
                     ),
-                    Text("รหัสพนักงาน : ${item.customer}"),
-                    Text("ตำแหน่ง : ${item.role}"),
+                    Text("รหัสพนักงาน : ${box.read('employee_code')}"),
+                    Text("ตำแหน่ง : ${box.read('department_name_th')}"),
                     SizedBox(height: 20),
                     Center(
                       child: Column(

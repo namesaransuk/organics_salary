@@ -9,16 +9,17 @@ import 'package:dotted_border/dotted_border.dart';
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:carousel_grid/carousel_grid.dart';
+import 'dart:async';
 
 final LeaveHistoryController leaveHistoryController =
     Get.put(LeaveHistoryController());
 
-List<Map<String, dynamic>> listLeave = [
+List listLeave = [
   {'lId': 1, 'lName': 'ลาป่วย'},
-  {'lId': 2, 'lName': 'มาสาย'},
-  {'lId': 3, 'lName': 'ลากิจ'},
-  {'lId': 4, 'lName': 'ลาพักร้อนประจำปี'},
-  {'lId': 5, 'lName': 'ลาคลอด'},
+  {'lId': 2, 'lName': 'ลากิจ'},
+  {'lId': 3, 'lName': 'ลาพักร้อนประจำปี'},
+  {'lId': 4, 'lName': 'ลาคลอด'},
+  {'lId': 5, 'lName': 'มาสาย'},
   {'lId': 6, 'lName': 'ลาอื่นๆ'},
 ];
 
@@ -105,17 +106,38 @@ class _LeaveReportState extends State<LeaveReport> {
 
   String? selectedLeave;
 
-  XFile? image;
+  int? selectedLeaveId;
+  List<File> selectedImages = [];
+  String? reasonLeave;
+
+  DateTime? partDateStart;
+  DateTime? partDateEnd;
+  TimeOfDay? partTimeStart;
+  TimeOfDay? partTimeEnd;
+
+  // XFile? image;
 
   final ImagePicker picker = ImagePicker();
 
-  Future getImage(ImageSource media) async {
-    var img = await picker.pickImage(source: media);
+  Future getImage() async {
+    final pickedFile = await picker.pickMultiImage(
+        imageQuality: 100, maxHeight: 1000, maxWidth: 1000);
+    List<XFile> xfilePick = pickedFile;
 
-    setState(() {
-      image = img;
-    });
+    for (var i = 0; i < xfilePick.length; i++) {
+      selectedImages.add(File(xfilePick[i].path));
+    }
+
+    setState(() {});
   }
+
+  // Future getImage(ImageSource media) async {
+  //   var img = await picker.pickImage(source: media);
+
+  //   setState(() {
+  //     image = img;
+  //   });
+  // }
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
@@ -138,8 +160,10 @@ class _LeaveReportState extends State<LeaveReport> {
       setState(() {
         if (mode == 1) {
           startDate = formattedDate;
+          partDateStart = selectedDate;
         } else {
           endDate = formattedDate;
+          partDateEnd = selectedDate;
         }
       });
     }
@@ -161,8 +185,10 @@ class _LeaveReportState extends State<LeaveReport> {
       setState(() {
         if (mode == 1) {
           startTime = formattedTime;
+          partTimeStart = selectedTime;
         } else {
           endTime = formattedTime;
+          partTimeEnd = selectedTime;
         }
       });
     }
@@ -174,10 +200,6 @@ class _LeaveReportState extends State<LeaveReport> {
 
   @override
   void initState() {
-    // _nameController = TextEditingController(text: '${box.read('f_name')} ${box.read('l_name')}');
-    // _empIdController = TextEditingController(text: box.read('employee_code'));
-    // _departmentController = TextEditingController(text: box.read('position_name_th'));
-
     super.initState();
   }
 
@@ -302,9 +324,14 @@ class _LeaveReportState extends State<LeaveReport> {
                           onChanged: (String? value) {
                             if (value != null) {
                               setState(() {
+                                dynamic selectedValues = value.split(' ');
+                                int leaveId = int.parse(selectedValues[0]);
+
+                                selectedLeaveId = leaveId;
                                 selectedLeave = value;
+
+                                print(selectedLeaveId);
                               });
-                              // dynamic selectedValues = value.split(' ');
                               // int selectedMonth = int.parse(selectedValues[0]);
                               // String selectedMonthName = selectedValues[1];
 
@@ -375,33 +402,78 @@ class _LeaveReportState extends State<LeaveReport> {
                                         borderType: BorderType.RRect,
                                         radius: Radius.circular(12),
                                         padding: EdgeInsets.all(20),
-                                        child: image != null
+                                        child: selectedImages.isNotEmpty
                                             ? Column(
                                                 children: [
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                12)),
-                                                    child: Image.file(
-                                                      File(image!.path),
-                                                      fit: BoxFit.cover,
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      height: 300,
-                                                    ),
+                                                  GridView.builder(
+                                                    shrinkWrap: true,
+                                                    itemCount:
+                                                        selectedImages.length,
+                                                    gridDelegate:
+                                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 2),
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return Center(
+                                                          child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 5),
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                          child: Image.file(
+                                                              selectedImages[
+                                                                  index]),
+                                                        ),
+                                                      ));
+                                                    },
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
                                                   ),
                                                   ElevatedButton(
                                                     onPressed: () {
-                                                      myAlert();
+                                                      getImage();
+                                                      selectedImages.clear();
+                                                      // myAlert();
                                                     },
                                                     child:
                                                         Text('เลือกรูปภาพใหม่'),
                                                   ),
                                                 ],
                                               )
+                                            // ? Column(
+                                            //     children: [
+                                            //       ClipRRect(
+                                            //         borderRadius:
+                                            //             BorderRadius.all(
+                                            //                 Radius.circular(
+                                            //                     12)),
+                                            //         child: Image.file(
+                                            //           File(image!.path),
+                                            //           fit: BoxFit.cover,
+                                            //           width:
+                                            //               MediaQuery.of(context)
+                                            //                   .size
+                                            //                   .width,
+                                            //           height: 300,
+                                            //         ),
+                                            //       ),
+                                            //       ElevatedButton(
+                                            //         onPressed: () {
+                                            //           myAlert();
+                                            //         },
+                                            //         child:
+                                            //             Text('เลือกรูปภาพใหม่'),
+                                            //       ),
+                                            //     ],
+                                            //   )
                                             : Container(
                                                 width: double.infinity,
                                                 child: Column(
@@ -413,7 +485,8 @@ class _LeaveReportState extends State<LeaveReport> {
                                                     ),
                                                     ElevatedButton(
                                                       onPressed: () {
-                                                        myAlert();
+                                                        getImage();
+                                                        // myAlert();
                                                       },
                                                       child: Text('อัพโหลดรูป'),
                                                     ),
@@ -433,6 +506,11 @@ class _LeaveReportState extends State<LeaveReport> {
                     children: [
                       Text('เหตุผลการลา'),
                       TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            reasonLeave = value;
+                          });
+                        },
                         minLines: 3,
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
@@ -577,7 +655,27 @@ class _LeaveReportState extends State<LeaveReport> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppTheme.ognGreen,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            DateTime originalDateTime =
+                                DateTime.parse('$partDateStart');
+
+                            String formattedDateTime =
+                                DateFormat('y-MM-d HH:mm:ss', 'th')
+                                    .format(originalDateTime);
+
+                            String leaveStart = '$formattedDateTime';
+                            String leaveEnd = '$partDateEnd';
+                            print(leaveStart);
+                            // print(leaveEnd);
+                            leaveHistoryController.sendData(
+                                selectedLeaveId,
+                                selectedImages,
+                                reasonLeave,
+                                leaveStart,
+                                leaveEnd);
+                          });
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Text(
@@ -614,7 +712,7 @@ class _LeaveReportState extends State<LeaveReport> {
                     //if user click this button, user can upload image from gallery
                     onPressed: () {
                       Navigator.pop(context);
-                      getImage(ImageSource.gallery);
+                      // getImage(ImageSource.gallery);
                     },
                     child: Row(
                       children: [
@@ -631,7 +729,7 @@ class _LeaveReportState extends State<LeaveReport> {
                     //if user click this button. user can upload image from camera
                     onPressed: () {
                       Navigator.pop(context);
-                      getImage(ImageSource.camera);
+                      // getImage(ImageSource.camera);
                     },
                     child: Row(
                       children: [
@@ -661,192 +759,268 @@ class LeaveHistory extends StatefulWidget {
 class _LeaveHistoryState extends State<LeaveHistory> {
   @override
   Widget build(BuildContext context) {
-    leaveHistoryController.loadData();
-
-    // List<String> imagesUrls = [
-    //   "https://newhr.organicscosme.com/uploads/images/medical_certificate/01.jpg",
-    //   "https://newhr.organicscosme.com/uploads/images/medical_certificate/01.jpg",
-    //   "https://newhr.organicscosme.com/uploads/images/medical_certificate/01.jpg",
-    //   "https://newhr.organicscosme.com/uploads/images/medical_certificate/01.jpg",
-    //   "https://newhr.organicscosme.com/uploads/images/medical_certificate/01.jpg",
-    // ];
+    // leaveHistoryController.loadData();
 
     return ListView(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Obx(
-            () => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: leaveHistoryController.leaveHistoryList.map((item) {
-                
-                List<String> imagesUrls = [];
-
-                Map<String, dynamic> jsonData = {
-                  "leave_img1": item.leaveImg1,
-                  "leave_img2": item.leaveImg2,
-                  "leave_img3": item.leaveImg3,
-                  "leave_img4": item.leaveImg4,
-                  "leave_img5": item.leaveImg5,
-                };
-
-                jsonData.forEach((key, value) {
-                  if (value is String) {
-                    imagesUrls.add(value);
-                  }
-                });
-
-                return Column(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${item.day} ${listMonth[item.month! - 1]} ${item.year}',
-                          style: TextStyle(color: AppTheme.ognGreen),
-                        ),
-                        Container(
-                          width: double.infinity,
-                          child: Card(
-                            child: Padding(
-                              padding: EdgeInsets.all(20.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'ประเภทการลา',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 20),
-                                            child: Text('${item.leaveTypeId}'),
-                                          ),
-                                        ],
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          showDialog<String>(
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                                Dialog(
-                                              backgroundColor: Colors.white,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: <Widget>[
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      color: AppTheme.ognGreen,
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(20),
-                                                        topRight:
-                                                            Radius.circular(20),
-                                                      ),
-                                                    ),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 15),
-                                                    child: Center(
-                                                      child: Text(
-                                                        '${item.day} ${listMonth[item.month! - 1]} ${item.year}',
-                                                        style: TextStyle(
-                                                          color: Colors
-                                                              .white, // สีข้อความ
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  CarouselGrid(
-                                                    // height: 285,
-                                                    width: double.infinity,
-                                                    listUrlImages: imagesUrls,
-                                                    iconBack: const Icon(
-                                                      Icons.arrow_back,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 10),
-                                                    child: TextButton(
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: const Text('ปิด'),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Text('ดูไฟล์'),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    'สาเหตุการลา',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 20),
-                                    child: Text('${item.leaveDetail}'),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    'ระยะเวลาวันที่ลา',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 20),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                            'ตั้งแต่ : ${dateThaiFormat(item.leaveDateStart)}'),
-                                        Text(
-                                            'จนถึง ${dateThaiFormat(item.leaveDateEnd)}'),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+        Obx(
+          () => Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.grey, width: 1),
+                borderRadius: BorderRadius.circular(50),
+                // boxShadow: <BoxShadow>[
+                //   BoxShadow(
+                //       color: Color.fromRGBO(0, 0, 0, 0.57), blurRadius: 5)
+                // ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30, right: 30),
+                child: DropdownButton<String>(
+                  value: leaveHistoryController.monthName.value,
+                  borderRadius: BorderRadius.circular(20),
+                  items: [
+                    DropdownMenuItem<String>(
+                      enabled: false,
+                      value: 'กรุณาเลือกเดือน',
+                      child: Text(
+                        'กรุณาเลือกเดือน',
+                        style: const TextStyle(color: Colors.black54),
+                      ),
                     ),
-                    SizedBox(
-                      height: 50,
-                    ),
+                    for (final month in listMonth)
+                      DropdownMenuItem<String>(
+                        value: month,
+                        child: Text(
+                          month,
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      ),
                   ],
-                );
-              }).toList(),
+                  onChanged: (String? value) {
+                    if (value != null) {
+                      int selectedIndex = listMonth.indexOf(value) + 1;
+                      leaveHistoryController.loadData(selectedIndex);
+                      leaveHistoryController.getMonthName(value);
+                    }
+                  },
+                  icon: const Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.black,
+                    ),
+                  ),
+                  iconEnabledColor: Colors.white,
+                  style: const TextStyle(color: Colors.black, fontSize: 15),
+                  dropdownColor: Colors.white,
+                  underline: Container(),
+                  isExpanded: true,
+                ),
+              ),
             ),
           ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Obx(() => leaveHistoryController.leaveHistoryList.isNotEmpty
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: leaveHistoryController.leaveHistoryList.map((item) {
+                    List<String> imagesUrls = [];
+
+                    Map<String, dynamic> jsonData = {
+                      "leave_img1": item.leaveImg1,
+                      "leave_img2": item.leaveImg2,
+                      "leave_img3": item.leaveImg3,
+                      "leave_img4": item.leaveImg4,
+                      "leave_img5": item.leaveImg5,
+                    };
+
+                    jsonData.forEach((key, value) {
+                      if (value is String) {
+                        imagesUrls.add(value);
+                      }
+                    });
+
+                    return Column(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${item.day} ${listMonth[item.month! - 1]} ${item.year}',
+                              style: TextStyle(color: AppTheme.ognGreen),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              child: Card(
+                                child: Padding(
+                                  padding: EdgeInsets.all(20.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'ประเภทการลา',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 20),
+                                                child:
+                                                    Text('${item.leaveType}'),
+                                              ),
+                                            ],
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              showDialog<String>(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        Dialog(
+                                                  backgroundColor: Colors.white,
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              AppTheme.ognGreen,
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    25),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    25),
+                                                          ),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 15),
+                                                        child: Center(
+                                                          child: Text(
+                                                            '${item.day} ${listMonth[item.month! - 1]} ${item.year}',
+                                                            style: TextStyle(
+                                                              color: Colors
+                                                                  .white, // สีข้อความ
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      CarouselGrid(
+                                                        // height: 285,
+                                                        width: double.infinity,
+                                                        listUrlImages:
+                                                            imagesUrls,
+                                                        loopCarouselList: false,
+                                                        iconBack: const Icon(
+                                                          Icons.arrow_back,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 10),
+                                                        child: TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child:
+                                                              const Text('ปิด'),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Text('ดูไฟล์'),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        'สาเหตุการลา',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20),
+                                        child: Text('${item.leaveDetail}'),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        'ระยะเวลาวันที่ลา',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                                'ตั้งแต่ : ${dateThaiFormat(item.leaveDateStart)}'),
+                                            Text(
+                                                'จนถึง : ${dateThaiFormat(item.leaveDateEnd)}'),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('ไม่มีข้อมูลการลา'),
+                  ],
+                )),
         ),
       ],
     );

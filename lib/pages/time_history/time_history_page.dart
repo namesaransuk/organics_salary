@@ -69,12 +69,12 @@ class _TimeHistoryPageState extends State<TimeHistoryPage> {
       ),
       body: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                Obx(
-                  () => DecoratedBox(
+          Column(
+            children: [
+              Obx(
+                () => Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: DecoratedBox(
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(color: Colors.grey, width: 1),
@@ -131,12 +131,12 @@ class _TimeHistoryPageState extends State<TimeHistoryPage> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                _buildListTime(),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              _buildListTime(),
+            ],
           ),
         ],
       ),
@@ -146,29 +146,39 @@ class _TimeHistoryPageState extends State<TimeHistoryPage> {
   Widget _buildListTime() {
     return Obx(() {
       if (timeHistoryController.timeHistoryList.isNotEmpty) {
-        final groupedData =
-            groupBy(timeHistoryController.timeHistoryList, (obj) => obj.date);
+        // final groupedData = groupBy(
+        //     timeHistoryController.timeHistoryList, (obj) => obj.pasteDate);
+
+        final groupedData = groupBy(
+          timeHistoryController.timeHistoryList,
+          (obj) => '${obj.days}-${obj.month}-${obj.year}',
+        );
         return ListView.builder(
           shrinkWrap: true,
           itemCount: groupedData.length,
           itemBuilder: (context, index) {
-            final date = groupedData.keys.toList()[index];
-            final timeHistoryList = groupedData[date]!;
+            final dateKey = groupedData.keys.toList()[index];
+            final dmy = dateKey.split('-');
+            final days = int.parse(dmy[0]);
+            final month = int.parse(dmy[1]);
+            final year = int.parse(dmy[2]);
+            final timeHistoryList = groupedData[dateKey]!;
 
             bool hasRedCard = timeHistoryList.any((item) {
-              List<String> timeParts = item.time!.split(':');
+              List<String> dateParts = item.pasteDate!.split(' ');
+              List<String> timeParts = dateParts[1].split(':');
               int hour = int.parse(timeParts[0]);
               int minute = int.parse(timeParts[1]);
 
-              return (hour == 8 && minute >= 1) ||
+              return (hour == 8 && minute >= 0 && minute <= 59) ||
                   (hour > 8 && hour < 12) ||
-                  (hour == 13 && minute <= 1) ||
+                  (hour == 13 && minute >= 0 && minute <= 59) ||
                   (hour > 13 && hour < 18);
             });
 
             return ExpansionTile(
               title: Text(
-                '$date',
+                '${days} ${listMonth[month - 1]} ${year}',
                 style: TextStyle(),
               ),
               collapsedBackgroundColor:
@@ -176,20 +186,26 @@ class _TimeHistoryPageState extends State<TimeHistoryPage> {
               collapsedTextColor: hasRedCard ? Colors.white : Colors.black,
               collapsedIconColor: hasRedCard ? Colors.white : Colors.black,
               iconColor: Colors.black,
-              childrenPadding: EdgeInsets.symmetric(vertical: 10),
+              childrenPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+              tilePadding: EdgeInsets.symmetric(horizontal: 25),
               // subtitle: Text('Trailing expansion arrow icon'),
               children: timeHistoryList.map((item) {
-                Color cardColor = Colors.grey.shade200;
+                Color cardColor = Colors.grey.shade100;
                 Color textColor = Colors.black;
 
-                List<String> timeParts = item.time!.split(':');
-                int hour = int.parse(timeParts[0]);
-                int minute = int.parse(timeParts[1]);
+                List<String> dateParts = item.pasteDate!.split(' ');
+                List<String> timeParts = dateParts[1].split(':');
+                int intHour = int.parse(timeParts[0]);
+                int intMinute = int.parse(timeParts[1]);
+                String hour = timeParts[0];
+                String minute = timeParts[1];
+                print('test: $intHour $intMinute');
 
-                if ((hour == 8 && minute >= 1) ||
-                    (hour > 8 && hour < 12) ||
-                    (hour == 13 && minute <= 1) ||
-                    (hour > 13 && hour < 18)) {
+                // เช็คว่าอยู่ในช่วงเวลาที่ต้องการหรือไม่
+                if ((intHour == 8 && intMinute >= 0 && intMinute <= 59) ||
+                    (intHour > 8 && intHour < 12) ||
+                    (intHour == 13 && intMinute >= 0 && intMinute <= 59) ||
+                    (intHour > 13 && intHour < 18)) {
                   cardColor = Colors.red;
                   textColor = Colors.white;
                 }
@@ -204,13 +220,13 @@ class _TimeHistoryPageState extends State<TimeHistoryPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${item.date}',
+                          '${item.days} ${listMonth[item.month! - 1]} ${item.year}',
                           style: TextStyle(
                             color: textColor,
                           ),
                         ),
                         Text(
-                          'เวลา : ${item.time}',
+                          'เวลา : ${hour}:${minute}',
                           style: TextStyle(
                             color: textColor,
                           ),

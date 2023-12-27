@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final box = GetStorage();
     var isLogged = box.read('isLogged') ?? false;
-    // var apppin = box.read('pin');
+    var apppin = box.read('pin');
 
     return GetMaterialApp(
         initialBinding: MyBinding(),
@@ -84,7 +84,12 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme: GoogleFonts.promptTextTheme(),
         ),
-        initialRoute: !isLogged ? '/login' : '/pin',
+        // initialRoute: !isLogged ? '/login' : '/',
+        initialRoute: !isLogged
+            ? '/login'
+            : apppin == 'null' || apppin == ''
+                ? '/pinauth'
+                : 'pin',
         defaultTransition: Transition.cupertino,
         getPages: [
           GetPage(

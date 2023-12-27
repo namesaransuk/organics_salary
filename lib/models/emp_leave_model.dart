@@ -19,6 +19,7 @@ class LeaveHistoryModel {
   int? year;
   DateTime? createdAt;
   DateTime? updatedAt;
+  String? leaveType;
 
   LeaveHistoryModel({
     this.id,
@@ -41,9 +42,11 @@ class LeaveHistoryModel {
     this.year,
     this.createdAt,
     this.updatedAt,
+    this.leaveType,
   });
 
-  factory LeaveHistoryModel.fromJson(Map<String, dynamic> json) => LeaveHistoryModel(
+  factory LeaveHistoryModel.fromJson(Map<String, dynamic> json) =>
+      LeaveHistoryModel(
         id: json['id'] as int?,
         empId: json['emp_id'] as int?,
         leaveTypeId: json['leave_type_id'] as int?,
@@ -68,6 +71,7 @@ class LeaveHistoryModel {
         updatedAt: json['updated_at'] == null
             ? null
             : DateTime.parse(json['updated_at'] as String),
+        leaveType: json['leave_type'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -91,5 +95,6 @@ class LeaveHistoryModel {
         'year': year,
         'created_at': createdAt?.toIso8601String(),
         'updated_at': updatedAt?.toIso8601String(),
+        'leave_type': leaveType,
       };
 }

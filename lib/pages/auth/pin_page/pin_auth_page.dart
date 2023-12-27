@@ -84,17 +84,12 @@ class _PinAuthPageState extends State<PinAuthPage> {
                     });
                   }
                 },
-                specialKey: Icon(
-                  Icons.fingerprint,
-                  key: const Key('fingerprint'),
-                  color: pinTheme.keysColor,
-                  size: 50,
-                ),
-                specialKeyOnTap: () {
-                  if (kDebugMode) {
-                    print('fingerprint');
-                  }
-                },
+                specialKey: SizedBox(),
+                // specialKeyOnTap: () {
+                //   if (kDebugMode) {
+                //     print('fingerprint');
+                //   }
+                // },
                 maxLength: 4,
               ),
             ],
