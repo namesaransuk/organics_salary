@@ -107,7 +107,12 @@ class _LeaveReportState extends State<LeaveReport> {
   String? selectedLeave;
 
   int? selectedLeaveId;
-  List<File> selectedImages = [];
+  XFile? image1;
+  XFile? image2;
+  XFile? image3;
+  XFile? image4;
+  XFile? image5;
+  List<XFile?> selectedImages = [];
   String? reasonLeave;
 
   DateTime? partDateStart;
@@ -115,38 +120,37 @@ class _LeaveReportState extends State<LeaveReport> {
   TimeOfDay? partTimeStart;
   TimeOfDay? partTimeEnd;
 
-  // XFile? image;
-
   final ImagePicker picker = ImagePicker();
 
-  Future getImage() async {
-    final pickedFile = await picker.pickMultiImage(
-        imageQuality: 100, maxHeight: 1000, maxWidth: 1000);
-    List<XFile> xfilePick = pickedFile;
+  // Future getImage() async {
+  //   final pickedFile = await picker.pickMultiImage(
+  //       imageQuality: 100, maxHeight: 1000, maxWidth: 1000);
+  //   List<XFile> xfilePick = pickedFile;
 
-    for (var i = 0; i < xfilePick.length; i++) {
-      selectedImages.add(File(xfilePick[i].path));
-    }
+  //   for (var i = 0; i < xfilePick.length; i++) {
+  //     selectedImages.add(File(xfilePick[i].path));
+  //   }
 
-    setState(() {});
-  }
-
-  // Future getImage(ImageSource media) async {
-  //   var img = await picker.pickImage(source: media);
-
-  //   setState(() {
-  //     image = img;
-  //   });
+  //   setState(() {});
   // }
 
-  DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay.now();
+  Future getImage(ImageSource media) async {
+    var img = await picker.pickImage(source: media);
+
+    setState(() {
+      // image1 = img;
+      selectedImages.add(img);
+    });
+  }
+
   String startDate = 'เลือกวันที่';
   String startTime = 'เลือกเวลา';
   String endDate = 'เลือกวันที่';
   String endTime = 'เลือกเวลา';
 
   Future<void> _selectDate(BuildContext context, int mode) async {
+    DateTime selectedDate = DateTime.now();
+
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
@@ -155,8 +159,11 @@ class _LeaveReportState extends State<LeaveReport> {
     );
 
     if (picked != null && picked != selectedDate) {
+      // final String formattedDate =
+      //     DateFormat('dd MMMM yyyy', 'th').format(picked.toLocal());
       final String formattedDate =
-          DateFormat('dd MMMM yyyy', 'th').format(picked!.toLocal());
+          DateFormat('yyyy-MM-dd').format(picked.toLocal());
+
       setState(() {
         if (mode == 1) {
           startDate = formattedDate;
@@ -170,17 +177,18 @@ class _LeaveReportState extends State<LeaveReport> {
   }
 
   Future<void> _selectTime(BuildContext context, int mode) async {
-    final TimeOfDay? picked = await showTimePicker(
+    TimeOfDay selectedTime = TimeOfDay.now();
+
+    final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: selectedTime,
     );
 
-    if (picked != null && picked != selectedTime) {
-      final DateTime now = DateTime.now();
-      final DateTime newTime =
-          DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
-
-      final String formattedTime = DateFormat.Hm().format(newTime);
+    if (pickedTime != null) {
+      // final String formattedTime = DateFormat.Hm().format(newTime);
+      final String formattedTime = "${pickedTime.hour}".padLeft(2, '0') +
+          ":" +
+          "${pickedTime.minute}".padLeft(2, '0');
 
       setState(() {
         if (mode == 1) {
@@ -402,78 +410,84 @@ class _LeaveReportState extends State<LeaveReport> {
                                         borderType: BorderType.RRect,
                                         radius: Radius.circular(12),
                                         padding: EdgeInsets.all(20),
+                                        // child: image1 != null
                                         child: selectedImages.isNotEmpty
-                                            ? Column(
-                                                children: [
-                                                  GridView.builder(
-                                                    shrinkWrap: true,
-                                                    itemCount:
-                                                        selectedImages.length,
-                                                    gridDelegate:
-                                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                                            crossAxisCount: 2),
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int index) {
-                                                      return Center(
-                                                          child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                vertical: 5),
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          10)),
-                                                          child: Image.file(
-                                                              selectedImages[
-                                                                  index]),
-                                                        ),
-                                                      ));
-                                                    },
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  ElevatedButton(
-                                                    onPressed: () {
-                                                      getImage();
-                                                      selectedImages.clear();
-                                                      // myAlert();
-                                                    },
-                                                    child:
-                                                        Text('เลือกรูปภาพใหม่'),
-                                                  ),
-                                                ],
-                                              )
                                             // ? Column(
                                             //     children: [
-                                            //       ClipRRect(
-                                            //         borderRadius:
-                                            //             BorderRadius.all(
-                                            //                 Radius.circular(
-                                            //                     12)),
-                                            //         child: Image.file(
-                                            //           File(image!.path),
-                                            //           fit: BoxFit.cover,
-                                            //           width:
-                                            //               MediaQuery.of(context)
-                                            //                   .size
-                                            //                   .width,
-                                            //           height: 300,
-                                            //         ),
+                                            //       GridView.builder(
+                                            //         shrinkWrap: true,
+                                            //         itemCount:
+                                            //             selectedImages.length,
+                                            //         gridDelegate:
+                                            //             const SliverGridDelegateWithFixedCrossAxisCount(
+                                            //                 crossAxisCount: 2),
+                                            //         itemBuilder:
+                                            //             (BuildContext context,
+                                            //                 int index) {
+                                            //           return Center(
+                                            //               child: Padding(
+                                            //             padding:
+                                            //                 const EdgeInsets
+                                            //                     .symmetric(
+                                            //                     vertical: 5),
+                                            //             child: ClipRRect(
+                                            //               borderRadius:
+                                            //                   BorderRadius.all(
+                                            //                       Radius
+                                            //                           .circular(
+                                            //                               10)),
+                                            //               child: Image.file(
+                                            //                   selectedImages[
+                                            //                       index]),
+                                            //             ),
+                                            //           ));
+                                            //         },
+                                            //       ),
+                                            //       SizedBox(
+                                            //         height: 10,
                                             //       ),
                                             //       ElevatedButton(
                                             //         onPressed: () {
-                                            //           myAlert();
+                                            //           selectedImages.clear();
+                                            //           getImage();
+                                            //           // myAlert();
                                             //         },
                                             //         child:
                                             //             Text('เลือกรูปภาพใหม่'),
                                             //       ),
                                             //     ],
                                             //   )
+                                            ? Column(
+                                                children:
+                                                    selectedImages.map((img) {
+                                                  return Column(
+                                                    children: [
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                          Radius.circular(5),
+                                                        ),
+                                                        child: Image.file(
+                                                          File(img!.path),
+                                                          fit: BoxFit.cover,
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          height: 300,
+                                                        ),
+                                                      ),
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          myAlert();
+                                                        },
+                                                        child: Text(
+                                                            'เลือกรูปภาพใหม่'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                }).toList(),
+                                              )
                                             : Container(
                                                 width: double.infinity,
                                                 child: Column(
@@ -485,8 +499,8 @@ class _LeaveReportState extends State<LeaveReport> {
                                                     ),
                                                     ElevatedButton(
                                                       onPressed: () {
-                                                        getImage();
-                                                        // myAlert();
+                                                        // getImage();
+                                                        myAlert();
                                                       },
                                                       child: Text('อัพโหลดรูป'),
                                                     ),
@@ -657,23 +671,12 @@ class _LeaveReportState extends State<LeaveReport> {
                         ),
                         onPressed: () {
                           setState(() {
-                            DateTime originalDateTime =
-                                DateTime.parse('$partDateStart');
-
-                            String formattedDateTime =
-                                DateFormat('y-MM-d HH:mm:ss', 'th')
-                                    .format(originalDateTime);
-
-                            String leaveStart = '$formattedDateTime';
-                            String leaveEnd = '$partDateEnd';
+                            String leaveStart = '$startDate $startTime:00';
+                            String leaveEnd = '$endDate $endTime:00';
                             print(leaveStart);
-                            // print(leaveEnd);
-                            leaveHistoryController.sendData(
-                                selectedLeaveId,
-                                selectedImages,
-                                reasonLeave,
-                                leaveStart,
-                                leaveEnd);
+                            print(leaveEnd);
+                            leaveHistoryController.sendData(selectedLeaveId,
+                                selectedImages, reasonLeave, leaveStart, leaveEnd);
                           });
                         },
                         child: Padding(
@@ -712,7 +715,7 @@ class _LeaveReportState extends State<LeaveReport> {
                     //if user click this button, user can upload image from gallery
                     onPressed: () {
                       Navigator.pop(context);
-                      // getImage(ImageSource.gallery);
+                      getImage(ImageSource.gallery);
                     },
                     child: Row(
                       children: [
@@ -729,7 +732,7 @@ class _LeaveReportState extends State<LeaveReport> {
                     //if user click this button. user can upload image from camera
                     onPressed: () {
                       Navigator.pop(context);
-                      // getImage(ImageSource.camera);
+                      getImage(ImageSource.camera);
                     },
                     child: Row(
                       children: [
