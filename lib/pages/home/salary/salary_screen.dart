@@ -131,14 +131,15 @@ class _SlipViewState extends State<SlipView> {
                           context: context,
                           builder: (BuildContext context) {
                             return SizedBox(
-                              height: 200,
+                              height: MediaQuery.of(context).size.height * 0.2,
                               child: Center(
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     Padding(
-                                      padding: const EdgeInsets.all(16.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 16),
                                       child: Obx(
                                         () => DecoratedBox(
                                           decoration: BoxDecoration(
@@ -217,7 +218,7 @@ class _SlipViewState extends State<SlipView> {
                                       ),
                                     ),
                                     ElevatedButton(
-                                      child: const Text('Close BottomSheet'),
+                                      child: const Text('ปิด'),
                                       onPressed: () => Navigator.pop(context),
                                     ),
                                   ],

@@ -138,8 +138,9 @@ class _LeaveReportState extends State<LeaveReport> {
     var img = await picker.pickImage(source: media);
 
     setState(() {
-      // image1 = img;
-      selectedImages.add(img);
+      if (img != null) {
+        selectedImages.add(img);
+      }
     });
   }
 
@@ -458,35 +459,161 @@ class _LeaveReportState extends State<LeaveReport> {
                                             //     ],
                                             //   )
                                             ? Column(
-                                                children:
-                                                    selectedImages.map((img) {
-                                                  return Column(
-                                                    children: [
-                                                      ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                          Radius.circular(5),
-                                                        ),
-                                                        child: Image.file(
-                                                          File(img!.path),
-                                                          fit: BoxFit.cover,
-                                                          width: MediaQuery.of(
-                                                                  context)
-                                                              .size
-                                                              .width,
-                                                          height: 300,
-                                                        ),
-                                                      ),
-                                                      ElevatedButton(
-                                                        onPressed: () {
-                                                          myAlert();
-                                                        },
-                                                        child: Text(
-                                                            'เลือกรูปภาพใหม่'),
-                                                      ),
-                                                    ],
-                                                  );
-                                                }).toList(),
+                                                children: [
+                                                  Text(
+                                                      'แนบไฟล์รูปภาพได้สูงสุด 5 ไฟล์'),
+                                                  SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  Container(
+                                                    child:
+                                                        selectedImages != null
+                                                            ? GridView.builder(
+                                                                shrinkWrap:
+                                                                    true,
+                                                                gridDelegate:
+                                                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                                                  crossAxisCount:
+                                                                      2,
+                                                                  crossAxisSpacing:
+                                                                      8.0,
+                                                                  mainAxisSpacing:
+                                                                      8.0,
+                                                                ),
+                                                                itemCount: selectedImages.length < 5
+                                                                    ? selectedImages
+                                                                            .length +
+                                                                        1
+                                                                    : selectedImages
+                                                                        .length,
+                                                                itemBuilder:
+                                                                    (BuildContext
+                                                                            context,
+                                                                        int index) {
+                                                                  if (index ==
+                                                                          selectedImages
+                                                                              .length &&
+                                                                      selectedImages
+                                                                              .length <
+                                                                          5) {
+                                                                    return Expanded(
+                                                                      child:
+                                                                          InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          myAlert();
+                                                                        },
+                                                                        child:
+                                                                            Card(
+                                                                          child:
+                                                                              Column(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.center,
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.center,
+                                                                            children: [
+                                                                              Icon(
+                                                                                Icons.add_photo_alternate_outlined,
+                                                                                color: AppTheme.ognGreen,
+                                                                                size: 24.0,
+                                                                              ),
+                                                                              Text(
+                                                                                'เลือกรูปเพิ่ม',
+                                                                                style: TextStyle(color: AppTheme.ognGreen),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  }
+
+                                                                  var img =
+                                                                      selectedImages[
+                                                                          index];
+
+                                                                  return Expanded(
+                                                                    child:
+                                                                        ClipRRect(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .all(
+                                                                        Radius.circular(
+                                                                            5),
+                                                                      ),
+                                                                      child:
+                                                                          Stack(
+                                                                        children: [
+                                                                          Image
+                                                                              .file(
+                                                                            File(img!.path),
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                            width:
+                                                                                MediaQuery.of(context).size.width / 2 - 12,
+                                                                          ),
+                                                                          Align(
+                                                                            alignment:
+                                                                                Alignment.topRight,
+                                                                            child:
+                                                                                Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Material(
+                                                                                color: Colors.transparent,
+                                                                                child: Ink(
+                                                                                  width: 27,
+                                                                                  height: 27,
+                                                                                  decoration: const ShapeDecoration(
+                                                                                    color: Colors.red,
+                                                                                    shape: CircleBorder(),
+                                                                                  ),
+                                                                                  child: IconButton(
+                                                                                    icon: const Icon(
+                                                                                      Icons.close,
+                                                                                      size: 10,
+                                                                                    ),
+                                                                                    color: Colors.white,
+                                                                                    onPressed: () {
+                                                                                      setState(() {
+                                                                                        selectedImages.remove(img);
+                                                                                      });
+                                                                                    },
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              )
+                                                            : Container(
+                                                                width: double
+                                                                    .infinity,
+                                                                child: Column(
+                                                                  children: [
+                                                                    Text(
+                                                                      "ไม่ได้เลือกรูปภาพ",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              18),
+                                                                    ),
+                                                                    ElevatedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        // getImage();
+                                                                        myAlert();
+                                                                      },
+                                                                      child: Text(
+                                                                          'อัพโหลดรูป'),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                  ),
+                                                ],
                                               )
                                             : Container(
                                                 width: double.infinity,
@@ -675,8 +802,12 @@ class _LeaveReportState extends State<LeaveReport> {
                             String leaveEnd = '$endDate $endTime:00';
                             print(leaveStart);
                             print(leaveEnd);
-                            leaveHistoryController.sendData(selectedLeaveId,
-                                selectedImages, reasonLeave, leaveStart, leaveEnd);
+                            leaveHistoryController.sendData(
+                                selectedLeaveId,
+                                selectedImages,
+                                reasonLeave,
+                                leaveStart,
+                                leaveEnd);
                           });
                         },
                         child: Padding(
@@ -726,8 +857,8 @@ class _LeaveReportState extends State<LeaveReport> {
                     ),
                   ),
                   SizedBox(
-                    height: 5.0,
-                  ),
+                      // height: 2.0,
+                      ),
                   ElevatedButton(
                     //if user click this button. user can upload image from camera
                     onPressed: () {
