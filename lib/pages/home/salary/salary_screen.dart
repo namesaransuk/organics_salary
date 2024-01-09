@@ -133,95 +133,179 @@ class _SlipViewState extends State<SlipView> {
                             return SizedBox(
                               height: MediaQuery.of(context).size.height * 0.2,
                               child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8, horizontal: 16),
-                                      child: Obx(
-                                        () => DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color: Colors.grey, width: 1),
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            // boxShadow: <BoxShadow>[
-                                            //   BoxShadow(
-                                            //       color: Color.fromRGBO(0, 0, 0, 0.57), blurRadius: 5)
-                                            // ],
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 30, right: 30),
-                                            child: DropdownButton<String>(
-                                              value: salaryController
-                                                  .monthName.value,
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              items: [
-                                                DropdownMenuItem<String>(
-                                                  enabled: false,
-                                                  value: 'กรุณาเลือกเดือน',
-                                                  child: Text(
-                                                    'กรุณาเลือกเดือน',
-                                                    style: const TextStyle(
-                                                        color: Colors.black54),
-                                                  ),
-                                                ),
-                                                for (final month in listMonth)
-                                                  DropdownMenuItem<String>(
-                                                    value: month,
-                                                    child: Text(
-                                                      month,
-                                                      style: const TextStyle(
-                                                          color: Colors.black),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Row(
+                                        children: [
+                                          Obx(
+                                            () => DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                border: Border.all(
+                                                    color: Colors.grey, width: 1),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                // boxShadow: <BoxShadow>[
+                                                //   BoxShadow(
+                                                //       color: Color.fromRGBO(0, 0, 0, 0.57), blurRadius: 5)
+                                                // ],
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 30, right: 30),
+                                                child: DropdownButton<String>(
+                                                  value: salaryController
+                                                      .monthName.value,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  items: [
+                                                    DropdownMenuItem<String>(
+                                                      enabled: false,
+                                                      value: 'กรุณาเลือกเดือน',
+                                                      child: Text(
+                                                        'กรุณาเลือกเดือน',
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.black54),
+                                                      ),
+                                                    ),
+                                                    for (final month in listMonth)
+                                                      DropdownMenuItem<String>(
+                                                        value: month,
+                                                        child: Text(
+                                                          month,
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      ),
+                                                  ],
+                                                  onChanged: (String? value) {
+                                                    if (value != null) {
+                                                      // final selectedValues = value.split(' ');
+                                                      // final selectedMonthId = selectedValues[0];
+                                                      // final selectedMonthName = selectedValues[1];
+                                  
+                                                      int selectedIndex =
+                                                          listMonth.indexOf(
+                                                                  value) +
+                                                              1;
+                                                      salaryController.loadData(
+                                                          selectedIndex);
+                                                      salaryController
+                                                          .getMonthName(value);
+                                                      Get.back();
+                                                    }
+                                                  },
+                                                  icon: const Padding(
+                                                    padding:
+                                                        EdgeInsets.only(left: 20),
+                                                    child: Icon(
+                                                      Icons.arrow_drop_down,
+                                                      color: Colors.black,
                                                     ),
                                                   ),
-                                              ],
-                                              onChanged: (String? value) {
-                                                if (value != null) {
-                                                  // final selectedValues = value.split(' ');
-                                                  // final selectedMonthId = selectedValues[0];
-                                                  // final selectedMonthName = selectedValues[1];
-
-                                                  int selectedIndex =
-                                                      listMonth.indexOf(value) +
-                                                          1;
-                                                  salaryController
-                                                      .loadData(selectedIndex);
-                                                  salaryController
-                                                      .getMonthName(value);
-                                                  Get.back();
-                                                }
-                                              },
-                                              icon: const Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 20),
-                                                child: Icon(
-                                                  Icons.arrow_drop_down,
-                                                  color: Colors.black,
+                                                  iconEnabledColor: Colors.white,
+                                                  style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 15),
+                                                  dropdownColor: Colors.white,
+                                                  underline: Container(),
+                                                  isExpanded: true,
                                                 ),
                                               ),
-                                              iconEnabledColor: Colors.white,
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 15),
-                                              dropdownColor: Colors.white,
-                                              underline: Container(),
-                                              isExpanded: true,
                                             ),
                                           ),
-                                        ),
+                                          Obx(
+                                            () => DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                border: Border.all(
+                                                    color: Colors.grey, width: 1),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                // boxShadow: <BoxShadow>[
+                                                //   BoxShadow(
+                                                //       color: Color.fromRGBO(0, 0, 0, 0.57), blurRadius: 5)
+                                                // ],
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 30, right: 30),
+                                                child: DropdownButton<String>(
+                                                  value: salaryController
+                                                      .monthName.value,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  items: [
+                                                    DropdownMenuItem<String>(
+                                                      enabled: false,
+                                                      value: 'กรุณาเลือกเดือน',
+                                                      child: Text(
+                                                        'กรุณาเลือกเดือน',
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.black54),
+                                                      ),
+                                                    ),
+                                                    for (final month in listMonth)
+                                                      DropdownMenuItem<String>(
+                                                        value: month,
+                                                        child: Text(
+                                                          month,
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      ),
+                                                  ],
+                                                  onChanged: (String? value) {
+                                                    if (value != null) {
+                                                      // final selectedValues = value.split(' ');
+                                                      // final selectedMonthId = selectedValues[0];
+                                                      // final selectedMonthName = selectedValues[1];
+                                  
+                                                      int selectedIndex =
+                                                          listMonth.indexOf(
+                                                                  value) +
+                                                              1;
+                                                      salaryController.loadData(
+                                                          selectedIndex);
+                                                      salaryController
+                                                          .getMonthName(value);
+                                                      Get.back();
+                                                    }
+                                                  },
+                                                  icon: const Padding(
+                                                    padding:
+                                                        EdgeInsets.only(left: 20),
+                                                    child: Icon(
+                                                      Icons.arrow_drop_down,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  iconEnabledColor: Colors.white,
+                                                  style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 15),
+                                                  dropdownColor: Colors.white,
+                                                  underline: Container(),
+                                                  isExpanded: true,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    ElevatedButton(
-                                      child: const Text('ปิด'),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                  ],
+                                      ElevatedButton(
+                                        child: const Text('ปิด'),
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
@@ -830,10 +914,10 @@ class _SlipRequestState extends State<SlipRequest> {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      itemCount: (abbrelistMonth.length / 4).ceil(),
+      itemCount: (abbrelistMonth.length / 3).ceil(),
       itemBuilder: (context, rowIndex) {
-        int startIndex = rowIndex * 4;
-        int endIndex = (rowIndex + 1) * 4;
+        int startIndex = rowIndex * 3;
+        int endIndex = (rowIndex + 1) * 3;
         if (endIndex > abbrelistMonth.length) {
           endIndex = abbrelistMonth.length;
         }
@@ -874,80 +958,6 @@ class _SlipRequestState extends State<SlipRequest> {
         );
       },
     );
-    // return Card(
-    //   color: AppTheme.ognGreen,
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       Padding(
-    //         padding: const EdgeInsets.all(16.0),
-    //         child: Text(
-    //           'ระบุเดือนที่ต้องการขอสลิป',
-    //           style: TextStyle(
-    //             fontSize: 16,
-    //             fontWeight: FontWeight.bold,
-    //             color: Colors.white,
-    //           ),
-    //         ),
-    //       ),
-    //       Container(
-    //         color: Colors.white,
-    //         child: Padding(
-    //           padding: const EdgeInsets.all(8.0),
-    //           child: ListView.builder(
-    //             shrinkWrap: true,
-    //             physics: NeverScrollableScrollPhysics(),
-    //             itemCount: (abbrelistMonth.length / 4).ceil(),
-    //             itemBuilder: (context, rowIndex) {
-    //               int startIndex = rowIndex * 4;
-    //               int endIndex = (rowIndex + 1) * 4;
-    //               if (endIndex > abbrelistMonth.length) {
-    //                 endIndex = abbrelistMonth.length;
-    //               }
-    //               return Row(
-    //                 children: List.generate(endIndex - startIndex, (colIndex) {
-    //                   int index = startIndex + colIndex;
-    //                   return Expanded(
-    //                     child: Row(
-    //                       children: [
-    //                         Checkbox(
-    //                           value:
-    //                               index < salaryController.checkedMonths.length
-    //                                   ? salaryController.checkedMonths[index]
-    //                                   : false,
-    //                           onChanged: (value) {
-    //                             setState(() {
-    //                               if (value != null) {
-    //                                 salaryController.checkedMonths[index] =
-    //                                     value;
-    //                                 if (value) {
-    //                                   salaryController.selectedMonths
-    //                                       .add(index + 1);
-    //                                 } else {
-    //                                   salaryController.selectedMonths
-    //                                       .remove(index + 1);
-    //                                 }
-    //                                 print(salaryController.selectedMonths);
-    //                               }
-    //                             });
-    //                           },
-    //                         ),
-    //                         Text(
-    //                           abbrelistMonth[index],
-    //                           textAlign: TextAlign.left,
-    //                         ),
-    //                       ],
-    //                     ),
-    //                   );
-    //                 }),
-    //               );
-    //             },
-    //           ),
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
   }
 
   Widget _buildCauseItem() {

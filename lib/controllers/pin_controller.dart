@@ -40,7 +40,9 @@ class PinController extends GetxController {
           if (responseBody['statusCode'] == '00') {
             box.write('pin', '$secondPin');
 
-            Get.offAllNamed('/');
+            await Future.delayed(const Duration(seconds: 1), () {
+              Get.offAllNamed('/');
+            });
             print('success');
           } else {
             print('failed with status code: ${responseBody['statusCode']}');
@@ -63,13 +65,14 @@ class PinController extends GetxController {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          actionsAlignment: MainAxisAlignment.center,
           backgroundColor: Colors.white,
           title: Text(title),
           content: Text(detail),
           actions: <Widget>[
             ElevatedButton(
               onPressed: () {
-                Get.offAllNamed('/pin');
+                Get.offAllNamed('pinauth');
               },
               child: Text("ตกลง"),
             ),

@@ -4,7 +4,9 @@ import 'package:custom_pin_screen/custom_pin_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:organics_salary/controllers/loading_controller.dart';
 import 'package:organics_salary/controllers/pin_controller.dart';
 import 'package:organics_salary/theme.dart';
 
@@ -18,11 +20,15 @@ class CheckPinPage extends StatefulWidget {
 class _CheckPinPageState extends State<CheckPinPage> {
   final box = GetStorage();
   final storedPin = GetStorage().read('pin');
+  final storedIdCard = GetStorage().read('id_card');
+
   final PinController pinController = Get.put(PinController());
   String pin = "";
   PinTheme pinTheme = PinTheme(
     keysColor: Colors.white,
   );
+
+  final LoadingController loadingController = Get.put(LoadingController());
   final List<GlobalKey<_PinCodeFieldState>> pinCodeFieldKeys = List.generate(
     4,
     (index) => GlobalKey<_PinCodeFieldState>(),
@@ -34,9 +40,25 @@ class _CheckPinPageState extends State<CheckPinPage> {
   bool _supportFingerprint = false;
   bool _supportFaceID = false;
 
+  var inputIdCard;
+  var _idCardController = TextEditingController();
+
+  void checkIdCard() async {
+    if (inputIdCard == storedIdCard) {
+      loadingController.dialogLoading();
+      await Future.delayed(const Duration(seconds: 2), () {
+        Get.offAllNamed('pinauth');
+      });
+    } else {
+      alertEmptyData(
+          'แจ้งเตือน', 'เลขบัตรประชาชนไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+
     auth = LocalAuthentication();
     _checkBiometricsSupport();
     // auth.isDeviceSupported().then(
@@ -69,18 +91,6 @@ class _CheckPinPageState extends State<CheckPinPage> {
                       color: Colors.white),
                 ),
               ),
-              // const SizedBox(
-              //   height: 5,
-              // ),
-              // const Text(
-              //   "กรอกรหัส 4 หลักเพื่อเข้าใช้งานในครั้งต่อไป",
-              //   style: TextStyle(
-              //     // color: Colors.white,
-              //     fontSize: 14,
-              //     fontWeight: FontWeight.normal,
-              //     color: Colors.white
-              //   ),
-              // ),
               const SizedBox(
                 height: 40,
               ),
@@ -103,10 +113,11 @@ class _CheckPinPageState extends State<CheckPinPage> {
                   pin = v;
                   setState(() {
                     if (pin.length == 4 && int.tryParse(pin) != null) {
-                      // print('pin ${pin}');
-                      // print('storepin ${storedPin}');
                       if (pin == storedPin) {
-                        Get.offAllNamed('/');
+                        loadingController.dialogLoading();
+                        Future.delayed(const Duration(seconds: 2), () {
+                          Get.offAllNamed('/');
+                        });
                       } else {
                         showDialog(
                           context: context,
@@ -133,15 +144,93 @@ class _CheckPinPageState extends State<CheckPinPage> {
                     }
                   });
                 },
-                specialKey: Icon(
-                  Icons.fingerprint,
-                  key: const Key('fingerprint'),
-                  color: pinTheme.keysColor,
-                  size: 50,
+                // specialKey: Icon(
+                //   Icons.fingerprint,
+                //   key: const Key('fingerprint'),
+                //   color: pinTheme.keysColor,
+                //   size: 50,
+                // ),
+                // specialKeyOnTap: () {
+                //   _authenticate();
+                //   print('fingerprint');
+                // },
+                specialKey: Text(
+                  'ลืมรหัส PIN',
+                  style: GoogleFonts.notoSansThai(
+                      fontSize: 14, color: Colors.white),
                 ),
                 specialKeyOnTap: () {
-                  _authenticate();
-                  print('fingerprint');
+                  showModalBottomSheet<void>(
+                      isScrollControlled: true,
+                      showDragHandle: true,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                              left: 40.0,
+                              right: 40.0,
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                  'กรอกเลขบัตรประชาชน 13 หลักเพื่อเปลี่ยนรหัส PIN'),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              TextField(
+                                controller: _idCardController,
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  setState(() {
+                                    inputIdCard = value;
+                                    print(value);
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 16),
+                                  labelText: 'รหัสบัตรประชาชน',
+                                  // errorText: empIdError,
+                                  alignLabelWithHint: true,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide:
+                                        BorderSide(color: AppTheme.ognGreen),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(color: Colors.grey),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Container(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    checkIdCard();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppTheme.ognGreen,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  child: Text('ตรวจสอบ'),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30,
+                              ),
+                            ],
+                          ),
+                        );
+                      });
                 },
                 maxLength: 4,
               ),
@@ -150,6 +239,28 @@ class _CheckPinPageState extends State<CheckPinPage> {
           ),
         ),
       ),
+    );
+  }
+
+  void alertEmptyData(String title, String detail) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          actionsAlignment: MainAxisAlignment.center,
+          backgroundColor: Colors.white,
+          title: Text(title),
+          content: Text(detail),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("ตกลง"),
+            ),
+          ],
+        );
+      },
     );
   }
 

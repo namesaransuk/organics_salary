@@ -90,6 +90,7 @@ class LoginController extends GetxController {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          actionsAlignment: MainAxisAlignment.center,
           backgroundColor: Colors.white,
           title: Text(title),
           content: Text(detail),

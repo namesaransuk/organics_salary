@@ -561,8 +561,8 @@ class _LeaveReportState extends State<LeaveReport> {
                                                                               child: Material(
                                                                                 color: Colors.transparent,
                                                                                 child: Ink(
-                                                                                  width: 27,
-                                                                                  height: 27,
+                                                                                  width: 25,
+                                                                                  height: 25,
                                                                                   decoration: const ShapeDecoration(
                                                                                     color: Colors.red,
                                                                                     shape: CircleBorder(),
@@ -570,7 +570,7 @@ class _LeaveReportState extends State<LeaveReport> {
                                                                                   child: IconButton(
                                                                                     icon: const Icon(
                                                                                       Icons.close,
-                                                                                      size: 10,
+                                                                                      size: 9,
                                                                                     ),
                                                                                     color: Colors.white,
                                                                                     onPressed: () {

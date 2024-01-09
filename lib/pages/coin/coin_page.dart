@@ -65,7 +65,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -132,9 +132,11 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: screenMode ? 3 : 2,
-                        // childAspectRatio: MediaQuery.of(context).size.width * 0.001
-                        childAspectRatio: 0.7),
+                      crossAxisCount: screenMode ? 3 : 2,
+                      mainAxisSpacing: 30.0
+                      // childAspectRatio: MediaQuery.of(context).size.width * 0.001
+                      // childAspectRatio: 0.7,
+                    ),
                     itemCount: coinController.coinList.length,
                     itemBuilder: (context, index) {
                       var coin = coinController.coinList[index];
@@ -149,7 +151,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                               Image.asset(
                                 '${coin.img}',
                                 width:
-                                    MediaQuery.of(context).size.height * 0.15,
+                                    MediaQuery.of(context).size.height * 0.12,
                               ),
                               Padding(
                                 padding:
@@ -175,7 +177,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                             ],
                           ),
                           SizedBox(
-                            height: 10,
+                            height: 5,
                           ),
                           Column(
                             children: [
@@ -200,7 +202,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
-                                            // mainAxisSize: MainAxisSize.max,
+                                            mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
                                               // const Text('Modal BottomSheet'),
                                               // ElevatedButton(
@@ -324,10 +326,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                                         );
                                       });
                                 },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Text('แลกรางวัล'),
-                                ),
+                                child: Text('แลกรางวัล'),
                               ),
                             ],
                           ),
