@@ -14,13 +14,18 @@ class LeaveHistoryController extends GetxController {
   final id = GetStorage().read('id');
 
   var leaveHistoryList = RxList<LeaveHistoryModel>();
-  RxString monthName = 'กรุณาเลือกเดือน'.obs;
+  RxString monthName = 'เดือน'.obs;
+  RxString yearName = 'ปี'.obs;
 
   void getMonthName(String mName) {
     monthName.value = mName;
   }
 
-  void loadData(int month) async {
+  void getYear(String yName) {
+    yearName.value = yName;
+  }
+
+  void loadData(int month, String year) async {
     loadingController.dialogLoading();
     leaveHistoryList.clear();
     try {
