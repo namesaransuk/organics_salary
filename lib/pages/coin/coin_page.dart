@@ -94,35 +94,20 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                     height: 20,
                   ),
                   Center(
-                    child: Column(
-                      children: [
-                        Text(
-                          'จำนวน coin ที่ใช้แลก',
-                          style: TextStyle(
-                            color: AppTheme.ognGreen,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 0),
-                          child: Wrap(
-                            spacing: 10,
-                            alignment: WrapAlignment.center,
-                            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _buildFilterItems(0, 'ทั้งหมด'),
-                              _buildFilterItems(1, '1-100'),
-                              _buildFilterItems(2, '100-500'),
-                              _buildFilterItems(3, '500-1000'),
-                              _buildFilterItems(4, '1000 ขึ้นไป'),
-                            ],
-                          ),
-                        )
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      child: Wrap(
+                        spacing: 10,
+                        alignment: WrapAlignment.center,
+                        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildFilterItems(0, 'ทั้งหมด'),
+                          _buildFilterItems(1, '1-100'),
+                          _buildFilterItems(2, '100-500'),
+                          _buildFilterItems(3, '500-1000'),
+                          _buildFilterItems(4, '1000 ขึ้นไป'),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -132,11 +117,11 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: screenMode ? 3 : 2,
-                      mainAxisSpacing: 30.0
-                      // childAspectRatio: MediaQuery.of(context).size.width * 0.001
-                      // childAspectRatio: 0.7,
-                    ),
+                        crossAxisCount: screenMode ? 3 : 2,
+                        mainAxisSpacing: 30.0
+                        // childAspectRatio: MediaQuery.of(context).size.width * 0.001
+                        // childAspectRatio: 0.7,
+                        ),
                     itemCount: coinController.coinList.length,
                     itemBuilder: (context, index) {
                       var coin = coinController.coinList[index];
@@ -193,6 +178,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                               ElevatedButton(
                                 onPressed: () {
                                   showModalBottomSheet<void>(
+                                      // isScrollControlled: true,
                                       showDragHandle: true,
                                       context: context,
                                       builder: (BuildContext context) {
@@ -224,54 +210,51 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      coin.name ?? '',
-                                                      style: TextStyle(
-                                                          color:
-                                                              AppTheme.ognGreen,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18),
+                                                    Center(
+                                                      child: Text(
+                                                        coin.name ?? '',
+                                                        style: TextStyle(
+                                                            color: AppTheme
+                                                                .ognGreen,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 18),
+                                                      ),
                                                     ),
                                                     SizedBox(
                                                       height: 10,
                                                     ),
-                                                    Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.circle,
-                                                          color:
-                                                              AppTheme.ognGreen,
-                                                          size: 15,
-                                                        ),
-                                                        SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                        Text(
-                                                          'รายละเอียด',
-                                                          style: TextStyle(
-                                                              color: AppTheme
-                                                                  .ognGreen,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 16),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                    // Row(
+                                                    //   children: [
+                                                    //     Icon(
+                                                    //       Icons.circle,
+                                                    //       color:
+                                                    //           AppTheme.ognGreen,
+                                                    //       size: 12,
+                                                    //     ),
+                                                    //     SizedBox(
+                                                    //       width: 5,
+                                                    //     ),
+                                                    //     Text(
+                                                    //       'รายละเอียด',
+                                                    //       style: TextStyle(
+                                                    //           color: AppTheme
+                                                    //               .ognGreen,
+                                                    //           fontWeight:
+                                                    //               FontWeight
+                                                    //                   .bold,
+                                                    //           fontSize: 16),
+                                                    //     ),
+                                                    //   ],
+                                                    // ),
                                                     SizedBox(
                                                       height: 5,
                                                     ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 20),
-                                                      child: Text(
-                                                        coin.description ?? '',
-                                                        style: TextStyle(
-                                                          color:
-                                                              AppTheme.ognGreen,
-                                                        ),
+                                                    Text(
+                                                      coin.description ?? '',
+                                                      style: TextStyle(
+                                                        color:
+                                                            AppTheme.ognGreen,
                                                       ),
                                                     ),
                                                   ],
@@ -282,15 +265,12 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                                                 padding: const EdgeInsets.only(
                                                     bottom: 20),
                                                 child: Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.3,
+                                                  width: double.infinity,
                                                   child: ElevatedButton(
                                                     child: Padding(
                                                       padding:
                                                           const EdgeInsets.all(
-                                                              8.0),
+                                                              10.0),
                                                       child: Row(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment

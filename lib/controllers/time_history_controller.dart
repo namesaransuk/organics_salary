@@ -6,17 +6,24 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class TimeHistoryController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
+  RxString monthName = 'เดือน'.obs;
+  RxString yearName = 'ปี'.obs;
+  RxString ddMonthName = 'เดือน'.obs;
+  RxString ddYearName = 'ปี'.obs;
   var timeHistoryList = RxList<TimeHistoryModel>();
-  RxString monthName = 'กรุณาเลือกเดือน'.obs;
   var baseUrl = dotenv.env['API_URL'];
   var connect = Get.find<GetConnect>();
   final box = GetStorage();
 
   void getMonthName(String mName) {
-    monthName.value = mName;
+    ddMonthName.value = mName;
   }
 
-  void loadData(int month) async {
+  void getYear(String yName) {
+    ddYearName.value = yName;
+  }
+
+  void loadData(String textMonth, int month, String year) async {
     loadingController.dialogLoading();
     timeHistoryList.clear();
     try {
@@ -30,30 +37,32 @@ class TimeHistoryController extends GetxController {
 
       print(box.read('id'));
 
-      if (response.statusCode == 200) {
-        Map<String, dynamic> responseBody = response.body;
+      // if (response.statusCode == 200) {
+      Map<String, dynamic> responseBody = response.body;
+      monthName.value = textMonth;
+      yearName.value = year;
 
-        if (responseBody['statusCode'] == '00') {
-          var timeHistoryListJSONList = responseBody['empLog'];
+      if (responseBody['statusCode'] == '00') {
+        var timeHistoryListJSONList = responseBody['empLog'];
 
-          var mappedtimeHistoryList =
-              timeHistoryListJSONList.map<TimeHistoryModel>(
-            (timeHistoryListJSON) =>
-                TimeHistoryModel.fromJson(timeHistoryListJSON),
-          );
+        var mappedtimeHistoryList =
+            timeHistoryListJSONList.map<TimeHistoryModel>(
+          (timeHistoryListJSON) =>
+              TimeHistoryModel.fromJson(timeHistoryListJSON),
+        );
 
-          var convertedtimeHistoryList =
-              RxList<TimeHistoryModel>.of(mappedtimeHistoryList);
+        var convertedtimeHistoryList =
+            RxList<TimeHistoryModel>.of(mappedtimeHistoryList);
 
-          timeHistoryList.assignAll(convertedtimeHistoryList);
-        } else {
-          print('failed with status code: ${responseBody['statusCode']}');
-        }
-        Get.back();
+        timeHistoryList.assignAll(convertedtimeHistoryList);
       } else {
-        Get.back();
-        print('Disconnect');
+        print('failed with status code: ${responseBody['statusCode']}');
       }
+      Get.back();
+      // } else {
+      //   Get.back();
+      //   print('Disconnect');
+      // }
     } catch (e) {
       print(e);
       Get.back();

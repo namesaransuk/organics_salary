@@ -16,50 +16,52 @@ class LeaveHistoryController extends GetxController {
   var leaveHistoryList = RxList<LeaveHistoryModel>();
   RxString monthName = 'เดือน'.obs;
   RxString yearName = 'ปี'.obs;
+  RxString ddMonthName = 'เดือน'.obs;
+  RxString ddYearName = 'ปี'.obs;
 
   void getMonthName(String mName) {
-    monthName.value = mName;
+    ddMonthName.value = mName;
   }
 
   void getYear(String yName) {
-    yearName.value = yName;
+    ddYearName.value = yName;
   }
 
-  void loadData(int month, String year) async {
+  void loadData(String textMonth, int month, String year) async {
     loadingController.dialogLoading();
     leaveHistoryList.clear();
+
+    monthName.value = textMonth;
+    yearName.value = year;
     try {
       var response = await connect.post(
         '$baseUrl/employee/empLeave',
         {'emp_id': box.read('id'), 'month': month},
       );
 
-      if (response.statusCode == 200) {
-        Map<String, dynamic> responseBody = response.body;
+      Map<String, dynamic> responseBody = response.body;
 
-        if (responseBody['statusCode'] == '00') {
-          var leaveHistoryJSONList = responseBody['empLeave'];
+      Get.back();
 
-          var mappedLeaveHistoryList =
-              leaveHistoryJSONList.map<LeaveHistoryModel>(
-            (leaveHistoryJSON) => LeaveHistoryModel.fromJson(leaveHistoryJSON),
-          );
+      if (responseBody['statusCode'] == '00') {
+        var leaveHistoryJSONList = responseBody['empLeave'];
 
-          var convertedLeaveHistoryList =
-              RxList<LeaveHistoryModel>.of(mappedLeaveHistoryList);
+        var mappedLeaveHistoryList =
+            leaveHistoryJSONList.map<LeaveHistoryModel>(
+          (leaveHistoryJSON) => LeaveHistoryModel.fromJson(leaveHistoryJSON),
+        );
 
-          leaveHistoryList.assignAll(convertedLeaveHistoryList);
-        } else {
-          print('failed with status code: ${responseBody['statusCode']}');
-        }
-        Get.back();
+        var convertedLeaveHistoryList =
+            RxList<LeaveHistoryModel>.of(mappedLeaveHistoryList);
+
+        leaveHistoryList.assignAll(convertedLeaveHistoryList);
       } else {
-        Get.back();
-        print('Disconnect');
+        print('failed with status code: ${responseBody['statusCode']}');
       }
+      // }
     } catch (e) {
       print(e);
-      Get.back();
+      alertEmptyData('แจ้งเตือน', 'เกิดข้อผิดพลาดโปรดลองใหม่อีกครั้งในภายหลัง');
     }
   }
 
@@ -142,24 +144,22 @@ class LeaveHistoryController extends GetxController {
     }
   }
 
-  void alertEmptyData(BuildContext context, String title, String detail) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          title: Text(title),
-          content: Text(detail),
-          actions: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                Get.offAllNamed('/pin');
-              },
-              child: Text("ตกลง"),
-            ),
-          ],
-        );
-      },
+  void alertEmptyData(String title, String detail) {
+    Get.dialog(
+      AlertDialog(
+        actionsAlignment: MainAxisAlignment.center,
+        backgroundColor: Colors.white,
+        title: Text(title),
+        content: Text(detail),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text("ตกลง"),
+          ),
+        ],
+      ),
     );
   }
 }

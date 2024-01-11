@@ -215,11 +215,6 @@ class _LeaveReportState extends State<LeaveReport> {
   final box = GetStorage();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
@@ -899,13 +894,12 @@ class LeaveHistory extends StatefulWidget {
 
 class _LeaveHistoryState extends State<LeaveHistory> {
   int sendMonth = 0;
-  String textMonth = '';
-  String sendYear = '';
+  String textMonth = 'เดือน';
+  String sendYear = 'ปี';
+  bool isButtonPressed = false;
 
   @override
   Widget build(BuildContext context) {
-    // leaveHistoryController.loadData();
-
     return ListView(
       children: [
         Card(
@@ -924,16 +918,19 @@ class _LeaveHistoryState extends State<LeaveHistory> {
           margin: EdgeInsets.all(0),
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Obx(
                   () => Text(
-                    'เดือน/ปี : ${leaveHistoryController.monthName.value == 'เดือน' || leaveHistoryController.yearName.value == 'ปี' ? 'ยังไม่ได้เลือกเดือนกับปี' : '${leaveHistoryController.monthName.value} ${leaveHistoryController.yearName.value}'}',
+                    leaveHistoryController.monthName.value == 'เดือน' &&
+                            leaveHistoryController.yearName.value == 'ปี'
+                        ? 'กรุณาเลือกเดือนและปี'
+                        : '${leaveHistoryController.monthName.value} ${leaveHistoryController.yearName.value}',
                     style: TextStyle(
                         // color: Colors.white,
-                        // fontWeight: FontWeight.bold
+                        // fontWeight: FontWeight.bold,
                         ),
                   ),
                 ),
@@ -944,7 +941,7 @@ class _LeaveHistoryState extends State<LeaveHistory> {
                         context: context,
                         builder: (BuildContext context) {
                           return SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.15,
+                            height: MediaQuery.of(context).size.height * 0.2,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
@@ -981,8 +978,10 @@ class _LeaveHistoryState extends State<LeaveHistory> {
                                               padding: const EdgeInsets.only(
                                                   left: 20, right: 10),
                                               child: DropdownButton<String>(
+                                                // value: leaveHistoryController
+                                                //     .monthName.value,
                                                 value: leaveHistoryController
-                                                    .monthName.value,
+                                                    .ddMonthName.value,
                                                 borderRadius:
                                                     BorderRadius.circular(20),
                                                 items: [
@@ -1015,9 +1014,11 @@ class _LeaveHistoryState extends State<LeaveHistory> {
                                                             1;
                                                     textMonth = value;
                                                     sendMonth = selectedIndex;
+
                                                     leaveHistoryController
                                                         .getMonthName(
                                                             textMonth);
+
                                                     // Get.back();
                                                   }
                                                 },
@@ -1063,8 +1064,10 @@ class _LeaveHistoryState extends State<LeaveHistory> {
                                               padding: const EdgeInsets.only(
                                                   left: 20, right: 10),
                                               child: DropdownButton<String>(
+                                                // value: leaveHistoryController
+                                                //     .yearName.value,
                                                 value: leaveHistoryController
-                                                    .yearName.value,
+                                                    .ddYearName.value,
                                                 borderRadius:
                                                     BorderRadius.circular(20),
                                                 items: [
@@ -1092,6 +1095,7 @@ class _LeaveHistoryState extends State<LeaveHistory> {
                                                 onChanged: (String? value) {
                                                   if (value != null) {
                                                     sendYear = value;
+
                                                     leaveHistoryController
                                                         .getYear(sendYear);
                                                     // Get.back();
@@ -1120,6 +1124,36 @@ class _LeaveHistoryState extends State<LeaveHistory> {
                                     ],
                                   ),
                                 ),
+                                // !isButtonPressed
+                                //     ? Container()
+                                //     : sendMonth == 0 && sendYear == 'ปี'
+                                Obx(() {
+                                  return Column(
+                                    children: [
+                                      (leaveHistoryController
+                                                          .ddMonthName.value !=
+                                                      'เดือน' &&
+                                                  leaveHistoryController
+                                                          .ddYearName.value ==
+                                                      'ปี') ||
+                                              (leaveHistoryController
+                                                          .ddMonthName.value ==
+                                                      'เดือน' &&
+                                                  leaveHistoryController
+                                                          .ddYearName.value !=
+                                                      'ปี')
+                                          ? Center(
+                                              child: Text(
+                                                'กรุณาเลือกข้อมูลให้ครบ',
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                    ],
+                                  );
+                                }),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -1133,9 +1167,11 @@ class _LeaveHistoryState extends State<LeaveHistory> {
                                     ElevatedButton(
                                       child: const Text('ตกลง'),
                                       onPressed: () {
-                                        if (sendMonth != 0 && sendYear != '') {
+                                        if (sendMonth != 0 &&
+                                            sendYear != 'ปี') {
                                           leaveHistoryController.loadData(
-                                              sendMonth, sendYear);
+                                              textMonth, sendMonth, sendYear);
+                                          isButtonPressed = true;
                                           Get.back();
                                         } else {
                                           print('0000000000000');
@@ -1155,11 +1191,11 @@ class _LeaveHistoryState extends State<LeaveHistory> {
             ),
           ),
         ),
-        SizedBox(
-          height: 20,
-        ),
+        // SizedBox(
+        //   height: 20,
+        // ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
           child: Obx(() => leaveHistoryController.leaveHistoryList.isNotEmpty
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

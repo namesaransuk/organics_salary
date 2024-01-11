@@ -115,7 +115,7 @@ class _CheckPinPageState extends State<CheckPinPage> {
                     if (pin.length == 4 && int.tryParse(pin) != null) {
                       if (pin == storedPin) {
                         loadingController.dialogLoading();
-                        Future.delayed(const Duration(seconds: 2), () {
+                        Future.delayed(const Duration(seconds: 1), () {
                           Get.offAllNamed('/');
                         });
                       } else {

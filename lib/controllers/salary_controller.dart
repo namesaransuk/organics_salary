@@ -5,8 +5,11 @@ import 'package:organics_salary/models/salary_model.dart';
 class SalaryController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
 
+  bool textStatus = false;
   RxString monthName = 'เดือน'.obs;
   RxString yearName = 'ปี'.obs;
+  RxString ddMonthName = 'เดือน'.obs;
+  RxString ddYearName = 'ปี'.obs;
   var salaryList = RxList<SalaryModel>();
 
   var checkedMonths = List<bool>.generate(12, (index) => false).obs;
@@ -16,14 +19,14 @@ class SalaryController extends GetxController {
   RxString usedDate = RxString('');
 
   void getMonthName(String mName) {
-    monthName.value = mName;
+    ddMonthName.value = mName;
   }
 
   void getYear(String yName) {
-    yearName.value = yName;
+    ddYearName.value = yName;
   }
 
-  void loadData(int month, String year) async {
+  void loadData(String textMonth, int month, String year) async {
     loadingController.dialogLoading();
 
     var response = [];
@@ -130,6 +133,8 @@ class SalaryController extends GetxController {
     salaryList.assignAll(convertedSalaryList);
 
     await Future.delayed(const Duration(seconds: 1), () {
+        monthName.value = textMonth;
+        yearName.value = year;
       Get.back();
     });
   }
