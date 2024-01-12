@@ -21,6 +21,7 @@ class _PinAuthPageState extends State<PinAuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: AppBar(backgroundColor: AppTheme.ognGreen,),
       backgroundColor: AppTheme.ognGreen,
       body: SafeArea(
         child: Padding(

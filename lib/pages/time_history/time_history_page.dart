@@ -121,7 +121,7 @@ class _TimeHistoryPageState extends State<TimeHistoryPage> {
                             return SizedBox(
                               height: MediaQuery.of(context).size.height * 0.2,
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   Padding(

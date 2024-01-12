@@ -38,6 +38,13 @@ class CoinController extends GetxController {
             'description': '',
             'coin': 2000,
           },
+          {
+            'id': '4',
+            'name': 'iPad Air (Silver)',
+            'img': 'assets/img/coin/ipadair.png',
+            'description': '',
+            'coin': 2000,
+          },
         ];
         break;
       case 1:

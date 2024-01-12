@@ -54,7 +54,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
         Container(
           color: AppTheme.ognSoftGreen,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
+            padding: const EdgeInsets.symmetric(vertical: 35  , horizontal: 30),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -97,8 +97,8 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                   // color: Color.fromARGB(255, 245, 245, 245),
                   color: AppTheme.bgSoftGreen,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(70),
-                    // topRight: Radius.circular(20),
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
                   ),
                   boxShadow: [
                     BoxShadow(

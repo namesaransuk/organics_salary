@@ -106,7 +106,7 @@ class _SettingPageState extends State<SettingPage> {
                       width: 170,
                       child: ElevatedButton(
                         onPressed: () {
-                          Get.toNamed('/changepass');
+                          Get.toNamed('/pinauth');
                         },
                         style: ElevatedButton.styleFrom(
                             // backgroundColor: tPrimaryColor,

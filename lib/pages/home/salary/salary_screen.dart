@@ -161,13 +161,14 @@ class _SlipViewState extends State<SlipView> {
                 ElevatedButton(
                     onPressed: () {
                       showModalBottomSheet<void>(
+                        barrierLabel: '12',
                         showDragHandle: true,
                         context: context,
                         builder: (BuildContext context) {
                           return SizedBox(
                             height: MediaQuery.of(context).size.height * 0.2,
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 Padding(
@@ -401,7 +402,7 @@ class _SlipViewState extends State<SlipView> {
                                       },
                                     ),
                                   ],
-                                )
+                                ),
                               ],
                             ),
                           );
@@ -832,7 +833,7 @@ class _SlipRequestState extends State<SlipRequest> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Center(
                   child: Text(
                     'กรุณาแจ้งขอสลิปก่อนวันที่นำไปใช้งาน 1-3 วัน',
