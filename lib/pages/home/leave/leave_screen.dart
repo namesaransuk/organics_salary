@@ -114,11 +114,6 @@ class _LeaveReportState extends State<LeaveReport> {
   String? selectedLeave;
 
   int? selectedLeaveId;
-  XFile? image1;
-  XFile? image2;
-  XFile? image3;
-  XFile? image4;
-  XFile? image5;
   List<XFile?> selectedImages = [];
   String? reasonLeave;
 
@@ -146,15 +141,10 @@ class _LeaveReportState extends State<LeaveReport> {
 
     setState(() {
       if (img != null) {
-        selectedImages.add(img);
+        leaveHistoryController.selectedImages.add(img);
       }
     });
   }
-
-  String startDate = 'เลือกวันที่';
-  String startTime = 'เลือกเวลา';
-  String endDate = 'เลือกวันที่';
-  String endTime = 'เลือกเวลา';
 
   Future<void> _selectDate(BuildContext context, int mode) async {
     DateTime selectedDate = DateTime.now();
@@ -174,10 +164,10 @@ class _LeaveReportState extends State<LeaveReport> {
 
       setState(() {
         if (mode == 1) {
-          startDate = formattedDate;
+          leaveHistoryController.startDate.value = formattedDate;
           partDateStart = selectedDate;
         } else {
-          endDate = formattedDate;
+          leaveHistoryController.endDate.value = formattedDate;
           partDateEnd = selectedDate;
         }
       });
@@ -200,10 +190,10 @@ class _LeaveReportState extends State<LeaveReport> {
 
       setState(() {
         if (mode == 1) {
-          startTime = formattedTime;
+          leaveHistoryController.startTime.value = formattedTime;
           partTimeStart = selectedTime;
         } else {
-          endTime = formattedTime;
+          leaveHistoryController.endTime.value = formattedTime;
           partTimeEnd = selectedTime;
         }
       });
@@ -213,11 +203,10 @@ class _LeaveReportState extends State<LeaveReport> {
   int? selectedOption;
 
   final box = GetStorage();
+  int _stepIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    int _stepIndex = 0;
-
     return ListView(
       children: [
         Padding(
@@ -233,12 +222,12 @@ class _LeaveReportState extends State<LeaveReport> {
             },
             onStepContinue: () {
               if (_stepIndex == 0) {
-                if (selectedLeaveId == null) {
+                if (leaveHistoryController.selectedLeaveId == 0) {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return alertEmptyData(
-                          'แจ้งเตือน', 'กรุณาเลือกเดือนที่ต้องการขอสลิป');
+                          'แจ้งเตือน', 'กรุณาเลือกประเภทการลา');
                     },
                   );
                 } else {
@@ -247,12 +236,12 @@ class _LeaveReportState extends State<LeaveReport> {
                   });
                 }
               } else if (_stepIndex == 1) {
-                if (reasonLeave == null) {
+                if (leaveHistoryController.selectedReasonLeave.isEmpty) {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return alertEmptyData(
-                          'แจ้งเตือน', 'กรุณาระบุสาเหตุที่ต้องการขอสลิป');
+                          'แจ้งเตือน', 'กรุณาระบุเหตุผลการลา');
                     },
                   );
                 } else {
@@ -261,10 +250,10 @@ class _LeaveReportState extends State<LeaveReport> {
                   });
                 }
               } else if (_stepIndex == 2) {
-                if (startDate == null &&
-                    startTime == null &&
-                    endDate == null &&
-                    endTime == null) {
+                if (leaveHistoryController.startDate.isEmpty ||
+                    leaveHistoryController.startTime.isEmpty ||
+                    leaveHistoryController.endDate.isEmpty ||
+                    leaveHistoryController.endTime.isEmpty) {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -287,17 +276,19 @@ class _LeaveReportState extends State<LeaveReport> {
             steps: <Step>[
               Step(
                 title: Text('ระบุประเภทการลา'),
-                content: _buildChoseMonthItem(),
-                isActive: _stepIndex == 0 || selectedLeaveId != null,
-                state: selectedLeaveId != null
+                content: _buildSelectedLeaveTypeItem(),
+                isActive: _stepIndex == 0 ||
+                    leaveHistoryController.selectedLeaveId != 0,
+                state: leaveHistoryController.selectedLeaveId != 0
                     ? StepState.complete
                     : StepState.indexed,
               ),
               Step(
                 title: Text('ระบุเหตุผลการลา'),
                 content: _buildCauseItem(),
-                isActive: _stepIndex == 1 || reasonLeave != null,
-                state: reasonLeave != null
+                isActive: _stepIndex == 1 ||
+                    leaveHistoryController.selectedReasonLeave.isNotEmpty,
+                state: leaveHistoryController.selectedReasonLeave.isNotEmpty
                     ? StepState.complete
                     : StepState.indexed,
               ),
@@ -305,14 +296,14 @@ class _LeaveReportState extends State<LeaveReport> {
                 title: Text('ระบุวันที่/เวลาที่จะลา'),
                 content: _buildUsedDateItem(),
                 isActive: _stepIndex == 2 ||
-                    startDate == null &&
-                        startTime == null &&
-                        endDate == null &&
-                        endTime == null,
-                state: startDate == null &&
-                        startTime == null &&
-                        endDate == null &&
-                        endTime == null
+                    leaveHistoryController.startDate.isNotEmpty &&
+                        leaveHistoryController.startTime.isNotEmpty &&
+                        leaveHistoryController.endDate.isNotEmpty &&
+                        leaveHistoryController.endTime.isNotEmpty,
+                state: leaveHistoryController.startDate.isNotEmpty &&
+                        leaveHistoryController.startTime.isNotEmpty &&
+                        leaveHistoryController.endDate.isNotEmpty &&
+                        leaveHistoryController.endTime.isNotEmpty
                     ? StepState.complete
                     : StepState.indexed,
               ),
@@ -324,7 +315,7 @@ class _LeaveReportState extends State<LeaveReport> {
             ],
             controlsBuilder: (BuildContext ctx, ControlsDetails dtl) {
               return Padding(
-                padding: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 5),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -347,11 +338,14 @@ class _LeaveReportState extends State<LeaveReport> {
                                   backgroundColor: AppTheme.ognGreen,
                                 ),
                                 onPressed: () {
-                                  // salaryController.sendSlipRequest();
+                                  leaveHistoryController.sendData();
                                 },
-                                child: Text(
-                                  'ส่งคำร้อง',
-                                  style: TextStyle(color: Colors.white),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'บันทึกใบลา',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
                               ),
                             ),
@@ -443,11 +437,11 @@ class _LeaveReportState extends State<LeaveReport> {
     );
   }
 
-  Widget _buildChoseMonthItem() {
+  Widget _buildSelectedLeaveTypeItem() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('ประเภทการลา'),
+        // Text('ประเภทการลา'),
         DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey, width: 1),
@@ -485,7 +479,7 @@ class _LeaveReportState extends State<LeaveReport> {
                   dynamic selectedValues = value.split(' ');
                   int leaveId = int.parse(selectedValues[0]);
 
-                  selectedLeaveId = leaveId;
+                  leaveHistoryController.selectedLeaveId.value = leaveId;
                   selectedLeave = value;
 
                   print(selectedLeaveId);
@@ -557,208 +551,179 @@ class _LeaveReportState extends State<LeaveReport> {
                               radius: Radius.circular(12),
                               padding: EdgeInsets.all(20),
                               // child: image1 != null
-                              child: selectedImages.isNotEmpty
-                                  // ? Column(
-                                  //     children: [
-                                  //       GridView.builder(
-                                  //         shrinkWrap: true,
-                                  //         itemCount:
-                                  //             selectedImages.length,
-                                  //         gridDelegate:
-                                  //             const SliverGridDelegateWithFixedCrossAxisCount(
-                                  //                 crossAxisCount: 2),
-                                  //         itemBuilder:
-                                  //             (BuildContext context,
-                                  //                 int index) {
-                                  //           return Center(
-                                  //               child: Padding(
-                                  //             padding:
-                                  //                 const EdgeInsets
-                                  //                     .symmetric(
-                                  //                     vertical: 5),
-                                  //             child: ClipRRect(
-                                  //               borderRadius:
-                                  //                   BorderRadius.all(
-                                  //                       Radius
-                                  //                           .circular(
-                                  //                               10)),
-                                  //               child: Image.file(
-                                  //                   selectedImages[
-                                  //                       index]),
-                                  //             ),
-                                  //           ));
-                                  //         },
-                                  //       ),
-                                  //       SizedBox(
-                                  //         height: 10,
-                                  //       ),
-                                  //       ElevatedButton(
-                                  //         onPressed: () {
-                                  //           selectedImages.clear();
-                                  //           getImage();
-                                  //           // myAlert();
-                                  //         },
-                                  //         child:
-                                  //             Text('เลือกรูปภาพใหม่'),
-                                  //       ),
-                                  //     ],
-                                  //   )
+                              child: leaveHistoryController
+                                      .selectedImages.isNotEmpty
                                   ? Column(
                                       children: [
                                         Text('แนบไฟล์รูปภาพได้สูงสุด 5 ไฟล์'),
                                         SizedBox(
                                           height: 15,
                                         ),
-                                        Container(
-                                          child: selectedImages != null
-                                              ? GridView.builder(
-                                                  shrinkWrap: true,
-                                                  gridDelegate:
-                                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount: 2,
-                                                    crossAxisSpacing: 8.0,
-                                                    mainAxisSpacing: 8.0,
-                                                  ),
-                                                  itemCount: selectedImages
-                                                              .length <
-                                                          5
-                                                      ? selectedImages.length +
-                                                          1
-                                                      : selectedImages.length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    if (index ==
-                                                            selectedImages
-                                                                .length &&
-                                                        selectedImages.length <
-                                                            5) {
-                                                      return Expanded(
-                                                        child: InkWell(
-                                                          onTap: () {
-                                                            myAlert();
-                                                          },
-                                                          child: Card(
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Icon(
-                                                                  Icons
-                                                                      .add_photo_alternate_outlined,
-                                                                  color: AppTheme
-                                                                      .ognGreen,
-                                                                  size: 24.0,
-                                                                ),
-                                                                Text(
-                                                                  'เลือกรูปเพิ่ม',
-                                                                  style: TextStyle(
-                                                                      color: AppTheme
-                                                                          .ognGreen),
-                                                                ),
-                                                              ],
+                                        Obx(
+                                          () => Container(
+                                            child: leaveHistoryController
+                                                    .selectedImages.isNotEmpty
+                                                ? GridView.builder(
+                                                    shrinkWrap: true,
+                                                    gridDelegate:
+                                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                                      crossAxisCount: 2,
+                                                      crossAxisSpacing: 8.0,
+                                                      mainAxisSpacing: 8.0,
+                                                    ),
+                                                    itemCount:
+                                                        leaveHistoryController
+                                                                    .selectedImages
+                                                                    .length <
+                                                                5
+                                                            ? leaveHistoryController
+                                                                    .selectedImages
+                                                                    .length +
+                                                                1
+                                                            : leaveHistoryController
+                                                                .selectedImages
+                                                                .length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      if (index ==
+                                                              leaveHistoryController
+                                                                  .selectedImages
+                                                                  .length &&
+                                                          leaveHistoryController
+                                                                  .selectedImages
+                                                                  .length <
+                                                              5) {
+                                                        return Expanded(
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              myAlert();
+                                                            },
+                                                            child: Card(
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Icon(
+                                                                    Icons
+                                                                        .add_photo_alternate_outlined,
+                                                                    color: AppTheme
+                                                                        .ognGreen,
+                                                                    size: 24.0,
+                                                                  ),
+                                                                  Text(
+                                                                    'เลือกรูปเพิ่ม',
+                                                                    style: TextStyle(
+                                                                        color: AppTheme
+                                                                            .ognGreen),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      );
-                                                    }
+                                                        );
+                                                      }
 
-                                                    var img =
-                                                        selectedImages[index];
+                                                      var img =
+                                                          leaveHistoryController
+                                                                  .selectedImages[
+                                                              index];
 
-                                                    return Expanded(
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                          Radius.circular(5),
-                                                        ),
-                                                        child: Stack(
-                                                          children: [
-                                                            Image.file(
-                                                              File(img!.path),
-                                                              fit: BoxFit.cover,
-                                                              width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width /
-                                                                      2 -
-                                                                  12,
-                                                            ),
-                                                            Align(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .topRight,
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        8.0),
-                                                                child: Material(
-                                                                  color: Colors
-                                                                      .transparent,
-                                                                  child: Ink(
-                                                                    width: 25,
-                                                                    height: 25,
-                                                                    decoration:
-                                                                        const ShapeDecoration(
-                                                                      color: Colors
-                                                                          .red,
-                                                                      shape:
-                                                                          CircleBorder(),
-                                                                    ),
-                                                                    child:
-                                                                        IconButton(
-                                                                      icon:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .close,
-                                                                        size: 9,
+                                                      return Expanded(
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                            Radius.circular(5),
+                                                          ),
+                                                          child: Stack(
+                                                            children: [
+                                                              Image.file(
+                                                                File(img!.path),
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width /
+                                                                        2 -
+                                                                    12,
+                                                              ),
+                                                              Align(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .topRight,
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      Material(
+                                                                    color: Colors
+                                                                        .transparent,
+                                                                    child: Ink(
+                                                                      width: 25,
+                                                                      height:
+                                                                          25,
+                                                                      decoration:
+                                                                          const ShapeDecoration(
+                                                                        color: Colors
+                                                                            .red,
+                                                                        shape:
+                                                                            CircleBorder(),
                                                                       ),
-                                                                      color: Colors
-                                                                          .white,
-                                                                      onPressed:
-                                                                          () {
-                                                                        setState(
+                                                                      child:
+                                                                          IconButton(
+                                                                        icon:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .close,
+                                                                          size:
+                                                                              9,
+                                                                        ),
+                                                                        color: Colors
+                                                                            .white,
+                                                                        onPressed:
                                                                             () {
-                                                                          selectedImages
+                                                                          leaveHistoryController
+                                                                              .selectedImages
                                                                               .remove(img);
-                                                                        });
-                                                                      },
+                                                                        },
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                          ],
+                                                            ],
+                                                          ),
                                                         ),
-                                                      ),
-                                                    );
-                                                  },
-                                                )
-                                              : Container(
-                                                  width: double.infinity,
-                                                  child: Column(
-                                                    children: [
-                                                      Text(
-                                                        "ไม่ได้เลือกรูปภาพ",
-                                                        style: TextStyle(
-                                                            fontSize: 18),
-                                                      ),
-                                                      ElevatedButton(
-                                                        onPressed: () {
-                                                          // getImage();
-                                                          myAlert();
-                                                        },
-                                                        child:
-                                                            Text('อัพโหลดรูป'),
-                                                      ),
-                                                    ],
+                                                      );
+                                                    },
+                                                  )
+                                                : Container(
+                                                    width: double.infinity,
+                                                    child: Column(
+                                                      children: [
+                                                        Text(
+                                                          "ไม่ได้เลือกรูปภาพ",
+                                                          style: TextStyle(
+                                                              fontSize: 18),
+                                                        ),
+                                                        ElevatedButton(
+                                                          onPressed: () {
+                                                            // getImage();
+                                                            myAlert();
+                                                          },
+                                                          child: Text(
+                                                              'อัพโหลดรูป'),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
+                                          ),
                                         ),
                                       ],
                                     )
@@ -795,12 +760,13 @@ class _LeaveReportState extends State<LeaveReport> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('เหตุผลการลา'),
+        // Text('เหตุผลการลา'),
         TextField(
           onChanged: (value) {
-            setState(() {
-              reasonLeave = value;
-            });
+            leaveHistoryController.selectedReasonLeave.value = value;
+            // setState(() {
+            //   reasonLeave = value;
+            // });
           },
           minLines: 3,
           maxLines: null,
@@ -841,7 +807,8 @@ class _LeaveReportState extends State<LeaveReport> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('วันที่ : ${startDate}'),
+                  Text(
+                      'วันที่ : ${leaveHistoryController.startDate.isNotEmpty ? leaveHistoryController.startDate : 'เลือกวันที่'}'),
                   ElevatedButton(
                     onPressed: () => _selectDate(context, 1),
                     child: Text('เลือกวันที่'),
@@ -854,7 +821,8 @@ class _LeaveReportState extends State<LeaveReport> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('เวลา : $startTime'),
+                  Text(
+                      'เวลา : ${leaveHistoryController.startTime.isNotEmpty ? leaveHistoryController.startTime : 'เลือกเวลา'}'),
                   ElevatedButton(
                     onPressed: () => _selectTime(context, 1),
                     child: Text('เลือกเวลา'),
@@ -877,7 +845,8 @@ class _LeaveReportState extends State<LeaveReport> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('วันที่ : $endDate'),
+                  Text(
+                      'เวลา : ${leaveHistoryController.endDate.isNotEmpty ? leaveHistoryController.endDate : 'เลือกวันที่'}'),
                   ElevatedButton(
                     onPressed: () => _selectDate(context, 2),
                     child: Text('เลือกวันที่'),
@@ -890,7 +859,8 @@ class _LeaveReportState extends State<LeaveReport> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('เวลา : $endTime'),
+                  Text(
+                      'เวลา : ${leaveHistoryController.endTime.isNotEmpty ? leaveHistoryController.endTime : 'เลือกเวลา'}'),
                   ElevatedButton(
                     onPressed: () => _selectTime(context, 2),
                     child: Text('เลือกเวลา'),
@@ -944,33 +914,26 @@ class _LeaveReportState extends State<LeaveReport> {
             ],
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 20),
-          child: Center(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.ognGreen,
-              ),
-              onPressed: () {
-                setState(() {
-                  String leaveStart = '$startDate $startTime:00';
-                  String leaveEnd = '$endDate $endTime:00';
-                  print(leaveStart);
-                  print(leaveEnd);
-                  leaveHistoryController.sendData(selectedLeaveId,
-                      selectedImages, reasonLeave, leaveStart, leaveEnd);
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text(
-                  'บันทึกใบลา',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-        )
+        // Padding(
+        //   padding: EdgeInsets.symmetric(vertical: 20),
+        //   child: Center(
+        //     child: ElevatedButton(
+        //       style: ElevatedButton.styleFrom(
+        //         backgroundColor: AppTheme.ognGreen,
+        //       ),
+        //       onPressed: () {
+        //         leaveHistoryController.sendData();
+        //       },
+        //       child: Padding(
+        //         padding: const EdgeInsets.all(12.0),
+        //         child: Text(
+        //           'บันทึกใบลา',
+        //           style: TextStyle(color: Colors.white),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // )
       ],
     );
   }

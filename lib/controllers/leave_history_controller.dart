@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:organics_salary/controllers/loading_controller.dart';
 import 'package:organics_salary/models/emp_leave_model.dart';
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 
 class LeaveHistoryController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
@@ -18,6 +19,17 @@ class LeaveHistoryController extends GetxController {
   RxString yearName = 'ปี'.obs;
   RxString ddMonthName = 'เดือน'.obs;
   RxString ddYearName = 'ปี'.obs;
+
+  RxInt selectedLeaveId = 0.obs;
+  // List<XFile?> selectedImages = [];
+  RxList<XFile?> selectedImages = RxList<XFile?>.from([]);
+  RxString selectedReasonLeave = ''.obs;
+  RxString startDate = ''.obs;
+  RxString startTime = ''.obs;
+  RxString endDate = ''.obs;
+  RxString endTime = ''.obs;
+  String get leaveStart => '$startDate $startTime:00';
+  String get leaveEnd => '$endDate $endTime:00';
 
   void getMonthName(String mName) {
     ddMonthName.value = mName;
@@ -65,8 +77,7 @@ class LeaveHistoryController extends GetxController {
     }
   }
 
-  void sendData(selectedLeaveId, selectedImages, reasonLeave, leaveStart,
-      leaveEnd) async {
+  void sendData() async {
     // FormData formData = FormData({
     //   'leave_img1': MultipartFile(
     //         await selectedImages[0].readAsBytes(),
@@ -104,7 +115,7 @@ class LeaveHistoryController extends GetxController {
     FormData formData = FormData({});
 
     formData.fields.add(MapEntry('leave_type_id', '$selectedLeaveId'));
-    formData.fields.add(MapEntry('leave_type_title', reasonLeave ?? ''));
+    formData.fields.add(MapEntry('leave_type_title', '$selectedReasonLeave'));
     formData.fields.add(MapEntry('leave_date_start', leaveStart));
     formData.fields.add(MapEntry('leave_date_end', leaveEnd));
     formData.fields.add(MapEntry('days', formattedDay));

@@ -828,12 +828,12 @@ class _SlipRequestState extends State<SlipRequest> {
     return ListView(
       children: [
         Padding(
-          padding: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(0.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.only(top: 20),
                 child: Center(
                   child: Text(
                     'กรุณาแจ้งขอสลิปก่อนวันที่นำไปใช้งาน 1-3 วัน',
