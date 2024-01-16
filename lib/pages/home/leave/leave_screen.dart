@@ -202,171 +202,175 @@ class _LeaveReportState extends State<LeaveReport> {
 
   int? selectedOption;
 
+  @override
+  void initState() {
+    super.initState();
+    selectedOption = 1;
+  }
+
   final box = GetStorage();
   int _stepIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(0.0),
-          child: Stepper(
-            currentStep: _stepIndex,
-            onStepCancel: () {
-              if (_stepIndex > 0) {
-                setState(() {
-                  _stepIndex -= 1;
-                });
-              }
-            },
-            onStepContinue: () {
-              if (_stepIndex == 0) {
-                if (leaveHistoryController.selectedLeaveId == 0) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return alertEmptyData(
-                          'แจ้งเตือน', 'กรุณาเลือกประเภทการลา');
-                    },
-                  );
-                } else {
-                  setState(() {
-                    _stepIndex += 1;
-                  });
-                }
-              } else if (_stepIndex == 1) {
-                if (leaveHistoryController.selectedReasonLeave.isEmpty) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return alertEmptyData(
-                          'แจ้งเตือน', 'กรุณาระบุเหตุผลการลา');
-                    },
-                  );
-                } else {
-                  setState(() {
-                    _stepIndex += 1;
-                  });
-                }
-              } else if (_stepIndex == 2) {
-                if (leaveHistoryController.startDate.isEmpty ||
-                    leaveHistoryController.startTime.isEmpty ||
-                    leaveHistoryController.endDate.isEmpty ||
-                    leaveHistoryController.endTime.isEmpty) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return alertEmptyData(
-                          'แจ้งเตือน', 'กรุณาระบุวันที่ต้องการนำไปใช้');
-                    },
-                  );
-                } else {
-                  setState(() {
-                    _stepIndex += 1;
-                  });
-                }
-              }
-            },
-            // onStepTapped: (int index) {
-            //   setState(() {
-            //     _stepIndex = index;
-            //   });
-            // },
-            steps: <Step>[
-              Step(
-                title: Text('ระบุประเภทการลา'),
-                content: _buildSelectedLeaveTypeItem(),
-                isActive: _stepIndex == 0 ||
-                    leaveHistoryController.selectedLeaveId != 0,
-                state: leaveHistoryController.selectedLeaveId != 0
-                    ? StepState.complete
-                    : StepState.indexed,
-              ),
-              Step(
-                title: Text('ระบุเหตุผลการลา'),
-                content: _buildCauseItem(),
-                isActive: _stepIndex == 1 ||
-                    leaveHistoryController.selectedReasonLeave.isNotEmpty,
-                state: leaveHistoryController.selectedReasonLeave.isNotEmpty
-                    ? StepState.complete
-                    : StepState.indexed,
-              ),
-              Step(
-                title: Text('ระบุวันที่/เวลาที่จะลา'),
-                content: _buildUsedDateItem(),
-                isActive: _stepIndex == 2 ||
-                    leaveHistoryController.startDate.isNotEmpty &&
-                        leaveHistoryController.startTime.isNotEmpty &&
-                        leaveHistoryController.endDate.isNotEmpty &&
-                        leaveHistoryController.endTime.isNotEmpty,
-                state: leaveHistoryController.startDate.isNotEmpty &&
-                        leaveHistoryController.startTime.isNotEmpty &&
-                        leaveHistoryController.endDate.isNotEmpty &&
-                        leaveHistoryController.endTime.isNotEmpty
-                    ? StepState.complete
-                    : StepState.indexed,
-              ),
-              Step(
-                title: Text('ตรวจสอบข้อมูล'),
-                content: _buildCheckSelectedValues(),
-                isActive: _stepIndex == 3,
-              ),
-            ],
-            controlsBuilder: (BuildContext ctx, ControlsDetails dtl) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    _stepIndex == 0
-                        ? Container()
-                        : ElevatedButton(
-                            onPressed: dtl.onStepCancel,
-                            child: Text('ย้อนกลับ'),
-                          ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    _stepIndex == 3
-                        ? Padding(
-                            padding: EdgeInsets.symmetric(vertical: 20),
-                            child: Center(
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppTheme.ognGreen,
-                                ),
-                                onPressed: () {
-                                  leaveHistoryController.sendData();
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'บันทึกใบลา',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
+    return Padding(
+      padding: const EdgeInsets.all(0.0),
+      child: Stepper(
+        physics: ClampingScrollPhysics(),
+        currentStep: _stepIndex,
+        onStepCancel: () {
+          if (_stepIndex > 0) {
+            setState(() {
+              _stepIndex -= 1;
+            });
+          }
+        },
+        onStepContinue: () {
+          if (_stepIndex == 0) {
+            if (leaveHistoryController.selectedLeaveId == 0) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return alertEmptyData(
+                      'แจ้งเตือน', 'กรุณาเลือกประเภทการลา');
+                },
+              );
+            } else {
+              setState(() {
+                _stepIndex += 1;
+              });
+            }
+          } else if (_stepIndex == 1) {
+            if (leaveHistoryController.selectedReasonLeave.isEmpty) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return alertEmptyData(
+                      'แจ้งเตือน', 'กรุณาระบุเหตุผลการลา');
+                },
+              );
+            } else {
+              setState(() {
+                _stepIndex += 1;
+              });
+            }
+          } else if (_stepIndex == 2) {
+            if (leaveHistoryController.startDate.isEmpty ||
+                leaveHistoryController.startTime.isEmpty ||
+                leaveHistoryController.endDate.isEmpty ||
+                leaveHistoryController.endTime.isEmpty) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return alertEmptyData(
+                      'แจ้งเตือน', 'กรุณาระบุวันที่ต้องการนำไปใช้');
+                },
+              );
+            } else {
+              setState(() {
+                _stepIndex += 1;
+              });
+            }
+          }
+        },
+        // onStepTapped: (int index) {
+        //   setState(() {
+        //     _stepIndex = index;
+        //   });
+        // },
+        steps: <Step>[
+          Step(
+            title: Text('ระบุประเภทการลา'),
+            content: _buildSelectedLeaveTypeItem(),
+            isActive: _stepIndex == 0 ||
+                leaveHistoryController.selectedLeaveId != 0,
+            state: leaveHistoryController.selectedLeaveId != 0
+                ? StepState.complete
+                : StepState.indexed,
+          ),
+          Step(
+            title: Text('ระบุเหตุผลการลา'),
+            content: _buildCauseItem(),
+            isActive: _stepIndex == 1 ||
+                leaveHistoryController.selectedReasonLeave.isNotEmpty,
+            state: leaveHistoryController.selectedReasonLeave.isNotEmpty
+                ? StepState.complete
+                : StepState.indexed,
+          ),
+          Step(
+            title: Text('ระบุวันที่/เวลาที่จะลา'),
+            content: _buildUsedDateItem(),
+            isActive: _stepIndex == 2 ||
+                leaveHistoryController.startDate.isNotEmpty &&
+                    leaveHistoryController.startTime.isNotEmpty &&
+                    leaveHistoryController.endDate.isNotEmpty &&
+                    leaveHistoryController.endTime.isNotEmpty,
+            state: leaveHistoryController.startDate.isNotEmpty &&
+                    leaveHistoryController.startTime.isNotEmpty &&
+                    leaveHistoryController.endDate.isNotEmpty &&
+                    leaveHistoryController.endTime.isNotEmpty
+                ? StepState.complete
+                : StepState.indexed,
+          ),
+          Step(
+            title: Text('ตรวจสอบข้อมูล'),
+            content: _buildCheckSelectedValues(),
+            isActive: _stepIndex == 3,
+          ),
+        ],
+        controlsBuilder: (BuildContext ctx, ControlsDetails dtl) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _stepIndex == 0
+                    ? Container()
+                    : ElevatedButton(
+                        onPressed: dtl.onStepCancel,
+                        child: Text('ย้อนกลับ'),
+                      ),
+                SizedBox(
+                  width: 10,
+                ),
+                _stepIndex == 3
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        child: Center(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppTheme.ognGreen,
+                            ),
+                            onPressed: () {
+                              leaveHistoryController.sendData();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'บันทึกใบลา',
+                                style: TextStyle(color: Colors.white),
                               ),
                             ),
-                          )
-                        : ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStatePropertyAll(
-                                    AppTheme.ognGreen)),
-                            onPressed: dtl.onStepContinue,
-                            child: Text(
-                              'ต่อไป',
-                              style: TextStyle(color: Colors.white),
-                            ),
                           ),
-                  ],
-                ),
-              );
-            },
-          ),
-        )
-      ],
+                        ),
+                      )
+                    : ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(AppTheme.ognGreen),
+                        ),
+                        onPressed: dtl.onStepContinue,
+                        child: Text(
+                          'ต่อไป',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -600,6 +604,8 @@ class _LeaveReportState extends State<LeaveReport> {
                                                               myAlert();
                                                             },
                                                             child: Card(
+                                                              margin: EdgeInsets
+                                                                  .all(0.0),
                                                               child: Column(
                                                                 mainAxisAlignment:
                                                                     MainAxisAlignment

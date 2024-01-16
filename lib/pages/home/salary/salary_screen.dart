@@ -825,171 +825,168 @@ class _SlipRequestState extends State<SlipRequest> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Center(
-                  child: Text(
-                    'กรุณาแจ้งขอสลิปก่อนวันที่นำไปใช้งาน 1-3 วัน',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+    return Padding(
+      padding: const EdgeInsets.all(0.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Center(
+              child: Text(
+                'กรุณาแจ้งขอสลิปก่อนวันที่นำไปใช้งาน 1-3 วัน',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Stepper(
-                currentStep: _stepIndex,
-                onStepCancel: () {
-                  if (_stepIndex > 0) {
-                    setState(() {
-                      _stepIndex -= 1;
-                    });
-                  }
-                },
-                onStepContinue: () {
-                  if (_stepIndex == 0) {
-                    if (salaryController.selectedMonths.isEmpty) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return alertEmptyData(
-                              'แจ้งเตือน', 'กรุณาเลือกเดือนที่ต้องการขอสลิป');
-                        },
-                      );
-                    } else {
-                      setState(() {
-                        _stepIndex += 1;
-                      });
-                    }
-                  } else if (_stepIndex == 1) {
-                    if (salaryController.inputCause.isEmpty) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return alertEmptyData(
-                              'แจ้งเตือน', 'กรุณาระบุสาเหตุที่ต้องการขอสลิป');
-                        },
-                      );
-                    } else {
-                      setState(() {
-                        _stepIndex += 1;
-                      });
-                    }
-                  } else if (_stepIndex == 2) {
-                    if (salaryController.usedDate.isEmpty) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return alertEmptyData(
-                              'แจ้งเตือน', 'กรุณาระบุวันที่ต้องการนำไปใช้');
-                        },
-                      );
-                    } else {
-                      setState(() {
-                        _stepIndex += 1;
-                      });
-                    }
-                  }
-                },
-                // onStepTapped: (int index) {
-                //   setState(() {
-                //     _stepIndex = index;
-                //   });
-                // },
-                steps: <Step>[
-                  Step(
-                    title: Text('ระบุเดือนที่ต้องการขอสลิป'),
-                    content: _buildChoseMonthItem(),
-                    isActive: _stepIndex == 0 ||
-                        salaryController.selectedMonths.isNotEmpty,
-                    state: salaryController.selectedMonths.isNotEmpty
-                        ? StepState.complete
-                        : StepState.indexed,
-                  ),
-                  Step(
-                    title: Text('ระบุสาเหตุที่ต้องการนำไปใช้'),
-                    content: _buildCauseItem(),
-                    isActive: _stepIndex == 1 ||
-                        salaryController.inputCause.isNotEmpty,
-                    state: salaryController.inputCause.isNotEmpty
-                        ? StepState.complete
-                        : StepState.indexed,
-                  ),
-                  Step(
-                    title: Text('ระบุวันที่ต้องการนำไปใช้'),
-                    content: _buildUsedDateItem(),
-                    isActive:
-                        _stepIndex == 2 || salaryController.usedDate.isNotEmpty,
-                    state: salaryController.usedDate.isNotEmpty
-                        ? StepState.complete
-                        : StepState.indexed,
-                  ),
-                  Step(
-                    title: Text('ตรวจสอบข้อมูล'),
-                    content: _buildCheckSelectedValues(),
-                    isActive: _stepIndex == 3,
-                  ),
-                ],
-                controlsBuilder: (BuildContext ctx, ControlsDetails dtl) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        _stepIndex == 0
-                            ? Container()
-                            : ElevatedButton(
-                                onPressed: dtl.onStepCancel,
-                                child: Text('ย้อนกลับ'),
-                              ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        _stepIndex == 3
-                            ? Padding(
-                                padding: EdgeInsets.symmetric(vertical: 20),
-                                child: Center(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppTheme.ognGreen,
-                                    ),
-                                    onPressed: () {
-                                      salaryController.sendSlipRequest();
-                                    },
-                                    child: Text(
-                                      'ส่งคำร้อง',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
+            ),
+          ),
+          Stepper(
+            physics: ClampingScrollPhysics(),
+            currentStep: _stepIndex,
+            onStepCancel: () {
+              if (_stepIndex > 0) {
+                setState(() {
+                  _stepIndex -= 1;
+                });
+              }
+            },
+            onStepContinue: () {
+              if (_stepIndex == 0) {
+                if (salaryController.selectedMonths.isEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alertEmptyData(
+                          'แจ้งเตือน', 'กรุณาเลือกเดือนที่ต้องการขอสลิป');
+                    },
+                  );
+                } else {
+                  setState(() {
+                    _stepIndex += 1;
+                  });
+                }
+              } else if (_stepIndex == 1) {
+                if (salaryController.inputCause.isEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alertEmptyData(
+                          'แจ้งเตือน', 'กรุณาระบุสาเหตุที่ต้องการขอสลิป');
+                    },
+                  );
+                } else {
+                  setState(() {
+                    _stepIndex += 1;
+                  });
+                }
+              } else if (_stepIndex == 2) {
+                if (salaryController.usedDate.isEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alertEmptyData(
+                          'แจ้งเตือน', 'กรุณาระบุวันที่ต้องการนำไปใช้');
+                    },
+                  );
+                } else {
+                  setState(() {
+                    _stepIndex += 1;
+                  });
+                }
+              }
+            },
+            // onStepTapped: (int index) {
+            //   setState(() {
+            //     _stepIndex = index;
+            //   });
+            // },
+            steps: <Step>[
+              Step(
+                title: Text('ระบุเดือนที่ต้องการขอสลิป'),
+                content: _buildChoseMonthItem(),
+                isActive: _stepIndex == 0 ||
+                    salaryController.selectedMonths.isNotEmpty,
+                state: salaryController.selectedMonths.isNotEmpty
+                    ? StepState.complete
+                    : StepState.indexed,
+              ),
+              Step(
+                title: Text('ระบุสาเหตุที่ต้องการนำไปใช้'),
+                content: _buildCauseItem(),
+                isActive:
+                    _stepIndex == 1 || salaryController.inputCause.isNotEmpty,
+                state: salaryController.inputCause.isNotEmpty
+                    ? StepState.complete
+                    : StepState.indexed,
+              ),
+              Step(
+                title: Text('ระบุวันที่ต้องการนำไปใช้'),
+                content: _buildUsedDateItem(),
+                isActive:
+                    _stepIndex == 2 || salaryController.usedDate.isNotEmpty,
+                state: salaryController.usedDate.isNotEmpty
+                    ? StepState.complete
+                    : StepState.indexed,
+              ),
+              Step(
+                title: Text('ตรวจสอบข้อมูล'),
+                content: _buildCheckSelectedValues(),
+                isActive: _stepIndex == 3,
+              ),
+            ],
+            controlsBuilder: (BuildContext ctx, ControlsDetails dtl) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    _stepIndex == 0
+                        ? Container()
+                        : ElevatedButton(
+                            onPressed: dtl.onStepCancel,
+                            child: Text('ย้อนกลับ'),
+                          ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    _stepIndex == 3
+                        ? Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Center(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppTheme.ognGreen,
                                 ),
-                              )
-                            : ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStatePropertyAll(
-                                        AppTheme.ognGreen)),
-                                onPressed: dtl.onStepContinue,
+                                onPressed: () {
+                                  salaryController.sendSlipRequest();
+                                },
                                 child: Text(
-                                  'ต่อไป',
+                                  'ส่งคำร้อง',
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
+                            ),
+                          )
+                        : ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll(
+                                    AppTheme.ognGreen)),
+                            onPressed: dtl.onStepContinue,
+                            child: Text(
+                              'ต่อไป',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                  ],
+                ),
+              );
+            },
           ),
-        )
-      ],
+        ],
+      ),
     );
   }
 

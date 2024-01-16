@@ -338,7 +338,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                                 child: Card(
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 2),
+                                        vertical: 15, horizontal: 2),
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
