@@ -72,18 +72,16 @@ class _ConfirmPinAuthpageState extends State<ConfirmPinAuthpage> {
               CustomKeyBoard(
                 pinTheme: pinTheme,
                 onChanged: (v) {
-                  if (kDebugMode) {
-                    print(v);
-                    pin = v;
-                    setState(() {
-                      if (pin.length == 4 && int.tryParse(pin) != null) {
-                        // Get.offAndToNamed('/');
-                        pinController.confirmpin(context, pin);
-                      } else {
-                        print('Invalid input');
-                      }
-                    });
-                  }
+                  print(v);
+                  pin = v;
+                  setState(() {
+                    if (pin.length == 4 && int.tryParse(pin) != null) {
+                      // Get.offAndToNamed('/');
+                      pinController.confirmpin(context, pin);
+                    } else {
+                      print('Invalid input');
+                    }
+                  });
                 },
                 // specialKey: Icon(
                 //   Icons.fingerprint,

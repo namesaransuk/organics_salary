@@ -72,18 +72,16 @@ class _PinAuthPageState extends State<PinAuthPage> {
               CustomKeyBoard(
                 pinTheme: pinTheme,
                 onChanged: (v) {
-                  if (kDebugMode) {
-                    print(v);
-                    pin = v;
-                    setState(() {
-                      if (pin.length == 4 && int.tryParse(pin) != null) {
-                        // Get.offAndToNamed('/');
-                        pinController.savepin(pin);
-                      } else {
-                        print('Invalid input');
-                      }
-                    });
-                  }
+                  print(v);
+                  pin = v;
+                  setState(() {
+                    if (pin.length == 4 && int.tryParse(pin) != null) {
+                      // Get.offAndToNamed('/');
+                      pinController.savepin(pin);
+                    } else {
+                      print('Invalid input');
+                    }
+                  });
                 },
                 specialKey: SizedBox(),
                 // specialKeyOnTap: () {

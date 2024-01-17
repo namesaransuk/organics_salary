@@ -3,7 +3,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:organics_salary/controllers/loading_controller.dart';
-import 'dart:convert';
 
 class PinController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
@@ -35,27 +34,36 @@ class PinController extends GetxController {
           },
         );
 
+        Get.back();
+
         if (response.statusCode == 200) {
           Map<String, dynamic> responseBody = response.body;
           if (responseBody['statusCode'] == '00') {
             box.write('pin', '$secondPin');
 
-            await Future.delayed(const Duration(seconds: 1), () {
-              Get.offAllNamed('/');
-            });
+            // await Future.delayed(const Duration(seconds: 1), () {
+            Get.offAllNamed('/');
+            // });
             print('success');
           } else {
             print('failed with status code: ${responseBody['statusCode']}');
+            alertEmptyData(
+                context, 'แจ้งเตือน', 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
           }
         } else {
           alertEmptyData(
               context, 'แจ้งเตือน', 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
         }
       } else {
+        await Future.delayed(const Duration(seconds: 1), () {
+          Get.back();
+        });
+
         alertEmptyData(
             context, 'แจ้งเตือน', 'รหัส PIN ไม่ตรงกัน กรุณาลองใหม่อีกครั้ง');
       }
     } catch (e) {
+      Get.back();
       print(e);
     }
   }

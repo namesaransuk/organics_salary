@@ -34,15 +34,19 @@ class _SettingPageState extends State<SettingPage> {
       body: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(0.0),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              // borderRadius: BorderRadius.circular(20),
               child: Container(
                 padding: EdgeInsets.symmetric(
                   vertical: 20,
                 ),
                 decoration: BoxDecoration(
-                  color: AppTheme.ognSoftGreen,
+                  image: DecorationImage(
+                    image: AssetImage('assets/img/bggreen.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                  // color: AppTheme.ognSoftGreen,
                   // borderRadius: BorderRadius.circular(20),
                 ),
                 width: double.infinity,
@@ -132,7 +136,7 @@ class _SettingPageState extends State<SettingPage> {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           Container(
             padding: EdgeInsets.symmetric(
               horizontal: 10,
