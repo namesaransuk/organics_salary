@@ -54,10 +54,9 @@ class LoginController extends GetxController {
         box.write('end_date', loginJSONList.endDate);
         box.write('y_experience', loginJSONList.yExperience);
         box.write(
-            'image',
-            loginJSONList.image != null
-                ? loginJSONList.image
-                : 'assets/img/user.png');
+          'image',
+          loginJSONList.image ?? 'assets/img/user.png',
+        );
         box.write('record_status', loginJSONList.recordStatus);
         box.write('coins', loginJSONList.coins);
         box.write('username', loginJSONList.username);

@@ -107,10 +107,6 @@ class LeaveReport extends StatefulWidget {
 }
 
 class _LeaveReportState extends State<LeaveReport> {
-  // late TextEditingController _nameController;
-  // late TextEditingController _empIdController;
-  // late TextEditingController _departmentController;
-
   String? selectedLeave;
 
   int? selectedLeaveId;
@@ -201,11 +197,19 @@ class _LeaveReportState extends State<LeaveReport> {
   }
 
   int? selectedOption;
+  TextEditingController _reasonController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     selectedOption = 1;
+  }
+
+  @override
+  void dispose() {
+    // leaveHistoryController.dispose();
+    Get.delete<LeaveHistoryController>();
+    super.dispose();
   }
 
   final box = GetStorage();
@@ -231,8 +235,7 @@ class _LeaveReportState extends State<LeaveReport> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return alertEmptyData(
-                      'แจ้งเตือน', 'กรุณาเลือกประเภทการลา');
+                  return alertEmptyData('แจ้งเตือน', 'กรุณาเลือกประเภทการลา');
                 },
               );
             } else {
@@ -245,8 +248,7 @@ class _LeaveReportState extends State<LeaveReport> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return alertEmptyData(
-                      'แจ้งเตือน', 'กรุณาระบุเหตุผลการลา');
+                  return alertEmptyData('แจ้งเตือน', 'กรุณาระบุเหตุผลการลา');
                 },
               );
             } else {
@@ -282,8 +284,8 @@ class _LeaveReportState extends State<LeaveReport> {
           Step(
             title: Text('ระบุประเภทการลา'),
             content: _buildSelectedLeaveTypeItem(),
-            isActive: _stepIndex == 0 ||
-                leaveHistoryController.selectedLeaveId != 0,
+            isActive:
+                _stepIndex == 0 || leaveHistoryController.selectedLeaveId != 0,
             state: leaveHistoryController.selectedLeaveId != 0
                 ? StepState.complete
                 : StepState.indexed,
@@ -344,6 +346,12 @@ class _LeaveReportState extends State<LeaveReport> {
                             ),
                             onPressed: () {
                               leaveHistoryController.sendData();
+                              leaveHistoryController.clear();
+                              selectedLeave = 'เลือกประเภทการลา';
+                              _reasonController.clear();
+                              setState(() {
+                                _stepIndex = 0;
+                              });
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -768,6 +776,7 @@ class _LeaveReportState extends State<LeaveReport> {
       children: [
         // Text('เหตุผลการลา'),
         TextField(
+          controller: _reasonController,
           onChanged: (value) {
             leaveHistoryController.selectedReasonLeave.value = value;
             // setState(() {

@@ -139,20 +139,41 @@ class LeaveHistoryController extends GetxController {
 
     try {
       var response = await connect.post(
-        'https://app.doctorjel.co.th/api/v1/member/upload/multiple',
+        '$baseUrl/employee/saveEmpLeave',
+        // 'https://app.doctorjel.co.th/api/v1/member/upload/multiple',
         formData,
       );
 
-      print(response);
+      print(response.body);
 
       if (response.statusCode == 200) {
         print('success');
+
+        selectedLeaveId = 0.obs;
+        selectedImages = RxList<XFile?>.from([]);
+        selectedReasonLeave = ''.obs;
+        startDate = ''.obs;
+        startTime = ''.obs;
+        endDate = ''.obs;
+        endTime = ''.obs;
       } else {
         print('failed');
       }
     } catch (e) {
       print('Error: $e');
     }
+  }
+
+  void clear() {
+    selectedLeaveId = 0.obs;
+    selectedImages = RxList<XFile?>.from([]);
+    selectedReasonLeave = ''.obs;
+    startDate = ''.obs;
+    startTime = ''.obs;
+    endDate = ''.obs;
+    endTime = ''.obs;
+
+    update();
   }
 
   void alertEmptyData(String title, String detail) {

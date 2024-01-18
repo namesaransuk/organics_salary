@@ -17,6 +17,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     final LogoutController logoutController = Get.put(LogoutController());
     final box = GetStorage();
+    print(box.read('accessa_token'));
 
     return Scaffold(
       appBar: AppBar(
@@ -52,14 +53,19 @@ class _SettingPageState extends State<SettingPage> {
                 width: double.infinity,
                 child: Column(
                   children: [
-                    SizedBox(
-                      width: 120,
-                      height: 120,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: Image.asset(
-                          '${box.read('image')}',
-                        ),
+                    ClipOval(
+                      child: Container(
+                        color: Colors.white,
+                        child: box.read('image').startsWith('http') ||
+                                box.read('image').startsWith('https')
+                            ? Image.network(
+                                '${box.read('image')}',
+                                width: MediaQuery.of(context).size.width * 0.3,
+                              )
+                            : Image.asset(
+                                '${box.read('image')}',
+                                width: MediaQuery.of(context).size.width * 0.3,
+                              ),
                       ),
                     ),
                     const SizedBox(height: 10),

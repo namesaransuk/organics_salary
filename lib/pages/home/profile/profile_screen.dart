@@ -54,7 +54,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
         Container(
           color: AppTheme.ognSoftGreen,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 35  , horizontal: 30),
+            padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 30),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,13 +75,28 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                             ?.copyWith(color: Colors.white54)),
                   ],
                 ),
-                CircleAvatar(
-                  radius: 30,
-                  child: Image.asset(
-                    '${box.read('image')}',
-                    width: 200,
+                ClipOval(
+                  child: Container(
+                    color: Colors.white,
+                    child: box.read('image').startsWith('http') ||
+                            box.read('image').startsWith('https')
+                        ? Image.network(
+                            '${box.read('image')}',
+                            width: MediaQuery.of(context).size.width * 0.18,
+                          )
+                        : Image.asset(
+                            '${box.read('image')}',
+                            width: MediaQuery.of(context).size.width * 0.18,
+                          ),
                   ),
                 ),
+                // CircleAvatar(
+                //   radius: 30,
+                //   child: Image.network(
+                //     '${box.read('image')}',
+                //     width: 200,
+                //   ),
+                // ),
               ],
             ),
           ),

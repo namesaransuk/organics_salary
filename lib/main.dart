@@ -18,10 +18,11 @@ import 'package:get_storage/get_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Get.put(GetConnect());
+  // Get.lazyPut(() => GetConnect());
   await initializeDateFormatting('th', null);
   dotenv.load();
   await GetStorage.init();
-  Get.lazyPut(() => GetConnect());
   runApp(const MyApp());
 }
 

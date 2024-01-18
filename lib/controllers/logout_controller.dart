@@ -6,8 +6,8 @@ import 'package:organics_salary/controllers/loading_controller.dart';
 class LogoutController extends GetxController {
   LoadingController loadingController = LoadingController();
   final box = GetStorage();
-  var connect = Get.find<GetConnect>();
-  var baseUrl = dotenv.env['API_URL'];
+  // var connect = Get.find<GetConnect>();
+  // var baseUrl = dotenv.env['API_URL'];
 
   void logout() async {
     loadingController.dialogLoading();
@@ -17,6 +17,7 @@ class LogoutController extends GetxController {
     // );
 
     // print(response);
+    // Get.deleteAll();
     GetStorage().erase();
 
     await Future.delayed(const Duration(seconds: 2), () {
