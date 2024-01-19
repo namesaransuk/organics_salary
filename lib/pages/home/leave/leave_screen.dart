@@ -208,6 +208,7 @@ class _LeaveReportState extends State<LeaveReport> {
   @override
   void dispose() {
     // leaveHistoryController.dispose();
+    leaveHistoryController.clear();
     Get.delete<LeaveHistoryController>();
     super.dispose();
   }
@@ -345,12 +346,34 @@ class _LeaveReportState extends State<LeaveReport> {
                               backgroundColor: AppTheme.ognGreen,
                             ),
                             onPressed: () {
-                              leaveHistoryController.sendData();
-                              leaveHistoryController.clear();
-                              selectedLeave = 'เลือกประเภทการลา';
-                              _reasonController.clear();
-                              setState(() {
-                                _stepIndex = 0;
+                              leaveHistoryController
+                                  .sendData()
+                                  .then((responseBody) {
+                                if (responseBody['statusCode'] == '00') {
+                                  leaveHistoryController.clear();
+                                  selectedLeave = 'เลือกประเภทการลา';
+                                  _reasonController.clear();
+                                  setState(() {
+                                    _stepIndex = 0;
+                                  });
+
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return alertEmptyData('แจ้งเตือน',
+                                          'บันทึกใบลาสำเร็จ อยู่ในระหว่างรอการอนุมัติ');
+                                    },
+                                  );
+                                } else {
+                                  print('show alert');
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return alertEmptyData('แจ้งเตือน',
+                                          'บันทึกใบลาไม่สำเร็จ ลองใหม่อีกครั้งในภายหลัง');
+                                    },
+                                  );
+                                }
                               });
                             },
                             child: Padding(
@@ -788,7 +811,7 @@ class _LeaveReportState extends State<LeaveReport> {
           keyboardType: TextInputType.multiline,
           decoration: InputDecoration(
             alignLabelWithHint: true,
-            hintText: '',
+            hintText: 'เช่น ไม่สบายเป็นไข้, ท้องเสีย',
             contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20.0),
@@ -952,6 +975,25 @@ class _LeaveReportState extends State<LeaveReport> {
       ],
     );
   }
+
+  // Widget alertEmptyData(String title, String detail) {
+  //   return Get.dialog(
+  //     AlertDialog(
+  //       actionsAlignment: MainAxisAlignment.center,
+  //       backgroundColor: Colors.white,
+  //       title: Text(title),
+  //       content: Text(detail),
+  //       actions: <Widget>[
+  //         ElevatedButton(
+  //           onPressed: () {
+  //             Get.back();
+  //           },
+  //           child: Text("ตกลง"),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
 
 // --------------------------------------------------------------

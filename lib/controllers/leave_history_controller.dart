@@ -6,6 +6,7 @@ import 'package:organics_salary/controllers/loading_controller.dart';
 import 'package:organics_salary/models/emp_leave_model.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
 
 class LeaveHistoryController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
@@ -77,7 +78,9 @@ class LeaveHistoryController extends GetxController {
     }
   }
 
-  void sendData() async {
+  Future<Map<String, dynamic>> sendData() async {
+    loadingController.dialogLoading();
+
     // FormData formData = FormData({
     //   'leave_img1': MultipartFile(
     //         await selectedImages[0].readAsBytes(),
@@ -114,8 +117,9 @@ class LeaveHistoryController extends GetxController {
 
     FormData formData = FormData({});
 
+    formData.fields.add(MapEntry('emp_id', '$id'));
     formData.fields.add(MapEntry('leave_type_id', '$selectedLeaveId'));
-    formData.fields.add(MapEntry('leave_type_title', '$selectedReasonLeave'));
+    formData.fields.add(MapEntry('leave_detail', '$selectedReasonLeave'));
     formData.fields.add(MapEntry('leave_date_start', leaveStart));
     formData.fields.add(MapEntry('leave_date_end', leaveEnd));
     formData.fields.add(MapEntry('days', formattedDay));
@@ -140,33 +144,39 @@ class LeaveHistoryController extends GetxController {
     try {
       var response = await connect.post(
         '$baseUrl/employee/saveEmpLeave',
-        // 'https://app.doctorjel.co.th/api/v1/member/upload/multiple',
         formData,
       );
 
       print(response.body);
 
-      if (response.statusCode == 200) {
+      Map<String, dynamic> responseBody = json.decode(response.body);
+      Get.back();
+
+      if (responseBody['statusCode'] == '00') {
         print('success');
 
-        selectedLeaveId = 0.obs;
-        selectedImages = RxList<XFile?>.from([]);
-        selectedReasonLeave = ''.obs;
-        startDate = ''.obs;
-        startTime = ''.obs;
-        endDate = ''.obs;
-        endTime = ''.obs;
-      } else {
-        print('failed');
+        // Reset ค่าต่าง ๆ ที่ต้องการ clear
+        selectedLeaveId.value = 0;
+        selectedImages.clear();
+        selectedReasonLeave.value = '';
+        startDate.value = '';
+        startTime.value = '';
+        endDate.value = '';
+        endTime.value = '';
+
+        return responseBody;
       }
     } catch (e) {
       print('Error: $e');
     }
+
+    // ในกรณีไม่สามารถส่งข้อมูลได้
+    return {'statusCode': 'error', 'message': 'Failed to send data'};
   }
 
   void clear() {
     selectedLeaveId = 0.obs;
-    selectedImages = RxList<XFile?>.from([]);
+    selectedImages.clear();
     selectedReasonLeave = ''.obs;
     startDate = ''.obs;
     startTime = ''.obs;

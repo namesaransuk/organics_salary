@@ -133,8 +133,8 @@ class SalaryController extends GetxController {
     salaryList.assignAll(convertedSalaryList);
 
     await Future.delayed(const Duration(seconds: 1), () {
-        monthName.value = textMonth;
-        yearName.value = year;
+      monthName.value = textMonth;
+      yearName.value = year;
       Get.back();
     });
   }
@@ -152,9 +152,47 @@ class SalaryController extends GetxController {
     print(usedDate);
   }
 
-  void sendSlipRequest() {
+  Future<Map<String, dynamic>> sendSlipRequest() async {
     print('selectedMonths: $selectedMonths');
     print('inputCause: $inputCause');
     print('usedDate: $usedDate');
+
+    try {
+      // var response = await connect.post(
+      //   '$baseUrl/employee/saveEmpLeave',
+      //   formData,
+      // );
+
+      // print(response.body);
+
+      // Map<String, dynamic> responseBody = json.decode(response.body);
+      // if (responseBody['statusCode'] == '00') {
+      //   print('success');
+
+      //   selectedLeaveId.value = 0;
+      //   selectedImages.clear();
+      //   selectedReasonLeave.value = '';
+      //   startDate.value = '';
+      //   startTime.value = '';
+      //   endDate.value = '';
+      //   endTime.value = '';
+
+      // return responseBody;
+      return {'statusCode': '00', 'message': 'Success'};
+    } catch (e) {
+      print('Error: $e');
+    }
+
+    return {'statusCode': 'error', 'message': 'Failed to send data'};
+  }
+
+  void clear() {
+    checkedMonths = List<bool>.generate(12, (index) => false).obs;
+    selectedMonths = RxList<int>();
+    inputCause = RxString('');
+    formatDate = RxString('ยังไม่ได้เลือก');
+    usedDate = RxString('');
+
+    update();
   }
 }

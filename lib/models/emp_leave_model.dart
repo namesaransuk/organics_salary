@@ -2,7 +2,7 @@ class LeaveHistoryModel {
   int? id;
   int? empId;
   int? leaveTypeId;
-  int? leaveTypeTitle;
+  String? leaveTypeTitle;
   int? statusManagerApprove;
   int? statusHrApprove;
   String? leaveDetail;
@@ -50,7 +50,7 @@ class LeaveHistoryModel {
         id: json['id'] as int?,
         empId: json['emp_id'] as int?,
         leaveTypeId: json['leave_type_id'] as int?,
-        leaveTypeTitle: json['leave_type_title'] as int?,
+        leaveTypeTitle: json['leave_type_title'] as String?,
         statusManagerApprove: json['status_manager_approve'] as int?,
         statusHrApprove: json['status_hr__approve'] as int?,
         leaveDetail: json['leave_detail'] as String?,

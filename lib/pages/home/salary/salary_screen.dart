@@ -822,6 +822,15 @@ class _SlipRequestState extends State<SlipRequest> {
   DateRangePickerController _datePickerController = DateRangePickerController();
   int _stepIndex = 0;
   bool hide = false;
+  TextEditingController _reasonController = TextEditingController();
+
+  @override
+  void dispose() {
+    // leaveHistoryController.dispose();
+    salaryController.clear();
+    Get.delete<SalaryController>();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -961,7 +970,37 @@ class _SlipRequestState extends State<SlipRequest> {
                                   backgroundColor: AppTheme.ognGreen,
                                 ),
                                 onPressed: () {
-                                  salaryController.sendSlipRequest();
+                                  // salaryController.sendSlipRequest();
+
+                                  salaryController
+                                      .sendSlipRequest()
+                                      .then((responseBody) {
+                                    if (responseBody['statusCode'] == '00') {
+                                      salaryController.clear();
+                                      // selectedLeave = 'เลือกประเภทการลา';
+                                      _reasonController.clear();
+                                      setState(() {
+                                        _stepIndex = 0;
+                                      });
+
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return alertEmptyData('แจ้งเตือน',
+                                              'บันทึกคำร้องขอสลิปสำเร็จ อยู่ในระหว่างรอการอนุมัติ');
+                                        },
+                                      );
+                                    } else {
+                                      print('show alert');
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return alertEmptyData('แจ้งเตือน',
+                                              'บันทึกใบลาไม่สำเร็จ ลองใหม่อีกครั้งในภายหลัง');
+                                        },
+                                      );
+                                    }
+                                  });
                                 },
                                 child: Text(
                                   'ส่งคำร้อง',
@@ -1072,6 +1111,7 @@ class _SlipRequestState extends State<SlipRequest> {
         //   height: 10,
         // ),
         TextField(
+          controller: _reasonController,
           onChanged: (value) {
             salaryController.updateInputCause(value);
           },
