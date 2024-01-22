@@ -29,10 +29,7 @@ class TimeHistoryController extends GetxController {
     try {
       var response = await connect.post(
         '$baseUrl/employee/empPasteCardLog',
-        {
-          'emp_id': box.read('id'),
-          'month': month,
-        },
+        {'emp_id': box.read('id'), 'month': month, 'year': year},
       );
 
       print(box.read('id'));

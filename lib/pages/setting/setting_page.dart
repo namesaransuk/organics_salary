@@ -17,7 +17,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     final LogoutController logoutController = Get.put(LogoutController());
     final box = GetStorage();
-    print(box.read('accessa_token'));
+    print(box.read('access_token'));
 
     return Scaffold(
       appBar: AppBar(

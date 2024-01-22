@@ -24,10 +24,10 @@ List listLeave = [
 ];
 
 List listYear = [
-  '2566',
-  '2567',
-  '2568',
-  '2569',
+  '2023',
+  '2024',
+  '2025',
+  '2026',
 ];
 
 List listMonth = [
@@ -1012,6 +1012,14 @@ class _LeaveHistoryState extends State<LeaveHistory> {
   bool isButtonPressed = false;
 
   @override
+  void dispose() {
+    // leaveHistoryList.clear();
+    leaveHistoryController.clearHistory();
+    // Get.delete<LeaveHistoryController>();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
@@ -1316,11 +1324,21 @@ class _LeaveHistoryState extends State<LeaveHistory> {
                     List<String> imagesUrls = [];
 
                     Map<String, dynamic> jsonData = {
-                      "leave_img1": item.leaveImg1,
-                      "leave_img2": item.leaveImg2,
-                      "leave_img3": item.leaveImg3,
-                      "leave_img4": item.leaveImg4,
-                      "leave_img5": item.leaveImg5,
+                      "leave_img1": item.leaveImg1 != null
+                          ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg1}'
+                          : null,
+                      "leave_img2": item.leaveImg2 != null
+                          ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg2}'
+                          : null,
+                      "leave_img3": item.leaveImg3 != null
+                          ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg3}'
+                          : null,
+                      "leave_img4": item.leaveImg4 != null
+                          ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg4}'
+                          : null,
+                      "leave_img5": item.leaveImg5 != null
+                          ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg5}'
+                          : null,
                     };
 
                     jsonData.forEach((key, value) {
@@ -1371,83 +1389,97 @@ class _LeaveHistoryState extends State<LeaveHistory> {
                                               ),
                                             ],
                                           ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              showDialog<String>(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        Dialog(
-                                                  backgroundColor: Colors.white,
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: <Widget>[
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color:
-                                                              AppTheme.ognGreen,
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    25),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    25),
-                                                          ),
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                vertical: 15),
-                                                        child: Center(
-                                                          child: Text(
-                                                            '${item.day} ${listMonth[item.month! - 1]} ${item.year}',
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .white, // สีข้อความ
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
+                                          item.leaveImg1 != null
+                                              ? ElevatedButton(
+                                                  onPressed: () {
+                                                    showDialog<String>(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          Dialog(
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: <Widget>[
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: AppTheme
+                                                                    .ognGreen,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          25),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          25),
+                                                                ),
+                                                              ),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      vertical:
+                                                                          15),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  '${item.day} ${listMonth[item.month! - 1]} ${item.year}',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white, // สีข้อความ
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
+                                                            CarouselGrid(
+                                                              // height: 285,
+                                                              width: double
+                                                                  .infinity,
+                                                              listUrlImages:
+                                                                  imagesUrls,
+                                                              loopCarouselList:
+                                                                  false,
+                                                              iconBack:
+                                                                  const Icon(
+                                                                Icons
+                                                                    .arrow_back,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      vertical:
+                                                                          10),
+                                                              child: TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                        'ปิด'),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
-                                                      CarouselGrid(
-                                                        // height: 285,
-                                                        width: double.infinity,
-                                                        listUrlImages:
-                                                            imagesUrls,
-                                                        loopCarouselList: false,
-                                                        iconBack: const Icon(
-                                                          Icons.arrow_back,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                vertical: 10),
-                                                        child: TextButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          child:
-                                                              const Text('ปิด'),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            child: Text('ดูไฟล์'),
-                                          )
+                                                    );
+                                                  },
+                                                  child: Text('ดูไฟล์'),
+                                                )
+                                              : Container(),
                                         ],
                                       ),
                                       SizedBox(height: 10),

@@ -57,6 +57,11 @@ class LoginController extends GetxController {
           'image',
           loginJSONList.image ?? 'assets/img/user.png',
         );
+        // box.write(
+        //     'image',
+        //     loginJSONList.image != null
+        //         ? '${loginJSONList.image}'
+        //         : 'assets/img/user.png');
         box.write('record_status', loginJSONList.recordStatus);
         box.write('coins', loginJSONList.coins);
         box.write('username', loginJSONList.username);
@@ -64,13 +69,13 @@ class LoginController extends GetxController {
         // box.write('created_at', loginJSONList.createdAt);
         // box.write('updated_at', loginJSONList.updatedAt);
         box.write('pin', '${loginJSONList.pin}');
-        box.write('accessa_token', loginJSONList.accessToken);
+        box.write('access_token', loginJSONList.accessToken);
 
         if (box.read('pin') == 'null' || box.read('pin') == '') {
           Get.offAndToNamed('pinauth');
         } else {
-          Get.offAndToNamed('pin');
-          // Get.offAndToNamed('home');
+          // Get.offAndToNamed('pin');
+          Get.offAndToNamed('home');
         }
       } else {
         alertEmptyData(

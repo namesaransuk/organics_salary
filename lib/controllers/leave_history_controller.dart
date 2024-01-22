@@ -15,7 +15,7 @@ class LeaveHistoryController extends GetxController {
   var connect = Get.find<GetConnect>();
   final id = GetStorage().read('id');
 
-  var leaveHistoryList = RxList<LeaveHistoryModel>();
+  RxList leaveHistoryList = RxList<LeaveHistoryModel>();
   RxString monthName = 'เดือน'.obs;
   RxString yearName = 'ปี'.obs;
   RxString ddMonthName = 'เดือน'.obs;
@@ -49,7 +49,7 @@ class LeaveHistoryController extends GetxController {
     try {
       var response = await connect.post(
         '$baseUrl/employee/empLeave',
-        {'emp_id': box.read('id'), 'month': month},
+        {'emp_id': box.read('id'), 'month': month, 'year': year},
       );
 
       Map<String, dynamic> responseBody = response.body;
@@ -73,6 +73,8 @@ class LeaveHistoryController extends GetxController {
       }
       // }
     } catch (e) {
+      Get.back();
+
       print(e);
       alertEmptyData('แจ้งเตือน', 'เกิดข้อผิดพลาดโปรดลองใหม่อีกครั้งในภายหลัง');
     }
@@ -167,14 +169,21 @@ class LeaveHistoryController extends GetxController {
         return responseBody;
       }
     } catch (e) {
+      Get.back();
       print('Error: $e');
     }
 
     // ในกรณีไม่สามารถส่งข้อมูลได้
+    Get.back();
     return {'statusCode': 'error', 'message': 'Failed to send data'};
   }
 
   void clear() {
+    // leaveHistoryList.clear();
+    // monthName = 'เดือน'.obs;
+    // yearName = 'ปี'.obs;
+    // ddMonthName = 'เดือน'.obs;
+    // ddYearName = 'ปี'.obs;
     selectedLeaveId = 0.obs;
     selectedImages.clear();
     selectedReasonLeave = ''.obs;
@@ -182,6 +191,16 @@ class LeaveHistoryController extends GetxController {
     startTime = ''.obs;
     endDate = ''.obs;
     endTime = ''.obs;
+
+    update();
+  }
+
+  void clearHistory() {
+    leaveHistoryList.clear();
+    monthName = 'เดือน'.obs;
+    yearName = 'ปี'.obs;
+    ddMonthName = 'เดือน'.obs;
+    ddYearName = 'ปี'.obs;
 
     update();
   }
