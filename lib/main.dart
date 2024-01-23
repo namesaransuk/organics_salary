@@ -4,6 +4,7 @@ import 'package:organics_salary/pages/auth/change_pass_page/change_pass_page.dar
 import 'package:organics_salary/pages/auth/login_page/login_page.dart';
 import 'package:organics_salary/pages/auth/pin_page/confirm_pin_auth_page.dart';
 import 'package:organics_salary/pages/auth/register_page.dart';
+import 'package:organics_salary/pages/auth/reset_pass_page/reset_pass_page.dart';
 import 'package:organics_salary/pages/coin/coin_page.dart';
 import 'package:organics_salary/pages/home/check_pin_page.dart';
 import 'package:organics_salary/pages/home/home_page.dart';
@@ -104,6 +105,7 @@ class MyApp extends StatelessWidget {
           GetPage(
               name: '/confirm-pinauth', page: () => const ConfirmPinAuthpage()),
           GetPage(name: '/changepass', page: () => const ChangePassPage()),
+          GetPage(name: '/resetpass', page: () => ResetPasswordPage()),
           GetPage(name: '/setting', page: () => const SettingPage()),
           GetPage(name: '/coin', page: () => CoinPage()),
           GetPage(name: '/time-history', page: () => TimeHistoryPage()),

@@ -122,6 +122,10 @@ class _LoginPageState extends State<LoginPage> {
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 labelText: 'รหัสพนักงาน',
+                labelStyle: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                ),
                 // errorText: empIdError,
                 alignLabelWithHint: true,
                 border: OutlineInputBorder(
@@ -148,6 +152,10 @@ class _LoginPageState extends State<LoginPage> {
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 7, horizontal: 16),
                 labelText: 'รหัสผ่าน',
+                labelStyle: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                ),
                 // errorText: passwordError,
                 alignLabelWithHint: true,
                 border: OutlineInputBorder(
@@ -166,7 +174,9 @@ class _LoginPageState extends State<LoginPage> {
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.toNamed('/resetpass');
+                },
                 child: const Text(
                   'ลืมรหัสผ่าน?',
                   style: TextStyle(
