@@ -17,9 +17,6 @@ class _CoinPageState extends State<CoinPage> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
     CoinRedeemRewardScreen(),
-    // Text(
-    //   'Index 1: Business',
-    // ),
     CoinHistoryScreen(),
   ];
 
