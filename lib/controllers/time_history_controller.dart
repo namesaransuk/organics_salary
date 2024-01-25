@@ -32,13 +32,12 @@ class TimeHistoryController extends GetxController {
         {'emp_id': box.read('id'), 'month': month, 'year': year},
       );
 
-      print(box.read('id'));
-
       // if (response.statusCode == 200) {
       Map<String, dynamic> responseBody = response.body;
       monthName.value = textMonth;
       yearName.value = year;
 
+      Get.back();
       if (responseBody['statusCode'] == '00') {
         var timeHistoryListJSONList = responseBody['empLog'];
 
@@ -52,10 +51,11 @@ class TimeHistoryController extends GetxController {
             RxList<TimeHistoryModel>.of(mappedtimeHistoryList);
 
         timeHistoryList.assignAll(convertedtimeHistoryList);
+
+        Get.toNamed('time-history-month');
       } else {
         print('failed with status code: ${responseBody['statusCode']}');
       }
-      Get.back();
       // } else {
       //   Get.back();
       //   print('Disconnect');

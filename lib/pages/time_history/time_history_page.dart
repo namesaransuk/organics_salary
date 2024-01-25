@@ -18,7 +18,7 @@ class _TimeHistoryPageState extends State<TimeHistoryPage>
     with TickerProviderStateMixin {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
-    TimeHistoryMonthScreen(),
+    TimeHistoryMonthPage(),
     TimeHistoryYearScreen(),
   ];
 
@@ -44,23 +44,24 @@ class _TimeHistoryPageState extends State<TimeHistoryPage>
         backgroundColor: AppTheme.ognGreen,
         foregroundColor: Colors.white,
       ),
-      body: _widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_view_day_outlined),
-            label: 'ประวัติรายเดือน',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_view_month_outlined),
-            label: 'ประวัติรายปี',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: AppTheme.ognGreen,
-        backgroundColor: Colors.white,
-        onTap: _onItemTapped,
-      ),
+      body: TimeHistoryYearScreen(),
+      // body: _widgetOptions.elementAt(_selectedIndex),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.calendar_view_day_outlined),
+      //       label: 'ประวัติรายเดือน',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.calendar_view_month_outlined),
+      //       label: 'ประวัติรายปี',
+      //     ),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   selectedItemColor: AppTheme.ognGreen,
+      //   backgroundColor: Colors.white,
+      //   onTap: _onItemTapped,
+      // ),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {},
       //   tooltip: 'Increment Counter',

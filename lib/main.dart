@@ -13,6 +13,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:organics_salary/pages/auth/pin_page/pin_auth_page.dart';
 import 'package:organics_salary/pages/setting/setting_page.dart';
+import 'package:organics_salary/pages/time_history/time_history_month_screen.dart';
 import 'package:organics_salary/pages/time_history/time_history_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_storage/get_storage.dart';
@@ -109,6 +110,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/setting', page: () => const SettingPage()),
           GetPage(name: '/coin', page: () => CoinPage()),
           GetPage(name: '/time-history', page: () => TimeHistoryPage()),
+          GetPage(name: '/time-history-month', page: () => TimeHistoryMonthPage()),
         ]);
   }
 }

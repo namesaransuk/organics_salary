@@ -4,15 +4,15 @@ import 'package:get/get.dart';
 import 'package:collection/collection.dart';
 import 'package:organics_salary/pages/time_history/innerlist.dart';
 
-class TimeHistoryMonthScreen extends StatefulWidget {
-  const TimeHistoryMonthScreen({super.key});
+class TimeHistoryMonthPage extends StatefulWidget {
+  const TimeHistoryMonthPage({super.key});
 
   @override
-  State<TimeHistoryMonthScreen> createState() => _TimeHistoryMonthScreenState();
+  State<TimeHistoryMonthPage> createState() => _TimeHistoryMonthPageState();
 }
 
-class _TimeHistoryMonthScreenState extends State<TimeHistoryMonthScreen> {
-  // const TimeHistoryMonthScreen({super.key});
+class _TimeHistoryMonthPageState extends State<TimeHistoryMonthPage> {
+  // const TimeHistoryMonthPage({super.key});
   final TimeHistoryController timeHistoryController =
       Get.put(TimeHistoryController());
 
@@ -58,41 +58,51 @@ class _TimeHistoryMonthScreenState extends State<TimeHistoryMonthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Card(
-          // color: AppTheme.ognSoftGreen,
-          shape: RoundedRectangleBorder(
-            // side: BorderSide(
-            //   color: Colors.greenAccent,
-            // ),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(0.0),
-              topRight: Radius.circular(0.0),
-              bottomLeft: Radius.circular(20.0),
-              bottomRight: Radius.circular(20.0),
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'เดือน${timeHistoryController.monthName.value} ${timeHistoryController.yearName.value}',
+          style: TextStyle(
+            fontSize: 16,
           ),
-          margin: EdgeInsets.all(0),
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Obx(
-                  () => Text(
-                    timeHistoryController.monthName.value == 'เดือน' &&
-                            timeHistoryController.yearName.value == 'ปี'
-                        ? 'กรุณาเลือกเดือนและปี'
-                        : '${timeHistoryController.monthName.value} ${timeHistoryController.yearName.value}',
-                    style: TextStyle(
-                        // color: Colors.white,
-                        // fontWeight: FontWeight.bold,
-                        ),
+        ),
+      ),
+      body: ListView(
+        children: [
+          Card(
+            // color: AppTheme.ognSoftGreen,
+            shape: RoundedRectangleBorder(
+              // side: BorderSide(
+              //   color: Colors.greenAccent,
+              // ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(0.0),
+                topRight: Radius.circular(0.0),
+                bottomLeft: Radius.circular(20.0),
+                bottomRight: Radius.circular(20.0),
+              ),
+            ),
+            margin: EdgeInsets.all(0),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Obx(
+                    () => Text(
+                      timeHistoryController.monthName.value == 'เดือน' &&
+                              timeHistoryController.yearName.value == 'ปี'
+                          ? 'กรุณาเลือกเดือนและปี'
+                          : '${timeHistoryController.monthName.value} ${timeHistoryController.yearName.value}',
+                      style: TextStyle(
+                          // color: Colors.white,
+                          // fontWeight: FontWeight.bold,
+                          ),
+                    ),
                   ),
-                ),
-                ElevatedButton(
+                  ElevatedButton(
                     onPressed: () {
                       showModalBottomSheet<void>(
                         showDragHandle: true,
@@ -325,14 +335,14 @@ class _TimeHistoryMonthScreenState extends State<TimeHistoryMonthScreen> {
                                     ElevatedButton(
                                       child: const Text('ตกลง'),
                                       onPressed: () {
-                                        if (sendMonth != 0 &&
-                                            sendYear != 'ปี') {
-                                          timeHistoryController.loadData(
-                                              textMonth, sendMonth, sendYear);
-                                          Get.back();
-                                        } else {
-                                          print('0000000000000');
-                                        }
+                                        // if (sendMonth != 0 &&
+                                        //     sendYear != 'ปี') {
+                                        //   timeHistoryController.loadData(
+                                        //       textMonth, sendMonth, sendYear);
+                                        //   Get.back();
+                                        // } else {
+                                        //   print('0000000000000');
+                                        // }
                                       },
                                     ),
                                   ],
@@ -343,19 +353,21 @@ class _TimeHistoryMonthScreenState extends State<TimeHistoryMonthScreen> {
                         },
                       );
                     },
-                    child: Text('เลือกเดือน/ปี'))
-              ],
+                    child: Text('เลือกเดือน/ปี'),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-        // SizedBox(
-        //   height: 20,
-        // ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
-          child: _buildListTime(),
-        ),
-      ],
+          // SizedBox(
+          //   height: 20,
+          // ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: _buildListTime(),
+          ),
+        ],
+      ),
     );
   }
 
