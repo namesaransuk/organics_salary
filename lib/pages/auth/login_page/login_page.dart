@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Image.asset(
                   'assets/img/organics_legendary.png',
-                  width: 145,
+                  width: 140,
                 ),
               ],
             ),

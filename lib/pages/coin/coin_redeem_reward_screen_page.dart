@@ -563,6 +563,9 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                 ],
               ),
             ),
+            SizedBox(
+              height: 20,
+            )
           ],
         ));
   }

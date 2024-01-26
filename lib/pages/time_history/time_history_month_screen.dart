@@ -3,6 +3,7 @@ import 'package:organics_salary/controllers/time_history_controller.dart';
 import 'package:get/get.dart';
 import 'package:collection/collection.dart';
 import 'package:organics_salary/pages/time_history/innerlist.dart';
+import 'package:organics_salary/theme.dart';
 
 class TimeHistoryMonthPage extends StatefulWidget {
   const TimeHistoryMonthPage({super.key});
@@ -374,8 +375,6 @@ class _TimeHistoryMonthPageState extends State<TimeHistoryMonthPage> {
   Widget _buildListTime() {
     return Obx(() {
       if (timeHistoryController.timeHistoryList.isNotEmpty) {
-        // final groupedData = groupBy(
-        //     timeHistoryController.timeHistoryList, (obj) => obj.pasteDate);
 
         final groupedData = groupBy(
           timeHistoryController.timeHistoryList,
@@ -404,67 +403,78 @@ class _TimeHistoryMonthPageState extends State<TimeHistoryMonthPage> {
                   (hour > 13 && hour < 18);
             });
 
-            return ExpansionTile(
-              title: Text(
-                '${days} ${listMonth[month - 1]} ${year}',
-                style: TextStyle(),
+            return Card(
+              elevation: 2,
+              margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-              collapsedBackgroundColor:
-                  hasRedCard ? Colors.red : Colors.grey.shade100,
-              collapsedTextColor: hasRedCard ? Colors.white : Colors.black,
-              collapsedIconColor: hasRedCard ? Colors.white : Colors.black,
-              iconColor: Colors.black,
-              childrenPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              tilePadding: EdgeInsets.symmetric(horizontal: 25),
-              // subtitle: Text('Trailing expansion arrow icon'),
-              children: timeHistoryList.map((item) {
-                Color cardColor = Colors.grey.shade100;
-                Color textColor = Colors.black;
+              clipBehavior: Clip.antiAlias,
+              child: ExpansionTile(
+                title: Text(
+                  '${days} ${listMonth[month - 1]} ${year}',
+                  style: TextStyle(),
+                ),
+                clipBehavior: Clip.antiAlias,
+                shape: Border.all(color: Colors.transparent),
+                collapsedShape: Border.all(color: Colors.transparent),
+                collapsedBackgroundColor:
+                    hasRedCard ? Colors.red : AppTheme.bgSoftGreen,
+                collapsedTextColor: hasRedCard ? Colors.white : Colors.black,
+                collapsedIconColor: hasRedCard ? Colors.white : Colors.black,
+                iconColor: Colors.black,
+                childrenPadding:
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                tilePadding: EdgeInsets.symmetric(horizontal: 25),
+                // subtitle: Text('Trailing expansion arrow icon'),
+                children: timeHistoryList.map((item) {
+                  Color cardColor = AppTheme.bgSoftGreen;
+                  Color textColor = Colors.black;
 
-                List<String> dateParts = item.pasteDate!.split(' ');
-                List<String> timeParts = dateParts[1].split(':');
-                int intHour = int.parse(timeParts[0]);
-                int intMinute = int.parse(timeParts[1]);
-                String hour = timeParts[0];
-                String minute = timeParts[1];
-                print('test: $intHour $intMinute');
+                  List<String> dateParts = item.pasteDate!.split(' ');
+                  List<String> timeParts = dateParts[1].split(':');
+                  int intHour = int.parse(timeParts[0]);
+                  int intMinute = int.parse(timeParts[1]);
+                  String hour = timeParts[0];
+                  String minute = timeParts[1];
+                  print('test: $intHour $intMinute');
 
-                // เช็คว่าอยู่ในช่วงเวลาที่ต้องการหรือไม่
-                if ((intHour == 8 && intMinute >= 1 && intMinute <= 59) ||
-                    (intHour > 8 && intHour < 12) ||
-                    (intHour == 13 && intMinute >= 1 && intMinute <= 59) ||
-                    (intHour > 13 && intHour < 18)) {
-                  cardColor = Colors.red;
-                  textColor = Colors.white;
-                }
+                  // เช็คว่าอยู่ในช่วงเวลาที่ต้องการหรือไม่
+                  if ((intHour == 8 && intMinute >= 1 && intMinute <= 59) ||
+                      (intHour > 8 && intHour < 12) ||
+                      (intHour == 13 && intMinute >= 1 && intMinute <= 59) ||
+                      (intHour > 13 && intHour < 18)) {
+                    cardColor = Colors.red;
+                    textColor = Colors.white;
+                  }
 
-                return Card(
-                  margin: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-                  color: cardColor,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${item.days} ${listMonth[item.month! - 1]} ${item.year}',
-                          style: TextStyle(
-                            color: textColor,
+                  return Card(
+                    margin: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                    color: cardColor,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${item.days} ${listMonth[item.month! - 1]} ${item.year}',
+                            style: TextStyle(
+                              color: textColor,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'เวลา : ${hour}:${minute}',
-                          style: TextStyle(
-                            color: textColor,
+                          Text(
+                            'เวลา : ${hour}:${minute}',
+                            style: TextStyle(
+                              color: textColor,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              ),
             );
           },
         );

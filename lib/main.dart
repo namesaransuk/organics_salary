@@ -6,6 +6,7 @@ import 'package:organics_salary/pages/auth/pin_page/confirm_pin_auth_page.dart';
 import 'package:organics_salary/pages/auth/register_page.dart';
 import 'package:organics_salary/pages/auth/reset_pass_page/reset_pass_page.dart';
 import 'package:organics_salary/pages/coin/coin_page.dart';
+import 'package:organics_salary/pages/coin/coin_scan_page.dart';
 import 'package:organics_salary/pages/home/check_pin_page.dart';
 import 'package:organics_salary/pages/home/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -109,6 +110,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/resetpass', page: () => ResetPasswordPage()),
           GetPage(name: '/setting', page: () => const SettingPage()),
           GetPage(name: '/coin', page: () => CoinPage()),
+          GetPage(name: '/coin-scan', page: () => CoinScanPage()),
           GetPage(name: '/time-history', page: () => TimeHistoryPage()),
           GetPage(name: '/time-history-month', page: () => TimeHistoryMonthPage()),
         ]);

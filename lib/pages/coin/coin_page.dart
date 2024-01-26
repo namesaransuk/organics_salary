@@ -60,7 +60,9 @@ class _CoinPageState extends State<CoinPage> {
         onTap: _onItemTapped,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Get.toNamed('coin-scan');
+        },
         tooltip: 'Increment Counter',
         child: const Icon(Icons.qr_code_scanner_rounded),
       ),
