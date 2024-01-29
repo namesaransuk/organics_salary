@@ -169,73 +169,145 @@ class _TimeHistoryYearScreenState extends State<TimeHistoryYearScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    children: [
-                      for (int columnIndex = 0; columnIndex < 3; columnIndex++)
-                        Expanded(
-                          child: Column(
-                            children: List.generate(
-                              (listMonth.length / 3).ceil(),
-                              (rowIndex) {
-                                int actualIndex =
-                                    rowIndex * 3 + columnIndex + 1;
-                                if (actualIndex <= listMonth.length) {
-                                  // int datakey = timeHistoryController
-                                  //             .empAttendanceList[rowIndex]
-                                  //         [actualIndex] ??
-                                  //     0;
+                  child: Column(
+                    children:
+                        timeHistoryController.empAttendanceList.map((item) {
+                      return Column(
+                        children: List.generate(4, (rowIndex) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: List.generate(3, (columnIndex) {
+                              int index = rowIndex * 3 + columnIndex;
+                              int monthValue = item['m_${index + 1}'] ?? 0;
 
-                                  // Color color;
-                                  // switch (datakey) {
-                                  //   case 0:
-                                  //     color = Colors.grey; // สีเทา
-                                  //     break;
-                                  //   case 1:
-                                  //     color = Colors.green; // สีเขียว
-                                  //     break;
-                                  //   case 2:
-                                  //     color = Colors.red; // สีแดง
-                                  //     break;
-                                  //   default:
-                                  //     color = Colors.transparent; // สีโปร่งใส
-                                  // }
-
-                                  return InkWell(
-                                    onTap: () {
-                                      if (timeHistoryController
-                                              .ddYearName.value !=
-                                          'ปี') {
-                                        // timeHistoryController.loadData(
-                                        //     listMonth[actualIndex - 1],
-                                        //     actualIndex,
-                                        //     sendYear);
-                                        print(actualIndex);
-                                      }
-                                    },
-                                    child: Card(
-                                      color: Colors.amber,
-                                      child: AspectRatio(
-                                        aspectRatio: 1.0,
-                                        child: Center(
-                                          child: Text(
-                                            listMonth[actualIndex - 1],
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
+                              Color cardColor;
+                              switch (monthValue) {
+                                case 0:
+                                  cardColor = Colors.grey;
+                                  break;
+                                case 1:
+                                  cardColor = Colors.green;
+                                  break;
+                                case 2:
+                                  cardColor = Colors.red;
+                                  break;
+                                default:
+                                  cardColor = Colors.transparent;
+                              }
+                              return Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    if (timeHistoryController
+                                            .ddYearName.value !=
+                                        'ปี') {
+                                      timeHistoryController.loadData(
+                                          listMonth[index],
+                                          index + 1,
+                                          sendYear);
+                                      print(index);
+                                    }
+                                  },
+                                  child: Card(
+                                    color: cardColor,
+                                    child: AspectRatio(
+                                      aspectRatio: 1.0,
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '${listMonth[index]}',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                          ),
+                                            SizedBox(height: 8),
+                                            Text(
+                                              '$monthValue',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
-                                  );
-                                } else {
-                                  return Container();
-                                }
-                              },
-                            ),
-                          ),
-                        ),
-                    ],
+                                  ),
+                                ),
+                              );
+                            }),
+                          );
+                        }),
+                      );
+                    }).toList(),
+
+                    // children: [
+                    // for (int columnIndex = 0; columnIndex < 3; columnIndex++)
+                    //   Expanded(
+                    //     child: Column(
+                    //       children: List.generate(
+                    //         (listMonth.length / 3).ceil(),
+                    //         (rowIndex) {
+                    //           int actualIndex =
+                    //               rowIndex * 3 + columnIndex + 1;
+                    //           if (actualIndex <= listMonth.length) {
+                    //             int value = timeHistoryController
+                    //                         .empAttendanceList[rowIndex]
+                    //                     [actualIndex] ??
+                    //                 0;
+                    //             Color cardColor;
+                    //             switch (value) {
+                    //               case 0:
+                    //                 cardColor = Colors.grey;
+                    //                 break;
+                    //               case 1:
+                    //                 cardColor = Colors.green;
+                    //                 break;
+                    //               case 2:
+                    //                 cardColor = Colors.red;
+                    //                 break;
+                    //               default:
+                    //                 cardColor = Colors.transparent;
+                    //             }
+                    //             return InkWell(
+                    //               onTap: () {
+                    //                 if (timeHistoryController
+                    //                         .ddYearName.value !=
+                    //                     'ปี') {
+                    //                   // timeHistoryController.loadData(
+                    //                   //     listMonth[actualIndex - 1],
+                    //                   //     actualIndex,
+                    //                   //     sendYear);
+                    //                   print(actualIndex);
+                    //                 }
+                    //               },
+                    //               child: Card(
+                    //                 color: cardColor,
+                    //                 child: AspectRatio(
+                    //                   aspectRatio: 1.0,
+                    //                   child: Center(
+                    //                     child: Text(
+                    //                       listMonth[actualIndex - 1],
+                    //                       style: TextStyle(
+                    //                         fontSize: 16,
+                    //                         color: Colors.white,
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //             );
+                    //           } else {
+                    //             return Container();
+                    //           }
+                    //         },
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ],
                   ),
                 ),
               ],

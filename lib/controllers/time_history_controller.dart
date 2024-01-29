@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:organics_salary/controllers/loading_controller.dart';
-import 'package:organics_salary/models/emp_attendance.dart';
+import 'package:organics_salary/models/emp_attendance_model.dart';
 import 'package:organics_salary/models/time_history_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -36,7 +36,7 @@ class TimeHistoryController extends GetxController {
       Get.back();
 
       Map<String, dynamic> responseBody = response.body;
-      print(responseBody['emp_attendance']);
+      // print(responseBody['emp_attendance']);
 
       if (responseBody['statusCode'] == '00') {
         var empAttendanceJSONList = responseBody['emp_attendance'];
@@ -51,7 +51,9 @@ class TimeHistoryController extends GetxController {
             RxList<EmpAttendanceModel>.of(mappedempAttendanceList);
 
         empAttendanceList.assignAll(convertedempAttendanceList);
-        print(empAttendanceList);
+        // convertedempAttendanceList.forEach((empAttendanceModel) {
+        //   print(empAttendanceModel.toJson());
+        // });
       } else {
         print('failed with status code: ${responseBody['statusCode']}');
       }
