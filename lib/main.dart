@@ -112,7 +112,8 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/coin', page: () => CoinPage()),
           GetPage(name: '/coin-scan', page: () => CoinScanPage()),
           GetPage(name: '/time-history', page: () => TimeHistoryPage()),
-          GetPage(name: '/time-history-month', page: () => TimeHistoryMonthPage()),
+          GetPage(
+              name: '/time-history-month', page: () => TimeHistoryMonthPage()),
         ]);
   }
 }

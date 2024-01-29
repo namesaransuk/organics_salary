@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:organics_salary/controllers/time_history_controller.dart';
 import 'package:get/get.dart';
 import 'package:collection/collection.dart';
 import 'package:organics_salary/pages/time_history/innerlist.dart';
+import 'package:organics_salary/theme.dart';
+import 'dart:core';
 
 class TimeHistoryYearScreen extends StatefulWidget {
   const TimeHistoryYearScreen({super.key});
@@ -58,221 +61,265 @@ class _TimeHistoryYearScreenState extends State<TimeHistoryYearScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Card(
-          // color: AppTheme.ognSoftGreen,
-          shape: RoundedRectangleBorder(
-            // side: BorderSide(
-            //   color: Colors.greenAccent,
-            // ),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(0.0),
-              topRight: Radius.circular(0.0),
-              bottomLeft: Radius.circular(20.0),
-              bottomRight: Radius.circular(20.0),
-            ),
-          ),
-          margin: EdgeInsets.all(0),
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Obx(
+      () => timeHistoryController.ddYearName.value != 'ปี'
+          ? ListView(
               children: [
-                Expanded(
+                Card(
+                  // color: AppTheme.ognSoftGreen,
+                  shape: RoundedRectangleBorder(
+                    // side: BorderSide(
+                    //   color: Colors.greenAccent,
+                    // ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(0.0),
+                      topRight: Radius.circular(0.0),
+                      bottomLeft: Radius.circular(20.0),
+                      bottomRight: Radius.circular(20.0),
+                    ),
+                  ),
+                  margin: EdgeInsets.all(0),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        'กรุณาเลือกปี',
-                        // timeHistoryController.yearName.value == 'ปี'
-                        //     ? 'กรุณาเลือกปี'
-                        //     : '${timeHistoryController.yearName.value}',
-                        style: TextStyle(
-                            // color: Colors.white,
-                            // fontWeight: FontWeight.bold,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                'กรุณาเลือกปี',
+                                // timeHistoryController.yearName.value == 'ปี'
+                                //     ? 'กรุณาเลือกปี'
+                                //     : '${timeHistoryController.yearName.value}',
+                                style: TextStyle(
+                                    // color: Colors.white,
+                                    // fontWeight: FontWeight.bold,
+                                    ),
+                              ),
                             ),
-                      ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(5, 0, 95, 0),
+                            child: Obx(
+                              () => DropdownButton<String>(
+                                value: timeHistoryController.ddYearName.value,
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  size: 20,
+                                ),
+                                elevation: 16,
+                                style:
+                                    const TextStyle(color: Colors.deepPurple),
+                                underline: Container(
+                                  height: 1,
+                                  color: AppTheme.ognGreen,
+                                ),
+                                onChanged: (String? value) {
+                                  if (value != null) {
+                                    sendYear = value;
+
+                                    timeHistoryController.getYear(sendYear);
+                                    // if (sendYear != 'ปี') {
+                                    //   timeHistoryController.loadData(
+                                    //       textMonth, sendMonth, sendYear);
+                                    // } else {
+                                    //   print('0000000000000');
+                                    // }
+                                    // Get.back();
+                                  }
+                                },
+                                items: [
+                                  DropdownMenuItem<String>(
+                                    alignment: Alignment.center,
+                                    enabled: false,
+                                    value: 'ปี',
+                                    child: Text(
+                                      'ปี',
+                                      style: const TextStyle(
+                                          color: Colors.black54),
+                                    ),
+                                  ),
+                                  for (final year in listYear)
+                                    DropdownMenuItem<String>(
+                                      alignment: Alignment.center,
+                                      value: year,
+                                      child: Text(
+                                        year,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                ],
+                                dropdownColor: Colors.white,
+                                isExpanded: true,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(5, 0, 65, 0),
-                    child: Obx(
-                      () => DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.grey, width: 1),
-                          borderRadius: BorderRadius.circular(10),
-                          // boxShadow: <BoxShadow>[
-                          //   BoxShadow(
-                          //       color: Color.fromRGBO(0, 0, 0, 0.57), blurRadius: 5)
-                          // ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 10),
-                          child: DropdownButton<String>(
-                            // value: timeHistoryController
-                            //     .yearName.value,
-                            value: timeHistoryController.ddYearName.value,
-                            borderRadius: BorderRadius.circular(20),
-                            items: [
-                              DropdownMenuItem<String>(
-                                enabled: false,
-                                value: 'ปี',
-                                child: Text(
-                                  'ปี',
-                                  style: const TextStyle(color: Colors.black54),
-                                ),
-                              ),
-                              for (final year in listYear)
-                                DropdownMenuItem<String>(
-                                  value: year,
-                                  child: Text(
-                                    year,
-                                    style: const TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                            ],
-                            onChanged: (String? value) {
-                              if (value != null) {
-                                sendYear = value;
-                                          
-                                timeHistoryController.getYear(sendYear);
-                                // if (sendYear != 'ปี') {
-                                //   timeHistoryController.loadData(
-                                //       textMonth, sendMonth, sendYear);
-                                // } else {
-                                //   print('0000000000000');
-                                // }
-                                // Get.back();
-                              }
-                            },
-                            icon: const Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Icon(
-                                Icons.arrow_drop_down,
-                                color: Colors.black,
-                              ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    children: [
+                      for (int columnIndex = 0; columnIndex < 3; columnIndex++)
+                        Expanded(
+                          child: Column(
+                            children: List.generate(
+                              (listMonth.length / 3).ceil(),
+                              (rowIndex) {
+                                int actualIndex =
+                                    rowIndex * 3 + columnIndex + 1;
+                                if (actualIndex <= listMonth.length) {
+                                  // int datakey = timeHistoryController
+                                  //             .empAttendanceList[rowIndex]
+                                  //         [actualIndex] ??
+                                  //     0;
+
+                                  // Color color;
+                                  // switch (datakey) {
+                                  //   case 0:
+                                  //     color = Colors.grey; // สีเทา
+                                  //     break;
+                                  //   case 1:
+                                  //     color = Colors.green; // สีเขียว
+                                  //     break;
+                                  //   case 2:
+                                  //     color = Colors.red; // สีแดง
+                                  //     break;
+                                  //   default:
+                                  //     color = Colors.transparent; // สีโปร่งใส
+                                  // }
+
+                                  return InkWell(
+                                    onTap: () {
+                                      if (timeHistoryController
+                                              .ddYearName.value !=
+                                          'ปี') {
+                                        // timeHistoryController.loadData(
+                                        //     listMonth[actualIndex - 1],
+                                        //     actualIndex,
+                                        //     sendYear);
+                                        print(actualIndex);
+                                      }
+                                    },
+                                    child: Card(
+                                      color: Colors.amber,
+                                      child: AspectRatio(
+                                        aspectRatio: 1.0,
+                                        child: Center(
+                                          child: Text(
+                                            listMonth[actualIndex - 1],
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              },
                             ),
-                            iconEnabledColor: Colors.white,
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 15),
-                            dropdownColor: Colors.white,
-                            underline: Container(),
-                            isExpanded: true,
                           ),
                         ),
-                      ),
-                    ),
+                    ],
                   ),
                 ),
               ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  children:
-                      List.generate((listMonth.length / 3).ceil(), (rowIndex) {
-                    return InkWell(
-                      onTap: () {
-                        int actualIndex = rowIndex * 3 + 1;
-                        timeHistoryController.loadData(
-                            listMonth[rowIndex * 3], actualIndex, sendYear);
-                      },
-                      child: Card(
-                        child: AspectRatio(
-                          aspectRatio: 1.0, // กำหนดสัดส่วน 1:1
-                          child: Center(
-                            child: Text(
-                              listMonth[rowIndex * 3],
-                              style: TextStyle(
-                                fontSize: 16,
+            )
+          : Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'กรุณาเลือกปี',
+                          // timeHistoryController.yearName.value == 'ปี'
+                          //     ? 'กรุณาเลือกปี'
+                          //     : '${timeHistoryController.yearName.value}',
+                          style: TextStyle(
+                              // color: Colors.white,
+                              // fontWeight: FontWeight.bold,
                               ),
-                            ),
-                          ),
                         ),
                       ),
-                    );
-                  }),
-                ),
-              ),
-              SizedBox(width: 5.0),
-              Expanded(
-                child: Column(
-                  children:
-                      List.generate((listMonth.length / 3).ceil(), (rowIndex) {
-                    if (rowIndex * 3 + 1 < listMonth.length) {
-                      return InkWell(
-                        onTap: () {
-                          int actualIndex = rowIndex * 3 + 2;
-                          timeHistoryController.loadData(
-                              listMonth[rowIndex * 3 + 1], actualIndex, sendYear);
-                        },
-                        child: Card(
-                          child: AspectRatio(
-                            aspectRatio: 1.0,
-                            child: Center(
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(5, 0, 115, 0),
+                      child: Obx(
+                        () => DropdownButton<String>(
+                          value: timeHistoryController.ddYearName.value,
+                          icon: const Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            size: 20,
+                          ),
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.deepPurple),
+                          underline: Container(
+                            height: 1,
+                            color: AppTheme.ognGreen,
+                          ),
+                          onChanged: (String? value) {
+                            if (value != null) {
+                              sendYear = value;
+
+                              timeHistoryController.getYear(sendYear);
+                              if (sendYear != 'ปี') {
+                                timeHistoryController.loadStatus();
+                              } else {
+                                print('0000000000000');
+                              }
+                              // Get.back();
+                            }
+                          },
+                          items: [
+                            DropdownMenuItem<String>(
+                              alignment: Alignment.center,
+                              enabled: false,
+                              value: 'ปี',
                               child: Text(
-                                listMonth[rowIndex * 3 + 1],
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
+                                'ปี',
+                                style: const TextStyle(color: Colors.black54),
                               ),
                             ),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return Container(); // หรือ Widget ที่ไม่แสดงอะไรเลย
-                    }
-                  }),
-                ),
-              ),
-              SizedBox(width: 8.0),
-              Expanded(
-                child: Column(
-                  children:
-                      List.generate((listMonth.length / 3).ceil(), (rowIndex) {
-                    if (rowIndex * 3 + 2 < listMonth.length) {
-                      return InkWell(
-                        onTap: () {
-                          int actualIndex = rowIndex * 3 + 3;
-                          timeHistoryController.loadData(
-                              listMonth[rowIndex * 3 + 2], actualIndex, sendYear);
-                        },
-                        child: Card(
-                          child: AspectRatio(
-                            aspectRatio: 1.0,
-                            child: Center(
-                              child: Text(
-                                listMonth[rowIndex * 3 + 2],
-                                style: TextStyle(
-                                  fontSize: 16,
+                            for (final year in listYear)
+                              DropdownMenuItem<String>(
+                                alignment: Alignment.center,
+                                value: year,
+                                child: Text(
+                                  year,
+                                  style: const TextStyle(color: Colors.black),
                                 ),
                               ),
-                            ),
-                          ),
+                          ],
+                          dropdownColor: Colors.white,
+                          isExpanded: true,
                         ),
-                      );
-                    } else {
-                      return Container(); // หรือ Widget ที่ไม่แสดงอะไรเลย
-                    }
-                  }),
-                ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        )
-      ],
+            ),
     );
   }
 

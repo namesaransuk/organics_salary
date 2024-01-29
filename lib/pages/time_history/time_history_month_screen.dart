@@ -375,7 +375,6 @@ class _TimeHistoryMonthPageState extends State<TimeHistoryMonthPage> {
   Widget _buildListTime() {
     return Obx(() {
       if (timeHistoryController.timeHistoryList.isNotEmpty) {
-
         final groupedData = groupBy(
           timeHistoryController.timeHistoryList,
           (obj) => '${obj.days}-${obj.month}-${obj.year}',

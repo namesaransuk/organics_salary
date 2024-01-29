@@ -71,7 +71,7 @@
 //     final payload = receivedAction.payload ?? {};
 //     if (payload["navigate"] == "true") {
 //       MainApp.navigatorKey.currentState?.push(
-//         MaterialPageRoute( 
+//         MaterialPageRoute(
 //           builder: (_) => const SecondScreen(),
 //         ),
 //       );
