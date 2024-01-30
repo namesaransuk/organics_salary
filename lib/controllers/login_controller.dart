@@ -4,6 +4,7 @@ import 'package:organics_salary/controllers/loading_controller.dart';
 import 'package:organics_salary/models/login_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:organics_salary/theme.dart';
 
 class LoginController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
@@ -90,24 +91,37 @@ class LoginController extends GetxController {
   }
 
   void alertEmptyData(BuildContext context, String title, String detail) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          actionsAlignment: MainAxisAlignment.center,
-          backgroundColor: Colors.white,
-          title: Text(title),
-          content: Text(detail),
-          actions: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("ตกลง"),
+    Get.dialog(
+      AlertDialog(
+        clipBehavior: Clip.antiAlias,
+        alignment: Alignment.center,
+        actionsAlignment: MainAxisAlignment.center,
+        backgroundColor: Colors.white,
+        titlePadding: EdgeInsets.zero,
+        title: Container(
+          color: AppTheme.ognGreen,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ],
-        );
-      },
+          ),
+        ),
+        content: Text(detail),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text("ตกลง"),
+          ),
+        ],
+      ),
     );
   }
 }

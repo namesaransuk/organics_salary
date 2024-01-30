@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 
+import 'package:organics_salary/theme.dart';
+
 class LeaveHistoryController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
   final box = GetStorage();
@@ -208,9 +210,25 @@ class LeaveHistoryController extends GetxController {
   void alertEmptyData(String title, String detail) {
     Get.dialog(
       AlertDialog(
+        clipBehavior: Clip.antiAlias,
+        alignment: Alignment.center,
         actionsAlignment: MainAxisAlignment.center,
         backgroundColor: Colors.white,
-        title: Text(title),
+        titlePadding: EdgeInsets.zero,
+        title: Container(
+          color: AppTheme.ognGreen,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
         content: Text(detail),
         actions: <Widget>[
           ElevatedButton(

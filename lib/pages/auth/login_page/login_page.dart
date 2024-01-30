@@ -197,13 +197,8 @@ class _LoginPageState extends State<LoginPage> {
                 if (empId.isNotEmpty && password.isNotEmpty) {
                   loginController.login(context, empId, password);
                 } else {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return alertEmptyData('แจ้งเตือน',
-                          'กรุณากรอกข้อมูลให้ครบถ้วนเพื่อลงชื่อเข้าใช้');
-                    },
-                  );
+                  alertEmptyData('แจ้งเตือน',
+                      'กรุณากรอกข้อมูลให้ครบถ้วนเพื่อลงชื่อเข้าใช้');
                 }
               },
               child: Container(
@@ -256,19 +251,38 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget alertEmptyData(String title, String detail) {
-    return AlertDialog(
-      backgroundColor: Colors.white,
-      title: Text(title),
-      content: Text(detail),
-      actions: <Widget>[
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text("ตกลง"),
+  void alertEmptyData(String title, String detail) {
+    Get.dialog(
+      AlertDialog(
+        clipBehavior: Clip.antiAlias,
+        alignment: Alignment.center,
+        actionsAlignment: MainAxisAlignment.center,
+        backgroundColor: Colors.white,
+        titlePadding: EdgeInsets.zero,
+        title: Container(
+          color: AppTheme.ognGreen,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
-      ],
+        content: Text(detail),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text("ตกลง"),
+          ),
+        ],
+      ),
     );
   }
 }

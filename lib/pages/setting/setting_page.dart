@@ -181,10 +181,26 @@ class _SettingPageState extends State<SettingPage> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            backgroundColor: Colors.white,
-                            title: Text('แจ้งเตือน'),
-                            content: Text('ต้องการออกจากระบบใช่หรือไม่?'),
+                            clipBehavior: Clip.antiAlias,
                             actionsAlignment: MainAxisAlignment.center,
+                            backgroundColor: Colors.white,
+                            titlePadding: EdgeInsets.zero,
+                            title: Container(
+                              color: AppTheme.ognGreen,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 16),
+                              child: Center(
+                                child: Text(
+                                  'แจ้งเตือน',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            content: Text('ต้องการออกจากระบบใช่หรือไม่?'),
                             actions: <Widget>[
                               ElevatedButton(
                                 onPressed: () {

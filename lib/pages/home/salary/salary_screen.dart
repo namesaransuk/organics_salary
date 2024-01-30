@@ -864,13 +864,8 @@ class _SlipRequestState extends State<SlipRequest> {
             onStepContinue: () {
               if (_stepIndex == 0) {
                 if (salaryController.selectedMonths.isEmpty) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return alertEmptyData(
-                          'แจ้งเตือน', 'กรุณาเลือกเดือนที่ต้องการขอสลิป');
-                    },
-                  );
+                  alertEmptyData(
+                      'แจ้งเตือน', 'กรุณาเลือกเดือนที่ต้องการขอสลิป');
                 } else {
                   setState(() {
                     _stepIndex += 1;
@@ -878,13 +873,8 @@ class _SlipRequestState extends State<SlipRequest> {
                 }
               } else if (_stepIndex == 1) {
                 if (salaryController.inputCause.isEmpty) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return alertEmptyData(
-                          'แจ้งเตือน', 'กรุณาระบุสาเหตุที่ต้องการขอสลิป');
-                    },
-                  );
+                  alertEmptyData(
+                      'แจ้งเตือน', 'กรุณาระบุสาเหตุที่ต้องการขอสลิป');
                 } else {
                   setState(() {
                     _stepIndex += 1;
@@ -892,13 +882,7 @@ class _SlipRequestState extends State<SlipRequest> {
                 }
               } else if (_stepIndex == 2) {
                 if (salaryController.usedDate.isEmpty) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return alertEmptyData(
-                          'แจ้งเตือน', 'กรุณาระบุวันที่ต้องการนำไปใช้');
-                    },
-                  );
+                  alertEmptyData('แจ้งเตือน', 'กรุณาระบุวันที่ต้องการนำไปใช้');
                 } else {
                   setState(() {
                     _stepIndex += 1;
@@ -983,22 +967,12 @@ class _SlipRequestState extends State<SlipRequest> {
                                         _stepIndex = 0;
                                       });
 
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return alertEmptyData('แจ้งเตือน',
-                                              'บันทึกคำร้องขอสลิปสำเร็จ อยู่ในระหว่างรอการอนุมัติ');
-                                        },
-                                      );
+                                      alertEmptyData('แจ้งเตือน',
+                                          'บันทึกคำร้องขอสลิปสำเร็จ อยู่ในระหว่างรอการอนุมัติ');
                                     } else {
                                       print('show alert');
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return alertEmptyData('แจ้งเตือน',
-                                              'บันทึกใบลาไม่สำเร็จ ลองใหม่อีกครั้งในภายหลัง');
-                                        },
-                                      );
+                                      alertEmptyData('แจ้งเตือน',
+                                          'บันทึกใบลาไม่สำเร็จ ลองใหม่อีกครั้งในภายหลัง');
                                     }
                                   });
                                 },
@@ -1029,19 +1003,38 @@ class _SlipRequestState extends State<SlipRequest> {
     );
   }
 
-  Widget alertEmptyData(String title, String detail) {
-    return AlertDialog(
-      backgroundColor: Colors.white,
-      title: Text(title),
-      content: Text(detail),
-      actions: <Widget>[
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text("ตกลง"),
+  void alertEmptyData(String title, String detail) {
+    Get.dialog(
+      AlertDialog(
+        clipBehavior: Clip.antiAlias,
+        alignment: Alignment.center,
+        actionsAlignment: MainAxisAlignment.center,
+        backgroundColor: Colors.white,
+        titlePadding: EdgeInsets.zero,
+        title: Container(
+          color: AppTheme.ognGreen,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
-      ],
+        content: Text(detail),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text("ตกลง"),
+          ),
+        ],
+      ),
     );
   }
 
@@ -1074,6 +1067,7 @@ class _SlipRequestState extends State<SlipRequest> {
                           salaryController.checkedMonths[index] = value;
                           if (value) {
                             salaryController.selectedMonths.add(index + 1);
+                            salaryController.selectedMonths.sort();
                           } else {
                             salaryController.selectedMonths.remove(index + 1);
                           }
@@ -1196,7 +1190,7 @@ class _SlipRequestState extends State<SlipRequest> {
         monthNames.add(listMonth[index - 1]);
         resultMonthNames = monthNames.join(', ');
       } else {
-        monthNames.add('Invalid Index');
+        monthNames.add('');
       }
     }
 

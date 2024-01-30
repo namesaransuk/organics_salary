@@ -88,7 +88,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme: GoogleFonts.promptTextTheme(),
         ),
-        // initialRoute: !isLogged ? '/login' : '/',
+        // initialRoute: '/login',
         initialRoute: !isLogged
             ? '/login'
             : apppin == 'null' || apppin == ''
@@ -106,7 +106,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/pinauth', page: () => const PinAuthPage()),
           GetPage(
               name: '/confirm-pinauth', page: () => const ConfirmPinAuthpage()),
-          GetPage(name: '/changepass', page: () => const ChangePassPage()),
+          GetPage(name: '/changepass', page: () => ChangePassPage()),
           GetPage(name: '/resetpass', page: () => ResetPasswordPage()),
           GetPage(name: '/setting', page: () => const SettingPage()),
           GetPage(name: '/coin', page: () => CoinPage()),

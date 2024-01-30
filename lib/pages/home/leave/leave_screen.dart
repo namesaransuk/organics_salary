@@ -233,12 +233,7 @@ class _LeaveReportState extends State<LeaveReport> {
         onStepContinue: () {
           if (_stepIndex == 0) {
             if (leaveHistoryController.selectedLeaveId == 0) {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return alertEmptyData('แจ้งเตือน', 'กรุณาเลือกประเภทการลา');
-                },
-              );
+              alertEmptyData('แจ้งเตือน', 'กรุณาเลือกประเภทการลา');
             } else {
               setState(() {
                 _stepIndex += 1;
@@ -246,12 +241,7 @@ class _LeaveReportState extends State<LeaveReport> {
             }
           } else if (_stepIndex == 1) {
             if (leaveHistoryController.selectedReasonLeave.isEmpty) {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return alertEmptyData('แจ้งเตือน', 'กรุณาระบุเหตุผลการลา');
-                },
-              );
+              alertEmptyData('แจ้งเตือน', 'กรุณาระบุเหตุผลการลา');
             } else {
               setState(() {
                 _stepIndex += 1;
@@ -262,13 +252,7 @@ class _LeaveReportState extends State<LeaveReport> {
                 leaveHistoryController.startTime.isEmpty ||
                 leaveHistoryController.endDate.isEmpty ||
                 leaveHistoryController.endTime.isEmpty) {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return alertEmptyData(
-                      'แจ้งเตือน', 'กรุณาระบุวันที่ต้องการนำไปใช้');
-                },
-              );
+              alertEmptyData('แจ้งเตือน', 'กรุณาระบุวันที่ต้องการนำไปใช้');
             } else {
               setState(() {
                 _stepIndex += 1;
@@ -357,22 +341,12 @@ class _LeaveReportState extends State<LeaveReport> {
                                     _stepIndex = 0;
                                   });
 
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return alertEmptyData('แจ้งเตือน',
-                                          'บันทึกใบลาสำเร็จ อยู่ในระหว่างรอการอนุมัติ');
-                                    },
-                                  );
+                                  alertEmptyData('แจ้งเตือน',
+                                      'บันทึกใบลาสำเร็จ อยู่ในระหว่างรอการอนุมัติ');
                                 } else {
                                   print('show alert');
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return alertEmptyData('แจ้งเตือน',
-                                          'บันทึกใบลาไม่สำเร็จ ลองใหม่อีกครั้งในภายหลัง');
-                                    },
-                                  );
+                                  alertEmptyData('แจ้งเตือน',
+                                      'บันทึกใบลาไม่สำเร็จ ลองใหม่อีกครั้งในภายหลัง');
                                 }
                               });
                             },
@@ -456,19 +430,38 @@ class _LeaveReportState extends State<LeaveReport> {
         });
   }
 
-  Widget alertEmptyData(String title, String detail) {
-    return AlertDialog(
-      backgroundColor: Colors.white,
-      title: Text(title),
-      content: Text(detail),
-      actions: <Widget>[
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text("ตกลง"),
+  void alertEmptyData(String title, String detail) {
+    Get.dialog(
+      AlertDialog(
+        clipBehavior: Clip.antiAlias,
+        alignment: Alignment.center,
+        actionsAlignment: MainAxisAlignment.center,
+        backgroundColor: Colors.white,
+        titlePadding: EdgeInsets.zero,
+        title: Container(
+          color: AppTheme.ognGreen,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
-      ],
+        content: Text(detail),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text("ตกลง"),
+          ),
+        ],
+      ),
     );
   }
 

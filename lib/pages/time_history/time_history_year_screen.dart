@@ -126,12 +126,11 @@ class _TimeHistoryYearScreenState extends State<TimeHistoryYearScreen> {
                                     sendYear = value;
 
                                     timeHistoryController.getYear(sendYear);
-                                    // if (sendYear != 'ปี') {
-                                    //   timeHistoryController.loadData(
-                                    //       textMonth, sendMonth, sendYear);
-                                    // } else {
-                                    //   print('0000000000000');
-                                    // }
+                                    if (sendYear != 'ปี') {
+                                      timeHistoryController.loadStatus();
+                                    } else {
+                                      print('0000000000000');
+                                    }
                                     // Get.back();
                                   }
                                 },
@@ -180,58 +179,72 @@ class _TimeHistoryYearScreenState extends State<TimeHistoryYearScreen> {
                               int index = rowIndex * 3 + columnIndex;
                               int monthValue = item['m_${index + 1}'] ?? 0;
 
+                              Color borderCardColor;
                               Color cardColor;
+                              Color textColor;
                               switch (monthValue) {
                                 case 0:
-                                  cardColor = Colors.grey;
+                                  borderCardColor =
+                                      Color.fromARGB(255, 214, 214, 214);
+                                  cardColor =
+                                      Color.fromARGB(255, 214, 214, 214);
+                                  textColor = Colors.white;
                                   break;
                                 case 1:
-                                  cardColor = Colors.green;
+                                  borderCardColor =
+                                      Color.fromARGB(255, 47, 170, 109);
+                                  cardColor = Colors.white;
+                                  textColor = Color.fromARGB(255, 47, 170, 109);
                                   break;
                                 case 2:
-                                  cardColor = Colors.red;
+                                  borderCardColor = Colors.redAccent.shade400;
+                                  cardColor = Colors.white;
+                                  textColor = Colors.redAccent.shade400;
                                   break;
                                 default:
-                                  cardColor = Colors.transparent;
+                                  borderCardColor =
+                                      Color.fromARGB(255, 214, 214, 214);
+                                  cardColor =
+                                      Color.fromARGB(255, 214, 214, 214);
+                                  textColor = Colors.white;
                               }
                               return Expanded(
                                 child: InkWell(
                                   onTap: () {
                                     if (timeHistoryController
-                                            .ddYearName.value !=
-                                        'ปี') {
+                                                .ddYearName.value !=
+                                            'ปี' &&
+                                        monthValue != 0) {
                                       timeHistoryController.loadData(
                                           listMonth[index],
                                           index + 1,
                                           sendYear);
                                       print(index);
+                                    } else {
+                                      alertEmptyData('แจ้งเตือน',
+                                          'ไม่สามารถดูประวัติการลงเวลาของเดือนนี้ได้ หรือยังไม่มีข้อมูลในเดือนนี้');
                                     }
                                   },
                                   child: Card(
+                                    clipBehavior: Clip.antiAlias,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        color: borderCardColor,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(16.0),
+                                    ),
                                     color: cardColor,
                                     child: AspectRatio(
                                       aspectRatio: 1.0,
                                       child: Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '${listMonth[index]}',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(
-                                              '$monthValue',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ],
+                                        child: Text(
+                                          '${listMonth[index]}',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                            color: textColor,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -310,6 +323,51 @@ class _TimeHistoryYearScreenState extends State<TimeHistoryYearScreen> {
                     // ],
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.fiber_manual_record_rounded,
+                            color: Color.fromARGB(255, 47, 170, 109),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text('เดือนที่ไม่ได้ขาด ลา มาสาย')
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.fiber_manual_record_rounded,
+                            color: Colors.redAccent.shade400,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text('เดือนที่มีการขาด ลา มาสาย')
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.fiber_manual_record_rounded,
+                            color: Color.fromARGB(255, 214, 214, 214),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text('ยังไม่มีข้อมูลการลงเวลาเข้างานในเดือนนั้น')
+                        ],
+                      )
+                    ],
+                  ),
+                ),
               ],
             )
           : Center(
@@ -383,6 +441,7 @@ class _TimeHistoryYearScreenState extends State<TimeHistoryYearScreen> {
                                 ),
                               ),
                           ],
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
                           dropdownColor: Colors.white,
                           isExpanded: true,
                         ),
@@ -505,5 +564,40 @@ class _TimeHistoryYearScreenState extends State<TimeHistoryYearScreen> {
         );
       }
     });
+  }
+
+  void alertEmptyData(String title, String detail) {
+    Get.dialog(
+      AlertDialog(
+        clipBehavior: Clip.antiAlias,
+        alignment: Alignment.center,
+        actionsAlignment: MainAxisAlignment.center,
+        backgroundColor: Colors.white,
+        titlePadding: EdgeInsets.zero,
+        title: Container(
+          color: AppTheme.ognGreen,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        content: Text(detail),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text("ตกลง"),
+          ),
+        ],
+      ),
+    );
   }
 }

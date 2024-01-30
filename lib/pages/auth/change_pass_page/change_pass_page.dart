@@ -2,154 +2,180 @@ import 'package:flutter/material.dart';
 import 'package:organics_salary/theme.dart';
 
 class ChangePassPage extends StatelessWidget {
-  const ChangePassPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Image.asset(
-                'assets/img/reset-password.png',
-                width: 150,
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Card(
-              surfaceTintColor: AppTheme.bgSoftGreen,
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppTheme.ognGreen,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12.0),
-                        topRight: Radius.circular(12.0),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.black38,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+      ),
+      body: Container(
+        padding: EdgeInsets.only(top: 60, left: 40, right: 40),
+        color: Colors.white,
+        child: ListView(
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        width: 200,
+                        height: 200,
+                        child: Image.asset("assets/img/reset-password.png"),
                       ),
-                    ),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Text(
+                        "เปลี่ยนรหัสผ่าน?",
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "โปรดกรอกข้อมูลให้ครบเพื่อยืนยันตัวตนในการเปลี่ยนรหัสผ่าน",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  width: double.infinity,
+                  child: Column(
+                    children: <Widget>[
+                      TextField(
+                        obscureText: true,
+                        // onChanged: (value) => setState(() {
+                        //   password = value;
+                        // }),
+                        // onSubmitted: (val) => submit(),
+                        decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 7, horizontal: 16),
+                          labelText: "รหัสผ่านเก่า",
+                          labelStyle: TextStyle(
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          // errorText: passwordError,
+                          alignLabelWithHint: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: AppTheme.ognGreen),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                      Divider(
+                        height: 40,
+                      ),
+                      TextField(
+                        obscureText: true,
+                        // onChanged: (value) => setState(() {
+                        //   password = value;
+                        // }),
+                        // onSubmitted: (val) => submit(),
+                        decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 7, horizontal: 16),
+                          labelText: "รหัสผ่านใหม่",
+                          labelStyle: TextStyle(
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          // errorText: passwordError,
+                          alignLabelWithHint: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: AppTheme.ognGreen),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextField(
+                        obscureText: true,
+                        // onChanged: (value) => setState(() {
+                        //   password = value;
+                        // }),
+                        // onSubmitted: (val) => submit(),
+                        decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 7, horizontal: 16),
+                          labelText: "ยืนยันรหัสผ่านใหม่",
+                          labelStyle: TextStyle(
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          // errorText: passwordError,
+                          alignLabelWithHint: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: AppTheme.ognGreen),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ElevatedButton(
                         child: Text(
-                          'เปลี่ยนแปลงรหัสผ่าน',
+                          "ตรวจสอบ",
                           style: TextStyle(
-                            fontSize: 18.0,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            // color: Colors.white,
                           ),
+                          textAlign: TextAlign.center,
                         ),
+                        onPressed: () {},
                       ),
-                    ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Column(
-                      children: [
-                        TextField(
-                          onChanged: (value) {
-                            // setState(() {
-                            //   empId = value;
-                            // });
-                          },
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 16),
-                            labelText: 'รหัสผ่านเดิม',
-                            // errorText: empIdError,
-                            alignLabelWithHint: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(color: AppTheme.ognGreen),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                        Divider(
-                          height: 50,
-                        ),
-                        TextField(
-                          onChanged: (value) {
-                            // setState(() {
-                            //   empId = value;
-                            // });
-                          },
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 16),
-                            labelText: 'รหัสผ่านใหม่',
-                            // errorText: empIdError,
-                            alignLabelWithHint: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(color: AppTheme.ognGreen),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        TextField(
-                          onChanged: (value) {
-                            // setState(() {
-                            //   empId = value;
-                            // });
-                          },
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 16),
-                            labelText: 'ยืนยันรหัสผ่านใหม่',
-                            // errorText: empIdError,
-                            alignLabelWithHint: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(color: AppTheme.ognGreen),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        ElevatedButton(
-                            onPressed: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('ยืนยัน'),
-                            ))
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                )
+              ],
+            )
           ],
         ),
       ),

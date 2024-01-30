@@ -70,6 +70,8 @@ class _CheckPinPageState extends State<CheckPinPage> {
 
   @override
   Widget build(BuildContext context) {
+  print(storedPin);
+
     return Scaffold(
       backgroundColor: AppTheme.ognGreen,
       body: SafeArea(

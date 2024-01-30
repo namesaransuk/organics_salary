@@ -5,6 +5,7 @@ import 'package:organics_salary/controllers/loading_controller.dart';
 import 'package:organics_salary/models/emp_attendance_model.dart';
 import 'package:organics_salary/models/time_history_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:organics_salary/theme.dart';
 
 class TimeHistoryController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
@@ -32,7 +33,10 @@ class TimeHistoryController extends GetxController {
     // Get.back();
     try {
       var response = await connect.post(
-          '$baseUrl/employee/attendance/by/month/year', null);
+        '$baseUrl/employee/attendance/by/month/year',
+        // {'emp_id': box.read('id') 'year': year},
+        null,
+      );
       Get.back();
 
       Map<String, dynamic> responseBody = response.body;
@@ -111,9 +115,25 @@ class TimeHistoryController extends GetxController {
   void alertEmptyData(String title, String detail) {
     Get.dialog(
       AlertDialog(
+        clipBehavior: Clip.antiAlias,
+        alignment: Alignment.center,
         actionsAlignment: MainAxisAlignment.center,
         backgroundColor: Colors.white,
-        title: Text(title),
+        titlePadding: EdgeInsets.zero,
+        title: Container(
+          color: AppTheme.ognGreen,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
         content: Text(detail),
         actions: <Widget>[
           ElevatedButton(
