@@ -48,13 +48,17 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final box = GetStorage();
 
+    List<String> parts = box.read('access_token').split('|');
+    String number = parts[0];
+    print('Number: $number');
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          color: AppTheme.ognSoftGreen,
+          color: AppTheme.ognGreen,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 30),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,7 +108,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
         Stack(
           children: [
             Container(
-              color: AppTheme.ognSoftGreen,
+              color: AppTheme.ognGreen,
               height: 200,
             ),
             Container(

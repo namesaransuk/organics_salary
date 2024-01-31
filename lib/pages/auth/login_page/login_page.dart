@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:organics_salary/controllers/login_controller.dart';
 import 'package:organics_salary/theme.dart';
 
@@ -70,6 +71,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    final box = GetStorage();
+    print(box.read('token'));
 
     return Scaffold(
       backgroundColor: Colors.white,

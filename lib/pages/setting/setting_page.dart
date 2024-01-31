@@ -32,206 +32,229 @@ class _SettingPageState extends State<SettingPage> {
         ),
         centerTitle: true,
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(0.0),
-            child: ClipRRect(
-              // borderRadius: BorderRadius.circular(20),
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: 20,
-                ),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/img/bggreen.jpg'),
-                    fit: BoxFit.cover,
+      body: Container(
+        // decoration: BoxDecoration(
+        //   image: DecorationImage(
+        //     image: AssetImage('assets/img/bggreen.jpg'),
+        //     fit: BoxFit.fitHeight,
+        //     colorFilter: ColorFilter.mode(
+        //       Colors.transparent.withOpacity(0.7),
+        //       BlendMode.dstATop,
+        //     ),
+        //   ),
+          // color: AppTheme.ognSoftGreen,
+          // borderRadius: BorderRadius.circular(20),
+        // ),
+        child: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: ClipRRect(
+                // borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 20,
                   ),
-                  // color: AppTheme.ognSoftGreen,
-                  // borderRadius: BorderRadius.circular(20),
-                ),
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    ClipOval(
-                      child: Container(
-                        color: Colors.white,
-                        child: box.read('image').startsWith('http') ||
-                                box.read('image').startsWith('https')
-                            ? Image.network(
-                                '${box.read('image')}',
-                                width: MediaQuery.of(context).size.width * 0.3,
-                              )
-                            : Image.asset(
-                                '${box.read('image')}',
-                                width: MediaQuery.of(context).size.width * 0.3,
-                              ),
+                  decoration: BoxDecoration(
+                    // image: DecorationImage(
+                    //   image: AssetImage('assets/img/bggreen.jpg'),
+                    //   fit: BoxFit.fitHeight,
+                    //   colorFilter: ColorFilter.mode(
+                    //     Colors.transparent.withOpacity(0.8),
+                    //     BlendMode.dstATop,
+                    //   ),
+                    // ),
+                    color: AppTheme.ognGreen,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(40.0),
+                      bottomRight: Radius.circular(40.0),
+                    ),
+                  ),
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      ClipOval(
+                        child: Container(
+                          color: Colors.white,
+                          child: box.read('image').startsWith('http') ||
+                                  box.read('image').startsWith('https')
+                              ? Image.network(
+                                  '${box.read('image')}',
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
+                                )
+                              : Image.asset(
+                                  '${box.read('image')}',
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
+                                ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '${box.read('f_name')} ${box.read('l_name')}',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.white),
-                    ),
-                    Text(
-                      'รหัสพนักงาน : ${box.read('employee_code')}',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      'แผนก : ${box.read('position_name_th')}',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    const SizedBox(height: 20),
+                      const SizedBox(height: 10),
+                      Text(
+                        '${box.read('f_name')} ${box.read('l_name')}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.white),
+                      ),
+                      Text(
+                        'รหัสพนักงาน : ${box.read('employee_code')}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        'แผนก : ${box.read('position_name_th')}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      const SizedBox(height: 20),
 
-                    /// -- BUTTON
-                    SizedBox(
-                      width: 170,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Get.toNamed('/changepass');
-                        },
-                        style: ElevatedButton.styleFrom(
-                            // backgroundColor: tPrimaryColor,
-                            side: BorderSide.none,
-                            shape: const StadiumBorder()),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.password_rounded,
-                                size: 18.0, color: AppTheme.ognGreen),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'เปลี่ยนรหัสผ่าน',
-                            ),
-                          ],
+                      /// -- BUTTON
+                      SizedBox(
+                        width: 170,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Get.toNamed('/changepass');
+                          },
+                          style: ElevatedButton.styleFrom(
+                              // backgroundColor: tPrimaryColor,
+                              side: BorderSide.none,
+                              shape: const StadiumBorder()),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.password_rounded,
+                                  size: 18.0, color: AppTheme.ognGreen),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'เปลี่ยนรหัสผ่าน',
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 170,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Get.toNamed('/pinauth');
-                        },
-                        style: ElevatedButton.styleFrom(
-                            // backgroundColor: tPrimaryColor,
-                            side: BorderSide.none,
-                            shape: const StadiumBorder()),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.pin,
-                                size: 18.0, color: AppTheme.ognGreen),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'เปลี่ยนรหัส PIN',
-                            ),
-                          ],
+                      SizedBox(
+                        width: 170,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Get.toNamed('/pinauth');
+                          },
+                          style: ElevatedButton.styleFrom(
+                              // backgroundColor: tPrimaryColor,
+                              side: BorderSide.none,
+                              shape: const StadiumBorder()),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.pin,
+                                  size: 18.0, color: AppTheme.ognGreen),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'เปลี่ยนรหัส PIN',
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10,
-            ),
-            child: Column(
-              children: [
-                /// -- MENU
-                ProfileMenuWidget(
-                    title: "การแจ้งเตือน",
-                    icon: Icons.notifications_active_rounded,
-                    onPress: () {}),
-                const SizedBox(height: 2),
-                ProfileMenuWidget(
-                    title: "เว็ปไซต์บริษัท",
-                    icon: Icons.home_work_rounded,
-                    onPress: () {
-                      _open('https://www.organicscosme.com');
-                    }),
-                const SizedBox(height: 2),
-                ProfileMenuWidget(
-                    title: "เฟสบุ๊คบริษัท",
-                    icon: Icons.facebook_rounded,
-                    onPress: () {
-                      _open('https://www.facebook.com/organicscosme/');
-                    }),
-                const SizedBox(height: 5),
-                _bildDivider(),
-                const SizedBox(height: 5),
-                ProfileMenuWidget(
-                    title: "ออกจากระบบ",
-                    icon: Icons.exit_to_app,
-                    textColor: Colors.red,
-                    endIcon: false,
-                    onPress: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            clipBehavior: Clip.antiAlias,
-                            actionsAlignment: MainAxisAlignment.center,
-                            backgroundColor: Colors.white,
-                            titlePadding: EdgeInsets.zero,
-                            title: Container(
-                              color: AppTheme.ognGreen,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 16),
-                              child: Center(
-                                child: Text(
-                                  'แจ้งเตือน',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+            const SizedBox(height: 20),
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
+              child: Column(
+                children: [
+                  /// -- MENU
+                  ProfileMenuWidget(
+                      title: "การแจ้งเตือน",
+                      icon: Icons.notifications_active_rounded,
+                      onPress: () {}),
+                  const SizedBox(height: 2),
+                  ProfileMenuWidget(
+                      title: "เว็ปไซต์บริษัท",
+                      icon: Icons.home_work_rounded,
+                      onPress: () {
+                        _open('https://www.organicscosme.com');
+                      }),
+                  const SizedBox(height: 2),
+                  ProfileMenuWidget(
+                      title: "เฟสบุ๊คบริษัท",
+                      icon: Icons.facebook_rounded,
+                      onPress: () {
+                        _open('https://www.facebook.com/organicscosme/');
+                      }),
+                  const SizedBox(height: 5),
+                  _bildDivider(),
+                  const SizedBox(height: 5),
+                  ProfileMenuWidget(
+                      title: "ออกจากระบบ",
+                      icon: Icons.exit_to_app,
+                      textColor: Colors.red,
+                      endIcon: false,
+                      onPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              clipBehavior: Clip.antiAlias,
+                              actionsAlignment: MainAxisAlignment.center,
+                              backgroundColor: Colors.white,
+                              titlePadding: EdgeInsets.zero,
+                              title: Container(
+                                color: AppTheme.ognGreen,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 16),
+                                child: Center(
+                                  child: Text(
+                                    'แจ้งเตือน',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            content: Text('ต้องการออกจากระบบใช่หรือไม่?'),
-                            actions: <Widget>[
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text("ยกเลิก"),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  // box.erase();
-                                  // Get.offAllNamed('/login');
-                                  logoutController.logout();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppTheme.ognGreen,
+                              content: Text('ต้องการออกจากระบบใช่หรือไม่?'),
+                              actions: <Widget>[
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("ยกเลิก"),
                                 ),
-                                child: Text(
-                                  "ตกลง",
-                                  style: TextStyle(color: Colors.white),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    // box.erase();
+                                    // Get.offAllNamed('/login');
+                                    logoutController.logout();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppTheme.ognGreen,
+                                  ),
+                                  child: Text(
+                                    "ตกลง",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }),
-              ],
+                              ],
+                            );
+                          },
+                        );
+                      }),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 10),
-        ],
+            const SizedBox(height: 10),
+          ],
+        ),
       ),
     );
   }

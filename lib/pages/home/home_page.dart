@@ -58,13 +58,13 @@ class _HomePageState extends State<HomePage> {
       appBar: shouldShowAppBar
           ? _selectedIndex == 0
               ? AppBar(
-                  title: Text(
-                    'ข้อมูลส่วนตัว',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  // title: Text(
+                  //   'ข้อมูลส่วนตัว',
+                  //   style: TextStyle(
+                  //     fontSize: 18,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
                   actions: <Widget>[
                     IconButton(
                       icon: Icon(

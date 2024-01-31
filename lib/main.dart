@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:organics_salary/controllers/token_controller.dart';
 import 'package:organics_salary/pages/auth/change_pass_page/change_pass_page.dart';
 import 'package:organics_salary/pages/auth/login_page/login_page.dart';
 import 'package:organics_salary/pages/auth/pin_page/confirm_pin_auth_page.dart';
@@ -47,7 +48,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final box = GetStorage();
-    var isLogged = box.read('isLogged') ?? false;
+    final TokenController tokenController = Get.put(TokenController());
+
+    tokenController.checkToken();
+    var isLogged = tokenController.status;
+    if (!isLogged) {
+      GetStorage().erase();
+    }
+
     var apppin = box.read('pin');
 
     return GetMaterialApp(

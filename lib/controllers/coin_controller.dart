@@ -47,7 +47,7 @@ class CoinController extends GetxController {
           },
         ];
         break;
-      case 1:
+      case 2:
         response = [
           {
             'id': '1',
