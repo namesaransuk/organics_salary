@@ -27,7 +27,7 @@ class TimeHistoryController extends GetxController {
     ddYearName.value = yName;
   }
 
-  void loadStatus() async {
+  void loadStatus(String year) async {
     loadingController.dialogLoading();
 
     // Get.back();

@@ -46,25 +46,32 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildBottomBarScaffold() {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       // backgroundColor: Colors.white,
       // appBar: AppBar(
       // elevation: 20,
       // title: const Text('GoogleNavBar'),
       // ),
       extendBody: true,
-      backgroundColor: _selectedIndex == 0
-          ? AppTheme.bgSoftGreen
-          : Color.fromARGB(255, 245, 245, 245),
+      backgroundColor: Colors.white,
+      // backgroundColor: _selectedIndex == 0
+      //     ? AppTheme.bgSoftGreen
+      //     : Color.fromARGB(255, 245, 245, 245),
       appBar: shouldShowAppBar
           ? _selectedIndex == 0
               ? AppBar(
-                  // title: Text(
-                  //   'ข้อมูลส่วนตัว',
-                  //   style: TextStyle(
-                  //     fontSize: 18,
-                  //     fontWeight: FontWeight.bold,
-                  //   ),
+                  // systemOverlayStyle: SystemUiOverlayStyle(
+                  //   // statusBarColor: AppTheme.ognSoftGreen,
+                  //   statusBarColor: Colors.white,
+                  //   statusBarIconBrightness: Brightness.dark,
                   // ),
+                  title: Text(
+                    'ข้อมูลส่วนตัว',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   actions: <Widget>[
                     IconButton(
                       icon: Icon(

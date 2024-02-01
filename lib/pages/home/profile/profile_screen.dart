@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:organics_salary/theme.dart';
+import 'package:flutter/services.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -52,13 +53,14 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
     String number = parts[0];
     print('Number: $number');
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          color: AppTheme.ognGreen,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+    return Container(
+      // color: AppTheme.bgSoftGreen,
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 30),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -67,16 +69,19 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${box.read('f_name')} ${box.read('l_name')}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall
-                            ?.copyWith(color: Colors.white)),
-                    Text(box.read('company_name_th'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(color: Colors.white54)),
+                    Text(
+                      '${box.read('f_name')} ${box.read('l_name')}',
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                              // color: Colors.white,
+                              ),
+                    ),
+                    Text(
+                      box.read('company_name_th'),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          // color: Colors.white54,
+                          ),
+                    ),
                   ],
                 ),
                 ClipOval(
@@ -104,59 +109,107 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
               ],
             ),
           ),
-        ),
-        Stack(
-          children: [
-            Container(
-              color: AppTheme.ognGreen,
-              height: 200,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  // color: Color.fromARGB(255, 245, 245, 245),
-                  color: AppTheme.bgSoftGreen,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
+          Stack(
+            children: [
+              // Container(
+              //   // color: AppTheme.ognSoftGreen,
+              //   color: Colors.white,
+              //   height: 200,
+              // ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
+                child: Card(
+                        color: AppTheme.ognGreen,
+                  elevation: 5,
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Center(
+                          child: Text(
+                            'สถิติการมาทำงาน',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        color: AppTheme.bgSoftGreen,
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: GridView.count(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 40,
+                            mainAxisSpacing: 30,
+                            children: [
+                              itemDashboard('ลาป่วย / วัน', '0'),
+                              itemDashboard('ลากิจ / วัน', '0'),
+                              itemDashboard('ลาพักร้อน / วัน', '0'),
+                              itemDashboard('มาสาย / ครั้ง', '0'),
+                              itemDashboard('ลาอื่นๆ / วัน', '0'),
+                              itemDashboard('การมาทำงาน', '100%'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromARGB(255, 45, 45, 45).withOpacity(0.2),
-                      // spreadRadius: 0.1,
-                      blurRadius: 5,
-                      offset: Offset(0, -5),
-                    ),
-                  ]),
-              child: Padding(
-                // padding: const EdgeInsets.all(12.0),
-                padding: EdgeInsets.fromLTRB(40, 40, 40, 40),
-                child: GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 40,
-                  mainAxisSpacing: 30,
-                  children: [
-                    itemDashboard('ลาป่วย / วัน', '0'),
-                    itemDashboard('ลากิจ / วัน', '0'),
-                    itemDashboard('ลาพักร้อน / วัน', '0'),
-                    itemDashboard('มาสาย / ครั้ง', '0'),
-                    itemDashboard('ลาอื่นๆ / วัน', '0'),
-                    itemDashboard('การมาทำงาน', '100%'),
-                  ],
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+              // Container(
+              //   decoration: BoxDecoration(
+              //       // color: AppTheme.bgSoftGreen,
+              //       color: Colors.grey[400],
+              //       borderRadius: BorderRadius.only(
+              //         topLeft: Radius.circular(40),
+              //         topRight: Radius.circular(40),
+              //       ),
+              //       boxShadow: [
+              //         BoxShadow(
+              //           color: Color.fromARGB(255, 45, 45, 45).withOpacity(0.2),
+              //           // spreadRadius: 0.1,
+              //           blurRadius: 5,
+              //           offset: Offset(0, -5),
+              //         ),
+              //       ]),
+              //   child: Padding(
+              //     // padding: const EdgeInsets.all(12.0),
+              //     padding: EdgeInsets.fromLTRB(40, 40, 40, 40),
+              //     child: GridView.count(
+              //       shrinkWrap: true,
+              //       physics: const NeverScrollableScrollPhysics(),
+              //       crossAxisCount: 2,
+              //       crossAxisSpacing: 40,
+              //       mainAxisSpacing: 30,
+              //       children: [
+              //         itemDashboard('ลาป่วย / วัน', '0'),
+              //         itemDashboard('ลากิจ / วัน', '0'),
+              //         itemDashboard('ลาพักร้อน / วัน', '0'),
+              //         itemDashboard('มาสาย / ครั้ง', '0'),
+              //         itemDashboard('ลาอื่นๆ / วัน', '0'),
+              //         itemDashboard('การมาทำงาน', '100%'),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
   itemDashboard(String title, String num) => Container(
         decoration: BoxDecoration(
             color: Colors.white,
-            // color: AppTheme.bgSoftGreen,
+            // color: AppTheme.ognSoftGreen,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
@@ -170,11 +223,14 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
           children: [
             Text(
               num,
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  // color: Colors.white,
+                  ),
             ),
             const SizedBox(height: 8),
-            Text(title.toUpperCase(),
-                style: Theme.of(context).textTheme.titleMedium)
+            Text(title.toUpperCase())
           ],
         ),
       );
