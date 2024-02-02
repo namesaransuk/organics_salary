@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:carousel_grid/carousel_grid.dart';
 import 'dart:async';
+import 'package:stepper_list_view/stepper_list_view.dart';
 
 final LeaveHistoryController leaveHistoryController =
     Get.put(LeaveHistoryController());
@@ -1014,6 +1015,7 @@ class _LeaveHistoryState extends State<LeaveHistory> {
 
   @override
   Widget build(BuildContext context) {
+    List<StepperItemData> listStepperItemData = leaveHistoryController.leaveHistoryList.cast<StepperItemData>().toList();
     return ListView(
       children: [
         Card(
@@ -1308,228 +1310,430 @@ class _LeaveHistoryState extends State<LeaveHistory> {
         // SizedBox(
         //   height: 20,
         // ),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+        //   child: Obx(() => leaveHistoryController.leaveHistoryList.isNotEmpty
+        //       ? Column(
+        //           crossAxisAlignment: CrossAxisAlignment.start,
+        //           children: leaveHistoryController.leaveHistoryList.map((item) {
+        //             List<String> imagesUrls = [];
+
+        //             Map<String, dynamic> jsonData = {
+        //               "leave_img1": item.leaveImg1 != null
+        //                   ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg1}'
+        //                   : null,
+        //               "leave_img2": item.leaveImg2 != null
+        //                   ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg2}'
+        //                   : null,
+        //               "leave_img3": item.leaveImg3 != null
+        //                   ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg3}'
+        //                   : null,
+        //               "leave_img4": item.leaveImg4 != null
+        //                   ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg4}'
+        //                   : null,
+        //               "leave_img5": item.leaveImg5 != null
+        //                   ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg5}'
+        //                   : null,
+        //             };
+
+        //             jsonData.forEach((key, value) {
+        //               if (value is String) {
+        //                 imagesUrls.add(value);
+        //               }
+        //             });
+
+        //             return Column(
+        //               children: [
+        //                 Column(
+        //                   crossAxisAlignment: CrossAxisAlignment.start,
+        //                   children: [
+        //                     Text(
+        //                       '${item.day} ${listMonth[item.month! - 1]} ${item.year}',
+        //                       style: TextStyle(color: AppTheme.ognGreen),
+        //                     ),
+        //                     Container(
+        //                       width: double.infinity,
+        //                       child: Card(
+        //                         child: Padding(
+        //                           padding: EdgeInsets.all(20.0),
+        //                           child: Column(
+        //                             crossAxisAlignment:
+        //                                 CrossAxisAlignment.start,
+        //                             children: [
+        //                               Row(
+        //                                 mainAxisAlignment:
+        //                                     MainAxisAlignment.spaceBetween,
+        //                                 children: [
+        //                                   Column(
+        //                                     mainAxisAlignment:
+        //                                         MainAxisAlignment.start,
+        //                                     crossAxisAlignment:
+        //                                         CrossAxisAlignment.start,
+        //                                     children: [
+        //                                       Text(
+        //                                         'ประเภทการลา',
+        //                                         style: TextStyle(
+        //                                           fontWeight: FontWeight.bold,
+        //                                         ),
+        //                                       ),
+        //                                       Padding(
+        //                                         padding:
+        //                                             EdgeInsets.only(left: 20),
+        //                                         child:
+        //                                             Text('${item.leaveType}'),
+        //                                       ),
+        //                                     ],
+        //                                   ),
+        //                                   item.leaveImg1 != null
+        //                                       ? ElevatedButton(
+        //                                           onPressed: () {
+        //                                             showDialog<String>(
+        //                                               context: context,
+        //                                               builder: (BuildContext
+        //                                                       context) =>
+        //                                                   Dialog(
+        //                                                 backgroundColor:
+        //                                                     Colors.white,
+        //                                                 child: Column(
+        //                                                   mainAxisSize:
+        //                                                       MainAxisSize.min,
+        //                                                   children: <Widget>[
+        //                                                     Container(
+        //                                                       decoration:
+        //                                                           BoxDecoration(
+        //                                                         color: AppTheme
+        //                                                             .ognGreen,
+        //                                                         borderRadius:
+        //                                                             BorderRadius
+        //                                                                 .only(
+        //                                                           topLeft: Radius
+        //                                                               .circular(
+        //                                                                   25),
+        //                                                           topRight: Radius
+        //                                                               .circular(
+        //                                                                   25),
+        //                                                         ),
+        //                                                       ),
+        //                                                       padding:
+        //                                                           const EdgeInsets
+        //                                                               .symmetric(
+        //                                                               vertical:
+        //                                                                   15),
+        //                                                       child: Center(
+        //                                                         child: Text(
+        //                                                           '${item.day} ${listMonth[item.month! - 1]} ${item.year}',
+        //                                                           style:
+        //                                                               TextStyle(
+        //                                                             color: Colors
+        //                                                                 .white, // สีข้อความ
+        //                                                             fontSize:
+        //                                                                 16,
+        //                                                             fontWeight:
+        //                                                                 FontWeight
+        //                                                                     .bold,
+        //                                                           ),
+        //                                                         ),
+        //                                                       ),
+        //                                                     ),
+        //                                                     CarouselGrid(
+        //                                                       // height: 285,
+        //                                                       width: double
+        //                                                           .infinity,
+        //                                                       listUrlImages:
+        //                                                           imagesUrls,
+        //                                                       loopCarouselList:
+        //                                                           false,
+        //                                                       iconBack:
+        //                                                           const Icon(
+        //                                                         Icons
+        //                                                             .arrow_back,
+        //                                                         color: Colors
+        //                                                             .white,
+        //                                                       ),
+        //                                                     ),
+        //                                                     Padding(
+        //                                                       padding:
+        //                                                           const EdgeInsets
+        //                                                               .symmetric(
+        //                                                               vertical:
+        //                                                                   10),
+        //                                                       child: TextButton(
+        //                                                         onPressed: () {
+        //                                                           Navigator.pop(
+        //                                                               context);
+        //                                                         },
+        //                                                         child:
+        //                                                             const Text(
+        //                                                                 'ปิด'),
+        //                                                       ),
+        //                                                     ),
+        //                                                   ],
+        //                                                 ),
+        //                                               ),
+        //                                             );
+        //                                           },
+        //                                           child: Text('ดูไฟล์'),
+        //                                         )
+        //                                       : Container(),
+        //                                 ],
+        //                               ),
+        //                               SizedBox(height: 10),
+        //                               Text(
+        //                                 'สาเหตุการลา',
+        //                                 style: TextStyle(
+        //                                   fontWeight: FontWeight.bold,
+        //                                 ),
+        //                               ),
+        //                               Padding(
+        //                                 padding: EdgeInsets.only(left: 20),
+        //                                 child: Text('${item.leaveDetail}'),
+        //                               ),
+        //                               SizedBox(height: 10),
+        //                               Text(
+        //                                 'ระยะเวลาวันที่ลา',
+        //                                 style: TextStyle(
+        //                                   fontWeight: FontWeight.bold,
+        //                                 ),
+        //                               ),
+        //                               Padding(
+        //                                 padding: EdgeInsets.only(left: 20),
+        //                                 child: Column(
+        //                                   crossAxisAlignment:
+        //                                       CrossAxisAlignment.start,
+        //                                   children: [
+        //                                     Text(
+        //                                         'ตั้งแต่ : ${dateThaiFormat(item.leaveDateStart)}'),
+        //                                     Text(
+        //                                         'จนถึง : ${dateThaiFormat(item.leaveDateEnd)}'),
+        //                                   ],
+        //                                 ),
+        //                               ),
+        //                             ],
+        //                           ),
+        //                         ),
+        //                       ),
+        //                     ),
+        //                   ],
+        //                 ),
+        //                 SizedBox(
+        //                   height: 50,
+        //                 ),
+        //               ],
+        //             );
+        //           }).toList(),
+        //         )
+        //       : Column(
+        //           mainAxisAlignment: MainAxisAlignment.center,
+        //           crossAxisAlignment: CrossAxisAlignment.center,
+        //           children: [
+        //             Text(
+        //               'ไม่มีข้อมูลการลา',
+        //               style: TextStyle(fontSize: 16),
+        //             ),
+        //           ],
+        //         )),
+        // ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-          child: Obx(() => leaveHistoryController.leaveHistoryList.isNotEmpty
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: leaveHistoryController.leaveHistoryList.map((item) {
-                    List<String> imagesUrls = [];
-
-                    Map<String, dynamic> jsonData = {
-                      "leave_img1": item.leaveImg1 != null
-                          ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg1}'
-                          : null,
-                      "leave_img2": item.leaveImg2 != null
-                          ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg2}'
-                          : null,
-                      "leave_img3": item.leaveImg3 != null
-                          ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg3}'
-                          : null,
-                      "leave_img4": item.leaveImg4 != null
-                          ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg4}'
-                          : null,
-                      "leave_img5": item.leaveImg5 != null
-                          ? 'https://newhr.organicscosme.com/uploads/images/leave_emp/${item.leaveImg5}'
-                          : null,
-                    };
-
-                    jsonData.forEach((key, value) {
-                      if (value is String) {
-                        imagesUrls.add(value);
-                      }
-                    });
-
-                    return Column(
-                      children: [
-                        Column(
+          padding: const EdgeInsets.all(20.0),
+          child: StepperListView(
+            showStepperInLast: true,
+            stepperData: listStepperItemData,
+            stepAvatar: (_, data) {
+              final stepData = data as StepperItemData;
+              return PreferredSize(
+                preferredSize: const Size.fromRadius(20),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    stepData.avatar!,
+                  ),
+                ),
+              );
+            },
+            stepWidget: (_, data) {
+              final stepData = data as StepperItemData;
+              return PreferredSize(
+                preferredSize: const Size.fromWidth(30),
+                child: Text(
+                  stepData.content['born_date'] ?? '',
+                  style: TextStyle(
+                    // color: theme.primaryColor,
+                    fontSize: 13,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              );
+            },
+            stepContentWidget: (_, data) {
+              final stepData = data as StepperItemData;
+              return Container(
+                margin: const EdgeInsets.only(
+                  top: 20,
+                ),
+                padding: const EdgeInsets.all(
+                  15,
+                ),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(7),
+                  visualDensity: const VisualDensity(
+                    vertical: -4,
+                    horizontal: -4,
+                  ),
+                  title: Text(stepData.content['name'] ?? ''),
+                  subtitle: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(
+                            flex: 3,
+                            child: Icon(Icons.work),
+                          ),
+                          Expanded(
+                            flex: 7,
+                            child: Text(stepData.content['occupation'] ?? ''),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(
+                            flex: 3,
+                            child: Icon(Icons.phone),
+                          ),
+                          Expanded(
+                            flex: 7,
+                            child: Text(stepData.content['mobileNumber'] ?? ''),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(
+                            flex: 3,
+                            child: Icon(Icons.email),
+                          ),
+                          Expanded(
+                            flex: 7,
+                            child: Text(stepData.content['email'] ?? ''),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Contact Link',
+                        // style: theme.textTheme.titleMedium,
+                      ),
+                      const SizedBox(
+                        height: 7,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              '${item.day} ${listMonth[item.month! - 1]} ${item.year}',
-                              style: TextStyle(color: AppTheme.ognGreen),
-                            ),
-                            Container(
-                              width: double.infinity,
-                              child: Card(
-                                child: Padding(
-                                  padding: EdgeInsets.all(20.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'ประเภทการลา',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 20),
-                                                child:
-                                                    Text('${item.leaveType}'),
-                                              ),
-                                            ],
-                                          ),
-                                          item.leaveImg1 != null
-                                              ? ElevatedButton(
-                                                  onPressed: () {
-                                                    showDialog<String>(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          Dialog(
-                                                        backgroundColor:
-                                                            Colors.white,
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: <Widget>[
-                                                            Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: AppTheme
-                                                                    .ognGreen,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          25),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          25),
-                                                                ),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      vertical:
-                                                                          15),
-                                                              child: Center(
-                                                                child: Text(
-                                                                  '${item.day} ${listMonth[item.month! - 1]} ${item.year}',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white, // สีข้อความ
-                                                                    fontSize:
-                                                                        16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            CarouselGrid(
-                                                              // height: 285,
-                                                              width: double
-                                                                  .infinity,
-                                                              listUrlImages:
-                                                                  imagesUrls,
-                                                              loopCarouselList:
-                                                                  false,
-                                                              iconBack:
-                                                                  const Icon(
-                                                                Icons
-                                                                    .arrow_back,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      vertical:
-                                                                          10),
-                                                              child: TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                },
-                                                                child:
-                                                                    const Text(
-                                                                        'ปิด'),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  child: Text('ดูไฟล์'),
-                                                )
-                                              : Container(),
-                                        ],
-                                      ),
-                                      SizedBox(height: 10),
-                                      Text(
-                                        'สาเหตุการลา',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20),
-                                        child: Text('${item.leaveDetail}'),
-                                      ),
-                                      SizedBox(height: 10),
-                                      Text(
-                                        'ระยะเวลาวันที่ลา',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                                'ตั้งแต่ : ${dateThaiFormat(item.leaveDateStart)}'),
-                                            Text(
-                                                'จนถึง : ${dateThaiFormat(item.leaveDateEnd)}'),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Text(
+                                    'Linked-In',
+                                    // style: theme.textTheme.caption,
                                   ),
                                 ),
-                              ),
+                                Expanded(
+                                  flex: 7,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      // _launchURL(stepData
+                                      //     .content['contact_list']['LinkedIn']);
+                                    },
+                                    child: Text(
+                                      stepData.content['contact_list']
+                                              ['LinkedIn'] ??
+                                          '',
+                                      // style:
+                                      //     theme.textTheme.titleMedium?.copyWith(
+                                      //   color: Colors.blue,
+                                      //   decoration: TextDecoration.underline,
+                                      // ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Text(
+                                    'Portfolio',
+                                    // style: theme.textTheme.caption,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 7,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      // _launchURL(
+                                      //     stepData.content['contact_list']
+                                      //         ['Portfolio']);
+                                    },
+                                    child: Text(
+                                      stepData.content['contact_list']
+                                              ['Portfolio'] ??
+                                          '',
+                                      // style:
+                                      //     theme.textTheme.titleMedium?.copyWith(
+                                      //   color: Colors.blue,
+                                      //   decoration: TextDecoration.underline,
+                                      // ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 50,
-                        ),
-                      ],
-                    );
-                  }).toList(),
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'ไม่มีข้อมูลการลา',
-                      style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(
+                      // color: theme.dividerColor,
+                      width: 0.8,
                     ),
-                  ],
-                )),
+                  ),
+                ),
+              );
+            },
+            stepperThemeData: StepperThemeData(
+              // lineColor: theme.primaryColor,
+              lineWidth: 5,
+            ),
+            physics: const BouncingScrollPhysics(),
+          ),
         ),
       ],
     );

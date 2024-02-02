@@ -53,10 +53,10 @@ class _HomePageState extends State<HomePage> {
       // title: const Text('GoogleNavBar'),
       // ),
       extendBody: true,
-      backgroundColor: Colors.white,
-      // backgroundColor: _selectedIndex == 0
-      //     ? AppTheme.bgSoftGreen
-      //     : Color.fromARGB(255, 245, 245, 245),
+      // backgroundColor: Colors.white,
+      backgroundColor: _selectedIndex == 0
+          ? Colors.grey[100]
+          : Colors.white,
       appBar: shouldShowAppBar
           ? _selectedIndex == 0
               ? AppBar(

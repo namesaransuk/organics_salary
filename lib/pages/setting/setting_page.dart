@@ -92,9 +92,9 @@ class _SettingPageState extends State<SettingPage> {
                 Text(
                   '${box.read('f_name')} ${box.read('l_name')}',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
                 Text(
                   'รหัสพนักงาน : ${box.read('employee_code')}',
@@ -103,7 +103,7 @@ class _SettingPageState extends State<SettingPage> {
                   'แผนก : ${box.read('position_name_th')}',
                 ),
                 const SizedBox(height: 20),
-                
+
                 /// -- BUTTON
                 SizedBox(
                   width: 170,
@@ -112,19 +112,20 @@ class _SettingPageState extends State<SettingPage> {
                       Get.toNamed('/changepass');
                     },
                     style: ElevatedButton.styleFrom(
-                        // backgroundColor: tPrimaryColor,
+                        backgroundColor: AppTheme.ognSoftGreen,
                         side: BorderSide.none,
                         shape: const StadiumBorder()),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.password_rounded,
-                            size: 18.0, color: AppTheme.ognGreen),
+                            size: 18.0, color: Colors.white),
                         SizedBox(
                           width: 10,
                         ),
                         Text(
                           'เปลี่ยนรหัสผ่าน',
+                          style: TextStyle(color: Colors.white),
                         ),
                       ],
                     ),
@@ -137,18 +138,19 @@ class _SettingPageState extends State<SettingPage> {
                       Get.toNamed('/pinauth');
                     },
                     style: ElevatedButton.styleFrom(
-                        // backgroundColor: tPrimaryColor,
+                        backgroundColor: AppTheme.ognSoftGreen,
                         side: BorderSide.none,
                         shape: const StadiumBorder()),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.pin, size: 18.0, color: AppTheme.ognGreen),
+                        Icon(Icons.pin, size: 18.0, color: Colors.white),
                         SizedBox(
                           width: 10,
                         ),
                         Text(
                           'เปลี่ยนรหัส PIN',
+                          style: TextStyle(color: Colors.white),
                         ),
                       ],
                     ),
@@ -304,7 +306,7 @@ class _SettingPageState extends State<SettingPage> {
                   ProfileMenuWidget(
                       title: "ออกจากระบบ",
                       icon: Icons.exit_to_app,
-                      textColor: Colors.red,
+                      textColor: Colors.white,
                       endIcon: false,
                       onPress: () {
                         showDialog(
@@ -403,7 +405,8 @@ class ProfileMenuWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var iconColor = endIcon ? AppTheme.ognSoftGreen : Colors.red;
+    var iconColor = endIcon ? AppTheme.ognSoftGreen : Colors.white;
+    var tileColor = endIcon ? AppTheme.white : Colors.red[400];
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -411,7 +414,7 @@ class ProfileMenuWidget extends StatelessWidget {
         side: BorderSide(color: Colors.white),
       ),
       child: ListTile(
-        tileColor: Colors.white,
+        tileColor: tileColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
           side: BorderSide(color: Colors.white),
