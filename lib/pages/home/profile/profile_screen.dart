@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:organics_salary/pages/home/profile/active_project_card.dart';
 import 'package:organics_salary/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -34,11 +33,13 @@ class _ProfileScreenState extends State<ProfileScreen>
 }
 
 class _GrapeData {
-  _GrapeData(this.year, this.sales, this.color);
+  _GrapeData(this.percent, this.month, this.data, this.color, this.textColor);
 
-  final String year;
-  final double sales;
+  final String percent;
+  final String month;
+  final double data;
   final Color color;
+  final Color textColor;
 }
 
 class GetMainUI extends StatefulWidget {
@@ -52,68 +53,62 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     List<_GrapeData> data1 = <_GrapeData>[
-      _GrapeData('Jan', 35, Colors.green),
+      _GrapeData('50%', 'Jan', 50, AppTheme.ognSoftGreen, Colors.white),
+      _GrapeData('50%', 'Feb', 50, Colors.grey.shade200, Colors.black),
       // _GrapeData('Feb', 35),
       // _GrapeData('Mar', 34),
       // _GrapeData('Apr', 32),
       // _GrapeData('May', 40)
     ];
+    // List<_GrapeData> data2 = <_GrapeData>[
+    //   _GrapeData('ธันวาคม', 1, Colors.grey.shade200),
+    //   _GrapeData('พฤษจิกายน', 1, Colors.grey.shade200),
+    //   _GrapeData('ตุลาคม', 1, Colors.grey.shade200),
+    //   _GrapeData('กันยายน', 1, Colors.grey.shade200),
+    //   _GrapeData('สิงหาคม', 1, Colors.grey.shade200),
+    //   _GrapeData('กรกฎาคม', 1, Colors.grey.shade200),
+    //   _GrapeData('มิถุนายน', 1, Colors.grey.shade200),
+    //   _GrapeData('พฤษภาคม', 1, Colors.grey.shade200),
+    //   _GrapeData('เมษายน', 1, Colors.grey.shade200),
+    //   _GrapeData('มีนาคม', 1, Colors.grey.shade200),
+    //   _GrapeData('กุมภาพันธ์', 1, Colors.grey.shade200),
+    //   _GrapeData('มกราคม', 1, Colors.grey.shade200),
+    // ];
     List<_GrapeData> data2 = <_GrapeData>[
-      _GrapeData('มกราคม', 1, Colors.grey.shade50),
-      _GrapeData('กุมภาพันธ์', 1, Colors.grey.shade100),
-      _GrapeData('มีนาคม', 1, Colors.grey.shade200),
-      _GrapeData('เมษายน', 1, Colors.grey.shade300),
-      _GrapeData('พฤษภาคม', 1, Colors.grey.shade400),
-      _GrapeData('มิถุนายน', 1, Colors.grey.shade500),
-      _GrapeData('กรกฎาคม', 1, Colors.grey.shade600),
-      _GrapeData('สิงหาคม', 1, Colors.grey.shade700),
-      _GrapeData('กันยายน', 1, Colors.grey.shade800),
-      _GrapeData('ตุลาคม', 1, Colors.grey.shade900),
-      _GrapeData('พฤษจิกายน', 1, Colors.black87),
-      _GrapeData('ธันวาคม', 1, Colors.black),
+      _GrapeData('', 'ธ.ค.', 1, Colors.grey.shade200, Colors.black),
+      _GrapeData('', 'พ.ย.', 1, Colors.grey.shade200, Colors.black),
+      _GrapeData('', 'ต.ค', 1, Colors.grey.shade200, Colors.black),
+      _GrapeData('', 'ก.ย.', 1, Colors.grey.shade200, Colors.black),
+      _GrapeData('', 'ส.ค', 1, Colors.grey.shade200, Colors.black),
+      _GrapeData('', 'ก.ค.', 1, Colors.grey.shade200, Colors.black),
+      _GrapeData('', 'มิ.ย.', 1, Colors.grey.shade200, Colors.black),
+      _GrapeData('', 'พ.ค.', 1, Colors.grey.shade200, Colors.black),
+      _GrapeData('', 'เม.ย.', 1, Colors.redAccent.shade200, Colors.white),
+      _GrapeData(
+          '', 'มี.ค', 1, Color.fromARGB(255, 47, 170, 109), Colors.white),
+      _GrapeData(
+          '', 'ก.พ.', 1, Color.fromARGB(255, 47, 170, 109), Colors.white),
+      _GrapeData(
+          '', 'ม.ค.', 1, Color.fromARGB(255, 47, 170, 109), Colors.white),
     ];
+
+    TextStyle getDataLabelTextStyle(_GrapeData data, int index) {
+      return TextStyle(
+        fontSize: 8,
+        color: data.textColor,
+      );
+    }
 
     final box = GetStorage();
 
-    // Map<String, double> dataMap = {
-    //   // "% การมาทำงาน": 12,
-    //   "ม.ค.": 1,
-    //   "ก.พ.": 1,
-    //   "มี.ค.": 1,
-    //   "เม.ย.": 1,
-    //   "พ.ค.": 1,
-    //   "มิ.ย.": 1,
-    //   "ก.ค.": 1,
-    //   "ส.ค.": 1,
-    //   "ก.ย.": 1,
-    //   "ต.ค.": 1,
-    //   "พ.ย.": 1,
-    //   "ธ.ค.": 1,
-    // };
-
-    // final gradientList = <List<Color>>[
-    //   // [
-    //   //   Color.fromRGBO(223, 250, 92, 1),
-    //   //   Color.fromRGBO(129, 250, 112, 1),
-    //   // ],
-    //   [
-    //     Color.fromRGBO(129, 182, 205, 1),
-    //     Color.fromRGBO(91, 253, 199, 1),
-    //   ],
-    //   [
-    //     Color.fromRGBO(175, 63, 62, 1.0),
-    //     Color.fromRGBO(254, 154, 92, 1),
-    //   ]
-    // ];
-
     return Container(
-      // color: AppTheme.bgSoftGreen,
-      color: Colors.white,
+      color: AppTheme.ognGreen,
+      // color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 30),
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,13 +121,13 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                       '${box.read('f_name')} ${box.read('l_name')}',
                       style:
                           Theme.of(context).textTheme.headlineSmall?.copyWith(
-                              // color: Colors.white,
+                                color: Colors.white,
                               ),
                     ),
                     Text(
                       box.read('company_name_th'),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          // color: Colors.white54,
+                            color: Colors.white54,
                           ),
                     ),
                   ],
@@ -152,19 +147,9 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                           ),
                   ),
                 ),
-                // CircleAvatar(
-                //   radius: 30,
-                //   child: Image.network(
-                //     '${box.read('image')}',
-                //     width: 200,
-                //   ),
-                // ),
               ],
             ),
           ),
-          // SizedBox(
-          //   height: 20,
-          // ),
           Column(
             children: [
               // Container(
@@ -178,7 +163,7 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                   children: [
                     Container(
                       // color: AppTheme.bgSoftGreen,
-                      color: Colors.grey[100],
+                      color: Colors.white,
                       width: double.infinity,
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
@@ -232,6 +217,20 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                             // SizedBox(
                             //   height: 20,
                             // ),
+                            const Card(
+                              color: AppTheme.ognSoftGreen,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  'ประวัติการมาทำงานและกาารลา',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
                             Stack(
                               children: [
                                 Align(
@@ -239,35 +238,44 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                                   child: Container(
                                     width: MediaQuery.of(context).size.width,
                                     child: SfCircularChart(
-                                      // Chart title
                                       // title: ChartTitle(
-                                      //     text: 'Half yearly sales analysis'),
-                                      // Enable legend
+                                      //     text: 'Half monthly data analysis'),
                                       // legend: Legend(
                                       //   isVisible: true,
                                       //   position: charts.LegendPosition.left,
                                       // ),
-                                      // Enable tooltip
-                                      tooltipBehavior:
-                                          TooltipBehavior(enable: true),
+                                      // tooltipBehavior:
+                                      //     TooltipBehavior(enable: true),
                                       series: <DoughnutSeries<_GrapeData,
                                           String>>[
                                         DoughnutSeries<_GrapeData, String>(
                                           dataSource: data1,
-                                          xValueMapper: (_GrapeData sales, _) =>
-                                              sales.year,
-                                          yValueMapper: (_GrapeData sales, _) =>
-                                              sales.sales,
+                                          strokeWidth: 0.5,
+                                          strokeColor: Colors.white,
+                                          xValueMapper: (_GrapeData data, _) =>
+                                              data.month,
+                                          yValueMapper: (_GrapeData data, _) =>
+                                              data.data,
                                           pointColorMapper:
-                                              (_GrapeData sales, _) =>
-                                                  sales.color,
-                                          name: 'Sales',
-                                          // Enable data label
+                                              (_GrapeData data, _) =>
+                                                  data.color,
+                                          name: '% การมาทำงาน',
+                                          dataLabelMapper:
+                                              (_GrapeData data, _) =>
+                                                  data.percent,
                                           dataLabelSettings: DataLabelSettings(
-                                              isVisible: false),
-                                          // starting angle of pie
+                                            textStyle: TextStyle(fontSize: 8),
+                                            isVisible: true,
+                                            labelPosition:
+                                                ChartDataLabelPosition.inside,
+                                            // useSeriesColor: true,
+                                            // connectorLineSettings:
+                                            //     ConnectorLineSettings(
+                                            //   type: ConnectorType.line,
+                                            //   length: '15%',
+                                            // ),
+                                          ),
                                           startAngle: 180,
-                                          // ending angle of pie
                                           endAngle: 0,
                                         )
                                       ],
@@ -277,51 +285,65 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width,
                                     child: SfCircularChart(
-                                      // Chart title
                                       // title: ChartTitle(
-                                      //     text: 'Half yearly sales analysis'),
-                                      // Enable legend
+                                      //     text: 'Half monthly data analysis'),
                                       // legend: Legend(
                                       //   isVisible: true,
                                       //   position: charts.LegendPosition.right,
                                       // ),
-                                      // Enable tooltip
-                                      tooltipBehavior:
-                                          TooltipBehavior(enable: true),
+                                      // tooltipBehavior:
+                                      //     TooltipBehavior(enable: true),
                                       series: <DoughnutSeries<_GrapeData,
                                           String>>[
                                         DoughnutSeries<_GrapeData, String>(
                                           dataSource: data2,
-                                          xValueMapper: (_GrapeData sales, _) =>
-                                              sales.year,
-                                          yValueMapper: (_GrapeData sales, _) =>
-                                              sales.sales,
+                                          strokeWidth: 0.5,
+                                          strokeColor: Colors.white,
+                                          xValueMapper: (_GrapeData data, _) =>
+                                              data.month,
+                                          yValueMapper: (_GrapeData data, _) =>
+                                              data.data,
                                           pointColorMapper:
-                                              (_GrapeData sales, _) =>
-                                                  sales.color,
-                                          name: 'Sales',
-                                          // Enable data label
-                                          dataLabelSettings: DataLabelSettings(
-                                              isVisible: false),
-                                          // starting angle of pie
+                                              (_GrapeData data, _) =>
+                                                  data.color,
+                                          name: '% ตรงเวลา',
+                                          dataLabelMapper:
+                                              (_GrapeData data, _) =>
+                                                  data.month,
+                                          dataLabelSettings:
+                                              const DataLabelSettings(
+                                            textStyle: TextStyle(
+                                              fontSize: 8,
+                                            ),
+                                            isVisible: true,
+                                            labelPosition:
+                                                ChartDataLabelPosition.inside,
+                                            // useSeriesColor: true,
+                                            // connectorLineSettings:
+                                            //     ConnectorLineSettings(
+                                            //   type: ConnectorType.line,
+                                            //   length: '15%',
+                                            // ),
+                                          ),
                                           startAngle: 0,
-                                          // ending angle of pie
                                           endAngle: 180,
-                                        )
+                                          explode: true,
+                                          explodeIndex: 8,
+                                          explodeOffset: '5%',
+                                        ),
                                       ],
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                            // itemDashboard('ลาป่วย', 'วัน', '0'),
-                            // itemDashboard('ลากิจ', 'วัน', '0'),
-                            // itemDashboard('ลาพักร้อน', 'วัน', '0'),
-                            // itemDashboard('มาสาย', 'ครั้ง', '0'),
-                            // itemDashboard('ลาอื่นๆ', 'วัน', '0'),
-                            // itemDashboard('การมาทำงาน', '%', '100'),
+                            itemDashboard('ลาป่วย', 'วัน', '0'),
+                            itemDashboard('ลากิจ', 'วัน', '0'),
+                            itemDashboard('ลาพักร้อน', 'วัน', '0'),
+                            itemDashboard('มาสาย', 'ครั้ง', '0'),
+                            itemDashboard('ลาอื่นๆ', 'วัน', '0'),
+                            itemDashboard('การมาทำงาน', '%', '100'),
                           ],
                         ),
                       ),
@@ -329,69 +351,6 @@ class _GetMainUIState extends State<GetMainUI> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              Container(
-                color: Colors.transparent,
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // subheading('Active Projects'),
-                    SizedBox(height: 5.0),
-                    Row(
-                      children: <Widget>[
-                        ActiveProjectsCard(
-                          cardColor: AppTheme.ognSoftGreen,
-                          loadingPercent: 0.25,
-                          title: 'ลาป่วย',
-                          subtitle: '9 hours progress',
-                        ),
-                        SizedBox(width: 20.0),
-                        ActiveProjectsCard(
-                          cardColor: AppTheme.ognSoftGreen,
-                          loadingPercent: 0.6,
-                          title: 'ลากิจ',
-                          subtitle: '20 hours progress',
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        ActiveProjectsCard(
-                          cardColor: AppTheme.ognSoftGreen,
-                          loadingPercent: 0.45,
-                          title: 'ลาพักร้อน',
-                          subtitle: '5 hours progress',
-                        ),
-                        SizedBox(width: 20.0),
-                        ActiveProjectsCard(
-                          cardColor: AppTheme.ognSoftGreen,
-                          loadingPercent: 0.9,
-                          title: 'มาสาย',
-                          subtitle: '23 hours progress',
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        ActiveProjectsCard(
-                          cardColor: AppTheme.ognSoftGreen,
-                          loadingPercent: 0.45,
-                          title: 'ลาอื่นๆ',
-                          subtitle: '5 hours progress',
-                        ),
-                        SizedBox(width: 20.0),
-                        ActiveProjectsCard(
-                          cardColor: AppTheme.ognSoftGreen,
-                          loadingPercent: 0.9,
-                          title: 'การมาทำงาน',
-                          subtitle: '23 hours progress',
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
               // Container(
               //   decoration: BoxDecoration(
               //       // color: AppTheme.bgSoftGreen,
