@@ -1,103 +1,111 @@
 class SalaryModel {
-  String? name;
-  String? customer;
-  String? role;
-  String? salaryMonth;
-  String? yearValue;
+  int? id;
+  int? empId;
   int? salary;
-  int? da;
-  int? ot;
-  int? fc;
+  int? diligenceAllowance;
+  int? overtime;
+  int? fuelCost;
   int? bonus;
   int? interest;
-  int? pm;
-  int? oi;
-  int? ti;
-  int? ss;
-  int? tax;
-  int? dp;
-  int? agl;
-  int? loan;
-  int? df;
-  int? od;
-  int? td;
-  int? total;
+  int? commission;
+  int? getOrthers;
+  int? totalEarning;
+  int? socialSecurityFund;
+  int? withholdingTax;
+  int? deposit;
+  int? absentLeaveLate;
+  int? companyLoan;
+  int? depositFund;
+  int? deducOthers;
+  int? totalDeductions;
+  int? netPay;
+  int? day;
+  int? month;
+  int? year;
+  dynamic createdAt;
+  dynamic updatedAt;
 
   SalaryModel({
-    this.name,
-    this.customer,
-    this.role,
-    this.salaryMonth,
-    this.yearValue,
+    this.id,
+    this.empId,
     this.salary,
-    this.da,
-    this.ot,
-    this.fc,
+    this.diligenceAllowance,
+    this.overtime,
+    this.fuelCost,
     this.bonus,
     this.interest,
-    this.pm,
-    this.oi,
-    this.ti,
-    this.ss,
-    this.tax,
-    this.dp,
-    this.agl,
-    this.loan,
-    this.df,
-    this.od,
-    this.td,
-    this.total,
+    this.commission,
+    this.getOrthers,
+    this.totalEarning,
+    this.socialSecurityFund,
+    this.withholdingTax,
+    this.deposit,
+    this.absentLeaveLate,
+    this.companyLoan,
+    this.depositFund,
+    this.deducOthers,
+    this.totalDeductions,
+    this.netPay,
+    this.day,
+    this.month,
+    this.year,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory SalaryModel.fromJson(Map<String, dynamic> json) => SalaryModel(
-        name: json['name'] as String?,
-        customer: json['customer'] as String?,
-        role: json['role'] as String?,
-        salaryMonth: json['salaryMonth'] as String?,
-        yearValue: json['yearValue'] as String?,
+        id: json['id'] as int?,
+        empId: json['emp_id'] as int?,
         salary: json['salary'] as int?,
-        da: json['da'] as int?,
-        ot: json['ot'] as int?,
-        fc: json['fc'] as int?,
+        diligenceAllowance: json['diligence_allowance'] as int?,
+        overtime: json['overtime'] as int?,
+        fuelCost: json['fuel_cost'] as int?,
         bonus: json['bonus'] as int?,
         interest: json['interest'] as int?,
-        pm: json['pm'] as int?,
-        oi: json['oi'] as int?,
-        ti: json['ti'] as int?,
-        ss: json['ss'] as int?,
-        tax: json['tax'] as int?,
-        dp: json['dp'] as int?,
-        agl: json['agl'] as int?,
-        loan: json['loan'] as int?,
-        df: json['df'] as int?,
-        od: json['od'] as int?,
-        td: json['td'] as int?,
-        total: json['total'] as int?,
+        commission: json['commission'] as int?,
+        getOrthers: json['get_orthers'] as int?,
+        totalEarning: json['total_earning'] as int?,
+        socialSecurityFund: json['social_security_fund'] as int?,
+        withholdingTax: json['withholding_tax'] as int?,
+        deposit: json['deposit'] as int?,
+        absentLeaveLate: json['absent_leave_late'] as int?,
+        companyLoan: json['company_loan'] as int?,
+        depositFund: json['deposit_fund'] as int?,
+        deducOthers: json['deduc_others'] as int?,
+        totalDeductions: json['total_deductions'] as int?,
+        netPay: json['net_pay'] as int?,
+        day: json['day'] as int?,
+        month: json['month'] as int?,
+        year: json['year'] as int?,
+        createdAt: json['created_at'] as dynamic,
+        updatedAt: json['updated_at'] as dynamic,
       );
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'customer': customer,
-        'role': role,
-        'salaryMonth': salaryMonth,
-        'yearValue': yearValue,
+        'id': id,
+        'emp_id': empId,
         'salary': salary,
-        'da': da,
-        'ot': ot,
-        'fc': fc,
+        'diligence_allowance': diligenceAllowance,
+        'overtime': overtime,
+        'fuel_cost': fuelCost,
         'bonus': bonus,
         'interest': interest,
-        'pm': pm,
-        'oi': oi,
-        'ti': ti,
-        'ss': ss,
-        'tax': tax,
-        'dp': dp,
-        'agl': agl,
-        'loan': loan,
-        'df': df,
-        'od': od,
-        'td': td,
-        'total': total,
+        'commission': commission,
+        'get_orthers': getOrthers,
+        'total_earning': totalEarning,
+        'social_security_fund': socialSecurityFund,
+        'withholding_tax': withholdingTax,
+        'deposit': deposit,
+        'absent_leave_late': absentLeaveLate,
+        'company_loan': companyLoan,
+        'deposit_fund': depositFund,
+        'deduc_others': deducOthers,
+        'total_deductions': totalDeductions,
+        'net_pay': netPay,
+        'day': day,
+        'month': month,
+        'year': year,
+        'created_at': createdAt,
+        'updated_at': updatedAt,
       };
 }

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:custom_pin_screen/custom_pin_screen.dart';
 import 'package:get/get.dart';
 import 'package:organics_salary/controllers/pin_controller.dart';
 import 'package:organics_salary/theme.dart';
 
 class PinAuthPage extends StatefulWidget {
-  const PinAuthPage({Key? key}) : super(key: key);
+  const PinAuthPage({super.key});
 
   @override
   State<PinAuthPage> createState() => _PinAuthPageState();
@@ -18,33 +17,39 @@ class _PinAuthPageState extends State<PinAuthPage> {
   PinTheme pinTheme = PinTheme(
     keysColor: Colors.white,
   );
+
+  final List<GlobalKey<_PinCodeFieldState>> pinCodeFieldKeys = List.generate(
+    4,
+    (index) => GlobalKey<_PinCodeFieldState>(),
+  );
+  final TextEditingController _keyboardController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final RxInt parameter = RxInt(0);
+
+    final argParameter = Get.arguments ?? 0;
+    parameter.value = argParameter;
+    print(parameter.value);
     return Scaffold(
       // appBar: AppBar(backgroundColor: AppTheme.ognGreen,),
-      backgroundColor: AppTheme.ognGreen,
+      backgroundColor: AppTheme.ognSmGreen,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 120),
+          padding: const EdgeInsets.symmetric(vertical: 70, horizontal: 5),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 35.0,
-                  vertical: 10.0,
-                ),
-                child: Text(
-                  "ระบุรหัส PIN",
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
+              const Text(
+                "ระบุรหัส PIN",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
-              // const SizedBox(
-              //   height: 5,
-              // ),
+              const SizedBox(
+                height: 5,
+              ),
               const Text(
                 "กรอกรหัส 4 หลักเพื่อเข้าใช้งานในครั้งต่อไป",
                 style: TextStyle(
@@ -54,22 +59,23 @@ class _PinAuthPageState extends State<PinAuthPage> {
                     color: Colors.white),
               ),
               const SizedBox(
-                height: 40,
+                height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   for (int i = 0; i < 4; i++)
                     PinCodeField(
-                      key: Key('pinField$i'),
+                      key: pinCodeFieldKeys[i],
                       pin: pin,
                       pinCodeFieldIndex: i,
                       theme: pinTheme,
                     ),
                 ],
               ),
-              const SizedBox(height: 80),
+              const SizedBox(height: 40),
               CustomKeyBoard(
+                controller: _keyboardController,
                 pinTheme: pinTheme,
                 onChanged: (v) {
                   print(v);
@@ -77,13 +83,21 @@ class _PinAuthPageState extends State<PinAuthPage> {
                   setState(() {
                     if (pin.length == 4 && int.tryParse(pin) != null) {
                       // Get.offAndToNamed('/');
-                      pinController.savepin(pin);
+                      pinController.savepin(pin, parameter.value);
                     } else {
                       print('Invalid input');
                     }
                   });
                 },
-                specialKey: SizedBox(),
+                specialKey: InkWell(
+                  onTap: () {},
+                  // splashColor: Colors.white,
+                  splashColor: Colors.transparent,
+                  child: const SizedBox(
+                    height: 55,
+                    width: 40,
+                  ),
+                ),
                 // specialKeyOnTap: () {
                 //   if (kDebugMode) {
                 //     print('fingerprint');
@@ -99,55 +113,63 @@ class _PinAuthPageState extends State<PinAuthPage> {
   }
 }
 
-class PinCodeField extends StatelessWidget {
+class PinCodeField extends StatefulWidget {
   const PinCodeField({
-    Key? key,
+    super.key,
     required this.pin,
     required this.pinCodeFieldIndex,
     required this.theme,
-  }) : super(key: key);
+  });
 
-  /// The pin code
   final String pin;
-
-  /// The the index of the pin code field
   final PinTheme theme;
-
-  /// The index of the pin code field
   final int pinCodeFieldIndex;
 
-  Color get getFillColorFromIndex {
-    if (pin.length > pinCodeFieldIndex) {
-      return AppTheme.ognSoftGreen;
-    } else if (pin.length == pinCodeFieldIndex) {
-      return Colors.white.withOpacity(0.7);
-    }
-    return Colors.grey.withOpacity(0.7);
-  }
+  @override
+  _PinCodeFieldState createState() => _PinCodeFieldState();
+}
 
+class _PinCodeFieldState extends State<PinCodeField> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      height: 50,
-      width: 50,
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-        color: getFillColorFromIndex,
-        borderRadius: BorderRadius.circular(7),
-        shape: BoxShape.rectangle,
-        border: Border.all(
-          color: getFillColorFromIndex,
-          width: 2,
-        ),
-      ),
-      duration: const Duration(microseconds: 40000),
-      child: pin.length > pinCodeFieldIndex
-          ? const Icon(
+      height: 40,
+      width: 40,
+      margin: const EdgeInsets.symmetric(horizontal: 0),
+      // decoration: BoxDecoration(
+      //   color: getFillColorFromIndex(),
+      //   borderRadius: BorderRadius.circular(7),
+      //   shape: BoxShape.rectangle,
+      //   border: Border.all(
+      //     color: getFillColorFromIndex(),
+      //     width: 2,
+      //   ),
+      // ),
+      duration: const Duration(milliseconds: 400),
+      child: widget.pin.length > widget.pinCodeFieldIndex
+          ? Icon(
+              Icons.circle,
+              color: getFillColorFromIndex(),
+              size: 18,
+            )
+          : const Icon(
               Icons.circle,
               color: Colors.white,
-              size: 12,
-            )
-          : const SizedBox(),
+              size: 18,
+            ),
     );
+  }
+
+  Color getFillColorFromIndex() {
+    if (widget.pin.length > widget.pinCodeFieldIndex) {
+      return AppTheme.stepperYellow;
+    } else if (widget.pin.length == widget.pinCodeFieldIndex) {
+      return Colors.white;
+    }
+    return Colors.white;
+  }
+
+  void updatePin() {
+    setState(() {});
   }
 }

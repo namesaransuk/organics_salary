@@ -7,7 +7,7 @@ import 'package:organics_salary/theme.dart';
 class LoginPage extends StatefulWidget {
   final Function(String? email, String? password)? onSubmitted;
 
-  const LoginPage({this.onSubmitted, Key? key}) : super(key: key);
+  const LoginPage({this.onSubmitted, super.key});
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   Function(String? empId, String? password)? get onSubmitted =>
       widget.onSubmitted;
   final LoginController loginController = Get.put(LoginController());
+  bool isPasswordVisible = false;
 
   @override
   void initState() {
@@ -75,181 +76,328 @@ class _LoginPageState extends State<LoginPage> {
     print(box.read('token'));
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // SizedBox(height: screenHeight * .05),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'ลงชื่อเข้าใช้',
-                      style: TextStyle(
-                        color: AppTheme.ognGreen,
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                      ),
+      // backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        AppTheme.ognSoftGreen,
+                        Colors.white,
+                      ],
                     ),
-                    Text(
-                      'ระบบ Organics HR',
-                      style: TextStyle(
-                        fontSize: 18,
-                        // color: Colors.black.withOpacity(.6),
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          clipBehavior: Clip.antiAlias,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(100.0),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(0, 1),
+                                blurRadius: 1,
+                              ),
+                            ],
+                          ),
+                          child: Image.asset(
+                            'assets/img/logo.jpg',
+                            width: 140,
+                          ),
+                        ),
+                        SizedBox(height: screenHeight * .02),
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'ลงชื่อเข้าใช้',
+                              style: TextStyle(
+                                color: AppTheme.ognGreen,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'ระบบ ',
+                                  style: TextStyle(
+                                    color: AppTheme.ognGreen,
+                                    fontSize: 20,
+                                    // color: Colors.black.withOpacity(.6),
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'Organics HR',
+                                  style: TextStyle(
+                                    color: AppTheme.ognOrangeGold,
+                                    fontSize: 20,
+                                    // color: Colors.black.withOpacity(.6),
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: screenHeight * .05),
+                        Column(
+                          children: [
+                            const Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.account_circle_rounded,
+                                  size: 20,
+                                  color: AppTheme.ognOrangeGold,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  'รหัสพนักงาน',
+                                  style: TextStyle(color: AppTheme.ognGreen),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 5),
+                            TextField(
+                              onChanged: (value) {
+                                setState(() {
+                                  empId = value;
+                                });
+                              },
+                              onSubmitted: (val) => submit(),
+                              style: const TextStyle(
+                                  color: AppTheme.ognMdGreen, fontSize: 14),
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 14, horizontal: 25),
+                                labelText: 'รหัสพนักงาน',
+                                labelStyle: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                                hintStyle: const TextStyle(fontSize: 14),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(25)),
+                                  borderSide: BorderSide(
+                                      width: 1, color: Colors.grey.shade300),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(25)),
+                                  borderSide: BorderSide(
+                                      width: 1, color: Colors.grey.shade300),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: screenHeight * .02),
+                        Column(
+                          children: [
+                            const Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.lock_rounded,
+                                  size: 20,
+                                  color: AppTheme.ognOrangeGold,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  'รหัสผ่าน',
+                                  style: TextStyle(color: AppTheme.ognGreen),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            TextField(
+                              obscureText: !isPasswordVisible,
+                              onChanged: (value) => setState(() {
+                                password = value;
+                              }),
+                              onSubmitted: (val) => submit(),
+                              style: const TextStyle(
+                                  color: AppTheme.ognMdGreen, fontSize: 14),
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 14, horizontal: 25),
+                                labelText: 'รหัสผ่าน',
+                                labelStyle: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                                hintStyle: const TextStyle(fontSize: 14),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(25)),
+                                  borderSide: BorderSide(
+                                      width: 1, color: Colors.grey.shade300),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(25)),
+                                  borderSide: BorderSide(
+                                      width: 1, color: Colors.grey.shade300),
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    isPasswordVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Colors.grey,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      isPasswordVisible = !isPasswordVisible;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: Padding(
+                                padding: const EdgeInsets.all(0.0),
+                                child: TextButton(
+                                  onPressed: () {
+                                    Get.toNamed('/resetpass');
+                                  },
+                                  child: const Text(
+                                    'ลืมรหัสผ่าน',
+                                    style: TextStyle(
+                                      color: AppTheme.ognGreen,
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: AppTheme.ognGreen,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.end,
+                        //   children: [
+                        //     Align(
+                        //       child: TextButton(
+                        //         onPressed: () {
+                        //           Get.toNamed('/resetpass');
+                        //         },
+                        //         child: const Text(
+                        //           'ลืมรหัสผ่าน',
+                        //           style: TextStyle(
+                        //             color: AppTheme.ognGreen,
+                        //             decoration: TextDecoration.underline,
+                        //             decorationColor: AppTheme.ognGreen,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     Container(
+                        //       width: 1.5,
+                        //       height: 20,
+                        //       color: AppTheme.ognOrangeGold,
+                        //       margin: const EdgeInsets.symmetric(horizontal: 1),
+                        //     ),
+                        //     Align(
+                        //       child: TextButton(
+                        //         onPressed: () {
+                        //           Get.toNamed('/register');
+                        //         },
+                        //         child: const Text(
+                        //           'สมัครสมาชิก',
+                        //           style: TextStyle(
+                        //             color: AppTheme.ognGreen,
+                        //             decoration: TextDecoration.underline,
+                        //             decorationColor: AppTheme.ognGreen,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        SizedBox(
+                          height: screenHeight * .015,
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppTheme.ognOrangeGold,
+                          ),
+                          // onPressed: submit,
+                          onPressed: () {
+                            if (empId.isNotEmpty && password.isNotEmpty) {
+                              loginController.login(context, empId, password);
+                            } else {
+                              alertEmptyData('แจ้งเตือน',
+                                  'กรุณากรอกข้อมูลให้ครบถ้วนเพื่อลงชื่อเข้าใช้');
+                            }
+                          },
+                          child: const SizedBox(
+                            width: double.infinity,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 15),
+                              child: Center(
+                                child: Text(
+                                  'เข้าสู่ระบบ',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                  ],
-                ),
-                Image.asset(
-                  'assets/img/organics_legendary.png',
-                  width: 140,
-                ),
-              ],
-            ),
-            SizedBox(height: screenHeight * .05),
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  empId = value;
-                });
-              },
-              onSubmitted: (val) => submit(),
-              decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                labelText: 'รหัสพนักงาน',
-                labelStyle: TextStyle(
-                  color: Colors.black54,
-                  fontWeight: FontWeight.w400,
-                ),
-                // errorText: empIdError,
-                alignLabelWithHint: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(color: AppTheme.ognGreen),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-              ),
-            ),
-            SizedBox(height: screenHeight * .02),
-            TextField(
-              obscureText: true,
-              onChanged: (value) => setState(() {
-                password = value;
-              }),
-              onSubmitted: (val) => submit(),
-              decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 7, horizontal: 16),
-                labelText: 'รหัสผ่าน',
-                labelStyle: TextStyle(
-                  color: Colors.black54,
-                  fontWeight: FontWeight.w400,
-                ),
-                // errorText: passwordError,
-                alignLabelWithHint: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(color: AppTheme.ognGreen),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  Get.toNamed('/resetpass');
-                },
-                child: const Text(
-                  'ลืมรหัสผ่าน?',
-                  style: TextStyle(
-                    color: Colors.black,
                   ),
                 ),
               ),
             ),
-            SizedBox(
-              height: screenHeight * .05,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.ognGreen,
-              ),
-              // onPressed: submit,
-              onPressed: () {
-                if (empId.isNotEmpty && password.isNotEmpty) {
-                  loginController.login(context, empId, password);
-                } else {
-                  alertEmptyData('แจ้งเตือน',
-                      'กรุณากรอกข้อมูลให้ครบถ้วนเพื่อลงชื่อเข้าใช้');
-                }
-              },
-              child: Container(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Center(
-                    child: Text(
-                      'เข้าสู่ระบบ',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            )
-            // SizedBox(
-            //   height: screenHeight * .15,
-            // ),
-            // TextButton(
-            //   onPressed: () {
-            //     Get.toNamed('/register');
-            //   },
-            //   // onPressed: () => Navigator.push(
-            //   //   context,
-            //   //   MaterialPageRoute(
-            //   //     builder: (_) => const RegisterPage(),
-            //   //   ),
-            //   // ),
-            //   child: RichText(
-            //     text: const TextSpan(
-            //       text: "ไม่มีบัญชีพนักงาน, ",
-            //       style: TextStyle(color: Colors.black),
-            //       children: [
-            //         TextSpan(
-            //           text: 'ลงทะเบียน',
-            //           style: TextStyle(
-            //             color: Colors.blue,
-            //             fontWeight: FontWeight.bold,
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // )
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -263,12 +411,12 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.white,
         titlePadding: EdgeInsets.zero,
         title: Container(
-          color: AppTheme.ognGreen,
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          color: AppTheme.ognMdGreen,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: Center(
             child: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -282,7 +430,7 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: () {
               Get.back();
             },
-            child: Text("ตกลง"),
+            child: const Text("ตกลง"),
           ),
         ],
       ),

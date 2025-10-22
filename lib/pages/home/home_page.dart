@@ -1,230 +1,447 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:line_icons/line_icons.dart';
-import 'package:organics_salary/pages/home/leave/leave_screen.dart';
-import 'package:organics_salary/pages/home/emp_list/emp_list_screen.dart';
-import 'package:organics_salary/pages/home/profile/profile_screen.dart';
-import 'package:organics_salary/pages/home/salary/salary_screen.dart';
-// import 'package:organics_salary/pages/home/coin/index.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:organics_salary/pages/home/menu/menu_screen.dart';
+import 'package:organics_salary/pages/home/notification/notification_screen.dart';
+import 'package:organics_salary/pages/home/dashboard/dashboard_screen.dart';
+import 'package:organics_salary/pages/home/setting/setting_screen.dart';
 import 'package:organics_salary/theme.dart';
 import 'package:sidebarx/sidebarx.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/gestures.dart';
+import 'package:upgrader/upgrader.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  final box = GetStorage();
   int _selectedIndex = 0;
-  static List<Widget> _widgetOptions = <Widget>[
-    ProfileScreen(),
-    SalaryScreen(),
-    LeaveScreen(),
-    EmpListScreen(),
+  late TabController tabController;
+
+  @override
+  void initState() {
+    tabController = TabController(length: 4, vsync: this);
+    tabController.animation?.addListener(
+      () {
+        final value = tabController.animation!.value.round();
+        if (value != _selectedIndex && mounted) {
+          changePage(value);
+        }
+      },
+    );
+    super.initState();
+    // FirebaseMessaging.instance.getToken().then((value) => print(value));
+  }
+
+  void changePage(int newPage) {
+    setState(() {
+      _selectedIndex = newPage;
+    });
+  }
+
+  static final List<Widget> _widgetOptions = <Widget>[
+    const DashboardScreen(),
+    const MenuScreen(),
+    // const ScanPage(),
+    const NotificationScreen(),
+    const SettingScreen(),
   ];
 
   late bool screenMode;
 
-  bool get shouldShowAppBar =>
-      _selectedIndex == 0 || _selectedIndex == _widgetOptions.length - 1;
+  // bool get shouldShowAppBar =>
+  //     _selectedIndex == 1 || _selectedIndex == _widgetOptions.length - 1;
+  bool get shouldShowAppBar => _selectedIndex == 1 || _selectedIndex == 3;
 
   final _controller = SidebarXController(selectedIndex: 0);
   final _key = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      // statusBarColor: AppTheme.ognSoftGreen,
-      // statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-    ));
-
+    print(MediaQuery.of(context).size.width);
     return screenMode ? buildDrawerScaffold(context) : buildBottomBarScaffold();
   }
 
   Widget buildBottomBarScaffold() {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      // backgroundColor: Colors.white,
-      // appBar: AppBar(
-      // elevation: 20,
-      // title: const Text('GoogleNavBar'),
-      // ),
-      extendBody: true,
-      // backgroundColor: Colors.white,
-      backgroundColor: _selectedIndex == 0
-          ? Colors.grey[100]
-          : Colors.white,
-      appBar: shouldShowAppBar
-          ? _selectedIndex == 0
-              ? AppBar(
-                  // systemOverlayStyle: SystemUiOverlayStyle(
-                  //   // statusBarColor: AppTheme.ognSoftGreen,
-                  //   statusBarColor: Colors.white,
-                  //   statusBarIconBrightness: Brightness.dark,
-                  // ),
-                  title: Text(
-                    'ข้อมูลส่วนตัว',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  actions: <Widget>[
-                    IconButton(
-                      icon: Icon(
-                        Icons.settings,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Get.toNamed('/setting');
-                      },
-                    )
-                  ],
-                  centerTitle: true,
-                  backgroundColor: AppTheme.ognGreen,
-                  foregroundColor: Colors.white,
-                )
-              : AppBar(
-                  title: Text(
-                    'รายการอื่น',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  centerTitle: true,
-                  backgroundColor: AppTheme.ognGreen,
-                  foregroundColor: Colors.white,
-                )
-          : null,
-      body: _widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 20,
-              color: Colors.black.withOpacity(.1),
-            )
-          ],
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-            child: GNav(
-              rippleColor: Colors.grey[300]!,
-              hoverColor: Colors.grey[100]!,
-              gap: 8,
-              activeColor: Colors.white,
-              iconSize: 26,
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              duration: Duration(milliseconds: 400),
-              tabBackgroundColor: AppTheme.ognGreen!,
-              color: Colors.black,
-              tabs: [
-                GButton(
-                  icon: Icons.person_outline_outlined,
-                  text: 'โปรไฟล์',
-                ),
-                GButton(
-                  icon: Icons.receipt_long_outlined,
-                  iconSize: 23,
-                  text: 'สลิปเงินเดือน',
-                ),
-                GButton(
-                  icon: Icons.share_arrival_time_outlined,
-                  text: 'แจ้งลา',
-                ),
-                GButton(
-                  icon: Icons.format_list_bulleted_outlined,
-                  text: 'รายการอื่น',
+    // String osVersion = Platform.version;
+    // print('OSSSSSSSSSS : $osVersion');
+    print(MediaQuery.of(context).viewPadding.bottom > 0 ? 'have' : 'dont have');
+    return UpgradeAlert(
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          extendBody: true,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          body: BottomBar(
+            clip: Clip.antiAlias,
+            // fit: StackFit.expand,
+            borderRadius: BorderRadius.circular(500),
+            duration: Duration(seconds: 1),
+            curve: Curves.decelerate,
+            showIcon: true,
+            width: MediaQuery.of(context).size.width * 0.88,
+            barColor: Colors.white,
+            start: 0,
+            end: Platform.isAndroid ? -0.15 : 0.2,
+            offset: 0,
+            barAlignment: Alignment.bottomCenter,
+            iconHeight: 35,
+            iconWidth: 35,
+            reverse: false,
+            barDecoration: BoxDecoration(
+              // color: colors[currentPage],
+              borderRadius: BorderRadius.circular(500),
+              boxShadow: [
+                BoxShadow(
+                  // color: Colors.grey.shade300,
+                  // spreadRadius: 2,
+                  // blurRadius: 7,
+                  // offset: Offset(0, 3),
+                  color: Colors.black.withOpacity(0.1), // เงาสีดำโปร่งใส
+                  offset: const Offset(0, 4), // เงาอยู่ด้านล่าง
+                  blurRadius: 10, // ความเบลอของเงา
+                  spreadRadius: 2, // การกระจายของเงา
                 ),
               ],
-              selectedIndex: _selectedIndex,
-              onTabChange: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
             ),
-          ),
-        ),
-      ),
+            hideOnScroll: true,
+            scrollOpposite: false,
+            onBottomBarHidden: () {},
+            onBottomBarShown: () {},
+            body: (context, controller) => TabBarView(
+              controller: tabController,
+              dragStartBehavior: DragStartBehavior.down,
+              physics: const NeverScrollableScrollPhysics(),
+              children: _widgetOptions,
+            ),
+            child: TabBar(
+              overlayColor: WidgetStatePropertyAll(Colors.transparent),
+              controller: tabController,
+              padding: EdgeInsets.symmetric(vertical: 10),
+              dividerColor: Colors.transparent,
+              indicatorWeight: 0.0,
+              // indicatorPadding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+              indicator: const UnderlineTabIndicator(
+                borderSide: BorderSide(
+                  color: Colors.transparent,
+                  width: 0,
+                ),
+                insets: EdgeInsets.zero,
+              ),
+              tabs: [
+                Tab(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.home_rounded,
+                        size: 32,
+                        color: _selectedIndex == 0
+                            ? AppTheme.ognOrangeGold
+                            : AppTheme.ognSmGreen,
+                      ),
+                      Text(
+                        'หน้าหลัก',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: _selectedIndex == 0
+                              ? AppTheme.ognOrangeGold
+                              : AppTheme.ognSmGreen,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Tab(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.widgets_rounded,
+                        size: 32,
+                        color: _selectedIndex == 1
+                            ? AppTheme.ognOrangeGold
+                            : AppTheme.ognSmGreen,
+                      ),
+                      Text(
+                        'เมนู',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: _selectedIndex == 1
+                              ? AppTheme.ognOrangeGold
+                              : AppTheme.ognSmGreen,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Tab(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.notifications,
+                        size: 32,
+                        color: _selectedIndex == 2
+                            ? AppTheme.ognOrangeGold
+                            : AppTheme.ognSmGreen,
+                      ),
+                      Text(
+                        'แจ้งเตือน',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: _selectedIndex == 2
+                              ? AppTheme.ognOrangeGold
+                              : AppTheme.ognSmGreen,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Tab(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.settings_rounded,
+                        size: 32,
+                        color: _selectedIndex == 3
+                            ? AppTheme.ognOrangeGold
+                            : AppTheme.ognSmGreen,
+                      ),
+                      Text(
+                        'ตั้งค่า',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: _selectedIndex == 3
+                              ? AppTheme.ognOrangeGold
+                              : AppTheme.ognSmGreen,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )),
     );
   }
 
+  // Widget buildBottomBarScaffold() {
+  //   print(MediaQuery.of(context).viewPadding.bottom > 0 ? 'have' : 'dont have');
+  //   return UpgradeAlert(
+  //     child: Scaffold(
+  //       resizeToAvoidBottomInset: false,
+  //       extendBody: true,
+  //       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+  //       body: FrostedBottomBar(
+  //         bottomBarColor: Colors.white,
+  //         opacity: 1,
+  //         fit: StackFit.expand,
+  //         borderRadius: BorderRadius.circular(80),
+  //         duration: const Duration(milliseconds: 500),
+  //         curve: Curves.decelerate,
+  //         width: MediaQuery.of(context).size.width * 0.88,
+  //         start: 0,
+  //         end: Platform.isAndroid
+  //             ? 0
+  //             : MediaQuery.of(context).viewPadding.bottom > 0
+  //                 ? -0.5
+  //                 : 0,
+  //         bottom: 0,
+  //         reverse: false,
+  //         hideOnScroll: true,
+  //         scrollOpposite: false,
+  //         onBottomBarHidden: () {},
+  //         onBottomBarShown: () {},
+  //         // body: _widgetOptions.elementAt(_selectedIndex),
+  //         body: (context, controller) => TabBarView(
+  //           controller: tabController,
+  //           dragStartBehavior: DragStartBehavior.down,
+  //           physics: const NeverScrollableScrollPhysics(),
+  //           children: _widgetOptions,
+  //         ),
+  //         child: Stack(
+  //           children: [
+  //             Container(
+  //               margin: EdgeInsets.all(2),
+  //               child: TabBar(
+  //                 controller: tabController,
+  //                 padding: EdgeInsets.symmetric(vertical: 8),
+  //                 dividerColor: Colors.transparent,
+  //                 indicatorWeight: 0.0,
+  //                 // indicatorPadding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+  //                 indicator: const UnderlineTabIndicator(
+  //                   borderSide: BorderSide(
+  //                     color: Colors.transparent,
+  //                     width: 0,
+  //                   ),
+  //                   insets: EdgeInsets.zero,
+  //                 ),
+  //                 tabs: [
+  //                   SizedBox(
+  //                     // height: 55,
+  //                     width: 40,
+  //                     child: Column(
+  //                       children: [
+  //                         Icon(
+  //                           Icons.home_rounded,
+  //                           size: 32,
+  //                           color: _selectedIndex == 0 ? AppTheme.ognOrangeGold : AppTheme.ognSmGreen,
+  //                         ),
+  //                         Text(
+  //                           'หน้าหลัก',
+  //                           style: TextStyle(
+  //                             fontSize: 10,
+  //                             color: _selectedIndex == 0 ? AppTheme.ognOrangeGold : AppTheme.ognSmGreen,
+  //                           ),
+  //                         )
+  //                       ],
+  //                     ),
+  //                   ),
+  //                   SizedBox(
+  //                     // height: 55,
+  //                     width: 40,
+  //                     child: Column(
+  //                       children: [
+  //                         Icon(
+  //                           Icons.widgets_rounded,
+  //                           size: 32,
+  //                           color: _selectedIndex == 1 ? AppTheme.ognOrangeGold : AppTheme.ognSmGreen,
+  //                         ),
+  //                         Text(
+  //                           'เมนู',
+  //                           style: TextStyle(
+  //                             fontSize: 10,
+  //                             color: _selectedIndex == 1 ? AppTheme.ognOrangeGold : AppTheme.ognSmGreen,
+  //                           ),
+  //                         )
+  //                       ],
+  //                     ),
+  //                   ),
+  //                   // InkWell(
+  //                   //   onTap: () {},
+  //                   //   splashColor: Colors.white,
+  //                   //   child: const SizedBox(
+  //                   //     height: 55,
+  //                   //     width: 40,
+  //                   //     child: Center(
+  //                   //       child: Icon(
+  //                   //         Icons.qr_code_scanner_rounded,
+  //                   //         color: Colors.white,
+  //                   //       ),
+  //                   //     ),
+  //                   //   ),
+  //                   // ),
+  //                   SizedBox(
+  //                     // height: 55,
+  //                     width: 40,
+  //                     child: Column(
+  //                       children: [
+  //                         Icon(
+  //                           Icons.notifications,
+  //                           size: 32,
+  //                           color: _selectedIndex == 2 ? AppTheme.ognOrangeGold : AppTheme.ognSmGreen,
+  //                         ),
+  //                         Text(
+  //                           'แจ้งเตือน',
+  //                           style: TextStyle(
+  //                             fontSize: 10,
+  //                             color: _selectedIndex == 2 ? AppTheme.ognOrangeGold : AppTheme.ognSmGreen,
+  //                           ),
+  //                         )
+  //                       ],
+  //                     ),
+  //                   ),
+  //                   SizedBox(
+  //                     // height: 55,
+  //                     width: 40,
+  //                     child: Column(
+  //                       children: [
+  //                         Icon(
+  //                           Icons.settings_rounded,
+  //                           size: 32,
+  //                           color: _selectedIndex == 3 ? AppTheme.ognOrangeGold : AppTheme.ognSmGreen,
+  //                         ),
+  //                         Text(
+  //                           'ตั้งค่า',
+  //                           style: TextStyle(
+  //                             fontSize: 10,
+  //                             color: _selectedIndex == 3 ? AppTheme.ognOrangeGold : AppTheme.ognSmGreen,
+  //                           ),
+  //                         )
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //             // Positioned(
+  //             //   top: -20,
+  //             //   child: FloatingActionButton(
+  //             //     elevation: 0,
+  //             //     backgroundColor: AppTheme.ognMdGreen,
+  //             //     onPressed: () {
+  //             //       Get.toNamed('scan');
+  //             //     },
+  //             //     shape: RoundedRectangleBorder(
+  //             //       borderRadius: BorderRadius.circular(17), // รูปร่างของปุ่ม
+  //             //       side:
+  //             //           const BorderSide(color: Colors.white, width: 2), // เส้นขอบสีขาว
+  //             //     ),
+  //             //     child: const Icon(Icons.qr_code_scanner_rounded),
+  //             //   ),
+  //             // )
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget buildDrawerScaffold(BuildContext context) {
-    return Scaffold(
-      key: _key,
-      extendBody: true,
-      backgroundColor: Color.fromARGB(255, 245, 245, 245),
-      // appBar: shouldShowAppBar
-      //     ? _selectedIndex == 0
-      //         ? AppBar(
-      //             title: Text(
-      //               'ข้อมูลส่วนตัว',
-      //               style: TextStyle(
-      //                 fontSize: 18,
-      //                 fontWeight: FontWeight.bold,
-      //               ),
-      //             ),
-      //             actions: <Widget>[
-      //               IconButton(
-      //                 icon: Icon(
-      //                   Icons.settings,
-      //                   color: Colors.white,
-      //                 ),
-      //                 onPressed: () {
-      //                   Get.toNamed('/setting');
-      //                 },
-      //               )
-      //             ],
-      //             centerTitle: true,
-      //             backgroundColor: AppTheme.ognGreen,
-      //             foregroundColor: Colors.white,
-      //           )
-      //         : AppBar(
-      //             title: Text(
-      //               'Organics Coin',
-      //               style: TextStyle(
-      //                 fontSize: 18,
-      //                 fontWeight: FontWeight.bold,
-      //               ),
-      //             ),
-      //             centerTitle: true,
-      //             backgroundColor: AppTheme.ognGreen,
-      //             foregroundColor: Colors.white,
-      //           )
-      //     : null,
-      // drawer: exampleSidebarX(),
-      body: Row(
-        children: [
-          _drawer(),
-          const VerticalDivider(
-            thickness: 2,
-            width: 1,
-            color: AppTheme.ognSoftGreen,
+    return UpgradeAlert(
+      child: Scaffold(
+        key: _key,
+        extendBody: true,
+        backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+        body: SafeArea(
+          child: Row(
+            children: [
+              _drawer(),
+              const VerticalDivider(
+                thickness: 2,
+                width: 1,
+                color: AppTheme.ognSoftGreen,
+              ),
+              Expanded(
+                child: Center(
+                  child: _widgetOptions.elementAt(_selectedIndex),
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: Center(
-              child: _widgetOptions.elementAt(_selectedIndex),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _drawer() {
+    final baseUrl = dotenv.env['ASSET_URL'];
+
     return SidebarX(
       controller: _controller,
       theme: SidebarXTheme(
         // margin: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: AppTheme.ognGreen,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/img/drawer.png'),
+            fit: BoxFit.cover,
+          ),
+          // color: AppTheme.ognMdGreen,
           // borderRadius: BorderRadius.circular(20),
         ),
         // hoverColor: scaffoldBackgroundColor,
@@ -233,58 +450,98 @@ class _HomePageState extends State<HomePage> {
         selectedTextStyle: const TextStyle(color: Colors.white),
         itemTextPadding: const EdgeInsets.only(left: 30),
         selectedItemTextPadding: const EdgeInsets.only(left: 30),
-        itemDecoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppTheme.ognGreen),
-        ),
+        // itemDecoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(10),
+        //   border: Border.all(color: AppTheme.ognMdGreen),
+        // ),
         selectedItemDecoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: AppTheme.ognSoftGreen.withOpacity(0.37),
           ),
           gradient: const LinearGradient(
-            colors: [AppTheme.ognGreen, AppTheme.ognGreen],
+            colors: [AppTheme.ognMdGreen, AppTheme.ognSmGreen],
           ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.28),
-              blurRadius: 20,
+              blurRadius: 5,
             )
           ],
         ),
-        iconTheme: IconThemeData(
-          color: Colors.white.withOpacity(0.7),
-          size: 20,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+          size: 25,
         ),
         selectedIconTheme: const IconThemeData(
           color: Colors.white,
-          size: 20,
+          size: 25,
         ),
       ),
       extendedTheme: const SidebarXTheme(
         width: 200,
         decoration: BoxDecoration(
-          color: AppTheme.ognGreen,
+          // color: AppTheme.ognMdGreen,
+          image: DecorationImage(
+            image: AssetImage('assets/img/drawer.png'),
+            fit: BoxFit.cover,
+          ),
         ),
       ),
       // footerDivider: divider,
       headerBuilder: (context, extended) {
         return Padding(
-          padding: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
           child: SizedBox(
-            height: 100,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Image.network(
-                  'https://synergysoft.co.th/images/2022/06/30/user.png'),
+            child: ClipOval(
+              child: box.read('profileImage') != null ||
+                      box.read('profileImage') != ''
+                  ? Image.network(
+                      '$baseUrl/${box.read('profileImage')}',
+                      width: MediaQuery.of(context).size.width *
+                          (MediaQuery.of(context).size.width >= 1024
+                              ? 0.045
+                              : 0.065),
+                      height: MediaQuery.of(context).size.width *
+                          (MediaQuery.of(context).size.width >= 1024
+                              ? 0.045
+                              : 0.065),
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/img/user.png',
+                          width: MediaQuery.of(context).size.width *
+                              (MediaQuery.of(context).size.width >= 1024
+                                  ? 0.045
+                                  : 0.065),
+                          height: MediaQuery.of(context).size.width *
+                              (MediaQuery.of(context).size.width >= 1024
+                                  ? 0.045
+                                  : 0.065),
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    )
+                  : Image.asset(
+                      'assets/img/user.png',
+                      width: MediaQuery.of(context).size.width *
+                          (MediaQuery.of(context).size.width >= 1024
+                              ? 0.045
+                              : 0.065),
+                      height: MediaQuery.of(context).size.width *
+                          (MediaQuery.of(context).size.width >= 1024
+                              ? 0.045
+                              : 0.065),
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
         );
       },
       items: [
         SidebarXItem(
-          icon: Icons.person_outline_outlined,
-          label: 'โปรไฟล์',
+          icon: Icons.home_rounded,
+          label: 'หน้าแรก',
           onTap: () {
             setState(() {
               _selectedIndex = 0;
@@ -292,8 +549,8 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         SidebarXItem(
-          icon: Icons.receipt_long,
-          label: 'สลิปเงินเดือน',
+          icon: Icons.widgets_rounded,
+          label: 'เมนู',
           onTap: () {
             setState(() {
               _selectedIndex = 1;
@@ -301,8 +558,8 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         SidebarXItem(
-          icon: Icons.punch_clock_rounded,
-          label: 'แจ้งลา',
+          icon: Icons.notifications_rounded,
+          label: 'แจ้งเตือน',
           onTap: () {
             setState(() {
               _selectedIndex = 2;
@@ -310,34 +567,32 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         SidebarXItem(
-          icon: Icons.format_list_bulleted_rounded,
-          label: 'รายการอื่น',
+          icon: Icons.settings_rounded,
+          label: 'ตั้งค่า',
           onTap: () {
             setState(() {
               _selectedIndex = 3;
             });
           },
         ),
-        // const SidebarXItem(
-        //   iconWidget: FlutterLogo(size: 20),
-        //   label: 'Flutter',
-        // ),
       ],
-      footerItems: [
-        SidebarXItem(
-          icon: Icons.settings,
-          label: 'ตั้งค่า',
-          onTap: () {
-            Get.toNamed('setting');
-          },
-        ),
-      ],
+      // footerItems: [
+      //   SidebarXItem(
+      //     icon: Icons.qr_code_rounded,
+      //     label: 'แสกน Qr Code',
+      //     onTap: () {
+      //       setState(() {
+      //         Get.toNamed('scan');
+      //       });
+      //     },
+      //   ),
+      // ],
     );
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    screenMode = MediaQuery.of(context).size.width >= 600;
+    screenMode = MediaQuery.of(context).size.width > 768;
   }
 }

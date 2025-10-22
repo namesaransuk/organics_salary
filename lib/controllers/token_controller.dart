@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:organics_salary/controllers/loading_controller.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -7,29 +6,45 @@ import 'package:get_storage/get_storage.dart';
 class TokenController extends GetxController {
   final LoadingController loadingController = Get.put(LoadingController());
   final box = GetStorage();
-  var status = false;
+  var connect = Get.find<GetConnect>();
+  var baseUrl = dotenv.env['API_URL'];
+  var token = dotenv.env['TOKEN'];
 
-  void checkToken() async {
-    var connect = Get.find<GetConnect>();
-    var baseUrl = dotenv.env['API_URL'];
+  Future<void> checkToken() async {
+    loadingController.dialogLoading();
+    // print('access_token: ${box.read('access_token')}');
+    // print('encode_access_token: ${box.read('encode_access_token')}');
 
-    if (box.read('access_token') != null) {
-      List<String> parts = box.read('access_token').split('|');
-      // var response = await connect.post(
-      //   '$baseUrl/employee/Login',
-      //   {
-      //     'username': username,
-      //     'password': password,
-      //   },
-      // );
+    try {
+      var response = await connect.post(
+          // '$baseUrl/check-token',
+          '$baseUrl/employee/login/repeat',
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+          {
+            'employee_code': box.read('employeeCode'),
+            'device_key': box.read('device_key')
+          });
 
-      String number = parts[0];
+      print(response);
 
-      print('Number: $number');
-
-      status = true;
-    } else {
-      status = false;
+      var responseBody = response.body;
+      if (responseBody['statusCode'] == 200) {
+        // Get.offAllNamed('/');
+        if (responseBody['pin'] == null || responseBody['pin'] == '') {
+          Get.offAllNamed('/pinauth', arguments: 1);
+        } else {
+          Get.offAllNamed('/pin');
+        }
+      } else {
+        GetStorage().erase();
+        Get.offAllNamed('failed-token');
+      }
+    } catch (e) {
+      GetStorage().erase();
+      Get.offAllNamed('failed-token');
     }
   }
 }

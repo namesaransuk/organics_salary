@@ -6,9 +6,18 @@ class AppTheme {
   static const Color white = Color(0xFFFFFFFF);
   static const Color background = Color(0xFFF2F3F8);
   static const Color bgSoftGreen = Color(0xFFeff8f7);
-  static const Color ognGreen = Color(0xFF136e68);
-  static const Color ognSoftGreen = Color(0xFF2b9d91);
+  // static const Color ognGreen = Color(0xFF136e68);
+  static const Color ognGreen = Color(0xFF048482);
+  static const Color ognMdGreen = Color(0xFF449E9D);
+  static const Color ognSmGreen = Color(0xFF77C6C5);
+  static const Color ognXsmGreen = Color(0xFFA1DCDB);
+  static const Color ogn2XsmGreen = Color(0xFFE1F0EF);
+  static const Color ognSoftGreen = Color(0xFF8FDED9);
   static const Color ognGold = Color(0xFFd69832);
+  static const Color ognOrangeGold = Color(0xFFFA9583);
+
+  static const Color stepperGreen = Color(0xFF5DD28C);
+  static const Color stepperYellow = Color(0xFFFFCE52);
 
   static const Color nearlyBlack = Color(0xFF213333);
   static const Color grey = Color(0xFF3A5160);
@@ -86,6 +95,6 @@ class AppTheme {
     fontWeight: FontWeight.w400,
     fontSize: 12,
     letterSpacing: 0.2,
-    color: lightText, // was lightText
+    color: lightText,
   );
 }

@@ -25,6 +25,7 @@ class LoginModel {
   String? endDate;
   dynamic yExperience;
   dynamic image;
+  int? userStatus;
   int? recordStatus;
   String? coins;
   String? username;
@@ -63,6 +64,7 @@ class LoginModel {
     this.endDate,
     this.yExperience,
     this.image,
+    this.userStatus,
     this.recordStatus,
     this.coins,
     this.username,
@@ -102,6 +104,7 @@ class LoginModel {
         endDate: json['end_date'] as String?,
         yExperience: json['y_experience'] as dynamic,
         image: json['image'] as dynamic,
+        userStatus: json['user_status'] as int?,
         recordStatus: json['record_status'] as int?,
         coins: json['coins'] as String?,
         username: json['username'] as String?,
@@ -145,6 +148,7 @@ class LoginModel {
         'end_date': endDate,
         'y_experience': yExperience,
         'image': image,
+        'user_status': userStatus,
         'record_status': recordStatus,
         'coins': coins,
         'username': username,
